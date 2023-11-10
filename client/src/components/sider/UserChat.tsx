@@ -13,7 +13,6 @@ import {
 } from "@ant-design/icons"
 import { Button, Flex, Popover, Typography } from "antd"
 import React from "react"
-import styled from "styled-components"
 import AvatarOnline from "../AvatarOnline"
 import PopoverMenu from "../PopoverMenu"
 
@@ -34,22 +33,27 @@ const ContentPop = () => {
     return <PopoverMenu data={menu} />
 }
 
-const WrapperUserChat = styled(Flex)`
-    &:hover {
-        background: #f3f5f5;
-
-        & .btn-option {
-            display: block !important;
-        }
-    }
-`
-
 const UserChat = () => {
+    const [isHovered, setIsHovered] = React.useState(false)
+
     return (
-        <WrapperUserChat
+        <Flex
             align="center"
             gap={10}
-            style={{ padding: "10px 10px", borderRadius: 5, marginRight: 5, cursor: "pointer" }}
+            style={{
+                position: "relative",
+                padding: "10px 10px",
+                borderRadius: 5,
+                marginRight: 5,
+                cursor: "pointer",
+                background: isHovered ? "#f3f5f5" : "inherit",
+            }}
+            onMouseEnter={() => {
+                setIsHovered(true)
+            }}
+            onMouseLeave={() => {
+                setIsHovered(false)
+            }}
         >
             <AvatarOnline online />
             <Flex vertical gap="none">
@@ -63,10 +67,14 @@ const UserChat = () => {
                     shape="circle"
                     icon={<EllipsisOutlined />}
                     className="btn-option"
-                    style={{ position: "absolute", right: 50, display: "none" }}
+                    style={{
+                        position: "absolute",
+                        right: 30,
+                        display: isHovered ? "block" : "none",
+                    }}
                 />
             </Popover>
-        </WrapperUserChat>
+        </Flex>
     )
 }
 
