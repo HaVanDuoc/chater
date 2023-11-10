@@ -18,22 +18,10 @@ import {
 } from "@ant-design/icons"
 import UserChat from "~/components/sider/UserChat"
 import PopoverMenu from "~/components/PopoverMenu"
-import { useEffect, useState } from "react"
 
 const ChatSider = () => {
     const paddingCSS = "7px 15px"
     const { colorBorder } = theme.useToken().token
-    const [heightHeaderSider, setHeightHeaderSider] = useState<String | Number>(0)
-
-    useEffect(() => {
-        const element = document.querySelector(".headerSider")
-
-        if (element) {
-            const htmlElement = element as HTMLElement
-            const height = htmlElement.offsetHeight
-            setHeightHeaderSider(height)
-        }
-    }, [])
 
     return (
         <Flex
@@ -55,9 +43,19 @@ const ChatSider = () => {
                 style={{
                     margin: "10px 0px 10px 7px",
                     overflowY: "auto",
-                    height: `calc(100vh - ${heightHeaderSider}px)`,
+                    flex: 1,
                 }}
             >
+                <UserChat />
+                <UserChat />
+                <UserChat />
+                <UserChat />
+                <UserChat />
+                <UserChat />
+                <UserChat />
+                <UserChat />
+                <UserChat />
+                <UserChat />
                 <UserChat />
                 <UserChat />
                 <UserChat />

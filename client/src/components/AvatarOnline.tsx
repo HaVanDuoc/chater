@@ -5,6 +5,7 @@ import React from "react"
 interface IAvatarOnline {
     online?: boolean
     avt?: string
+    size?: number
 }
 
 const dotStyle = {
@@ -12,10 +13,14 @@ const dotStyle = {
     height: 11,
 }
 
-const AvatarOnline: React.FC<IAvatarOnline> = ({ online = false, avt = <UserOutlined /> }) => {
+const AvatarOnline: React.FC<IAvatarOnline> = ({
+    online = false,
+    avt = <UserOutlined />,
+    size = 45,
+}) => {
     return (
-        <Badge dot={online} status="success" offset={[-5, "80%"]} style={dotStyle}>
-            <Avatar size={45} icon={avt} />
+        <Badge dot={online} status="success" offset={["-5%", "80%"]} style={dotStyle}>
+            <Avatar size={size} icon={avt} />
         </Badge>
     )
 }
