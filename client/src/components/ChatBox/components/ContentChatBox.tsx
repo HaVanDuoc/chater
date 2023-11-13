@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useRef } from "react"
 import Message from "./Message"
 import { Flex } from "antd"
 
@@ -41,6 +41,16 @@ export const messages = [
 ]
 
 const ContentChatBox = () => {
+    const scrollRef = useRef(null)
+
+    useEffect(() => {
+        if (scrollRef.current) {
+            const htmlElement = scrollRef.current as HTMLElement
+            const { scrollHeight, clientHeight } = htmlElement
+            htmlElement.scrollTop = scrollHeight - clientHeight
+        }
+    }, [])
+
     return (
         <Flex
             vertical
@@ -50,6 +60,7 @@ const ContentChatBox = () => {
                 height: "calc(100vh - 100px)",
                 background: "#fff",
             }}
+            ref={scrollRef}
         >
             {messages.map((message, index) => (
                 <Message

@@ -18,10 +18,21 @@ import {
 } from "@ant-design/icons"
 import UserChat from "~/components/sider/UserChat"
 import PopoverMenu from "~/components/PopoverMenu"
+import { useSelector } from "react-redux"
+import { selectUser } from "~/redux/selectors"
+import { useDispatch } from "react-redux"
+import { getUser } from "~/redux/users/actions"
 
 const ChatSider = () => {
     const paddingCSS = "7px 15px"
     const { colorBorder } = theme.useToken().token
+
+    const users = useSelector(selectUser)
+    console.log("users", users)
+
+    const dispatch = useDispatch()
+
+    dispatch(getUser)
 
     return (
         <Flex

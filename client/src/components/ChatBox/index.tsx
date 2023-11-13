@@ -2,8 +2,8 @@ import React from "react"
 import { Flex as WrapChatBox } from "antd"
 import { widthSider } from "~/layouts/DefaultLayout"
 import HeaderChatBox from "./components/HeaderChatBox"
-import ContentChatBox from "./components/ContentChatBox copy"
-import FooterChatBox from "./components/FooterChatBox copy"
+import ContentChatBox from "./components/ContentChatBox"
+import FooterChatBox from "./components/FooterChatBox"
 
 const ChatBox = () => {
     return (

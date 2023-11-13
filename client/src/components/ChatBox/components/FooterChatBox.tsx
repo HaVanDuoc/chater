@@ -28,9 +28,8 @@ const FooterChatBox: React.FC = () => {
         <Flex gap={10} align="center" style={{ padding: 10, background: "#fff" }}>
             <Flex>
                 {buttons.map((button, index) => (
-                    <Tooltip title={button.title}>
+                    <Tooltip title={button.title} key={index}>
                         <Button
-                            key={index}
                             icon={button.icon}
                             shape="circle"
                             type="text"
