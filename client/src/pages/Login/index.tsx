@@ -1,6 +1,7 @@
-import { Button, Flex, Typography } from "antd"
+import { Flex, Typography } from "antd"
 import { PF } from "~/utils/variables"
 import LoginLayout from "~/layouts/LoginLayout"
+import ButtonLoginWithGoogle from "~/components/ButtonLoginWithGoogle"
 
 const Logo = ({ src, size }: { src: string; size: number }) => {
     return <img src={src} alt="logo" style={{ width: size, maxWidth: 300 }} />
@@ -20,9 +21,7 @@ const LoginPage = () => {
                     <Typography style={{ fontSize: 30 }}>
                         Kết nối với những người bạn yêu quý.
                     </Typography>
-                    <Button shape="round" type="primary" size="large">
-                        Đăng nhập với Tài khoản Google
-                    </Button>
+                    <ButtonLoginWithGoogle />
                 </Flex>
 
                 <Flex gap={40}>

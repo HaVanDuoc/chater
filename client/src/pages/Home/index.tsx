@@ -2,7 +2,7 @@ import { Fragment, useEffect } from "react"
 import { useNavigate } from "react-router"
 
 const HomePage = () => {
-    const logged = true
+    const logged = false
     const navigate = useNavigate()
 
     useEffect(() => {
