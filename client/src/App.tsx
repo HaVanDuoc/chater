@@ -1,7 +1,6 @@
-import React from "react"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import { routes } from "./router"
-import DefaultLayout from "./layouts/DefaultLayout"
+import { routes } from "./routes"
+import Login from "./pages/Login"
 
 function App() {
     return (
@@ -10,12 +9,9 @@ function App() {
                 <Routes>
                     {routes.map((route, index) => {
                         const path = route.path
-                        const Layout = route.layout || DefaultLayout
-                        const Sider = route.sider
+                        const Page = route.page || Login
 
-                        return (
-                            <Route key={index} path={path} element={<Layout sider={<Sider />} />} />
-                        )
+                        return <Route key={index} path={path} element={<Page />} />
                     })}
                 </Routes>
             </BrowserRouter>

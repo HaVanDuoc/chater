@@ -20,8 +20,8 @@ import UserChat from "~/components/sider/UserChat"
 import PopoverMenu from "~/components/PopoverMenu"
 import { useSelector } from "react-redux"
 import { selectUser } from "~/redux/selectors"
-import { useDispatch } from "react-redux"
 import { getUser } from "~/redux/users/actions"
+import { useAppDispatch } from "~/redux/store"
 
 const ChatSider = () => {
     const paddingCSS = "7px 15px"
@@ -30,9 +30,9 @@ const ChatSider = () => {
     const users = useSelector(selectUser)
     console.log("users", users)
 
-    const dispatch = useDispatch()
+    // const dispatch = useAppDispatch()
 
-    dispatch(getUser)
+    // dispatch(getUser)
 
     return (
         <Flex

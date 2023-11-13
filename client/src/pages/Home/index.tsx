@@ -1,7 +1,15 @@
-import React from "react"
+import { Fragment, useEffect } from "react"
+import { useNavigate } from "react-router"
 
-const Home = () => {
-    return <div>Home</div>
+const HomePage = () => {
+    const logged = true
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        logged ? navigate("/chat") : navigate("/login")
+    }, [logged, navigate])
+
+    return <Fragment />
 }
 
-export default Home
+export default HomePage
