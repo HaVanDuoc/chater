@@ -5,6 +5,8 @@ import axios from "axios"
 const ButtonLoginWithGoogle = () => {
     const login = useGoogleLogin({
         onSuccess: async ({ access_token }) => {
+            console.log(access_token)
+
             const userInfo = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
                 headers: { Authorization: `Bearer ${access_token}` },
             })

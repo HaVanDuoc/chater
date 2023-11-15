@@ -1,15 +1,21 @@
 import { NextFunction, Request, Response } from "express"
 import HttpStatusCodes from "http-status-codes"
 import AuthServices from "../services/authServices"
+import axios from "axios"
 
 namespace AuthControllers {
     export const login = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            console.log("auth controllers")
-            const response = await AuthServices.login()
+            const { access_token } = req.body
+
+            const userInfo = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
+                headers: { Authorization: `Bearer ${access_token}` },
+            })
+
+            const response = await AuthServices.login(userInfo.data)
             return res.status(HttpStatusCodes.OK).json(response)
         } catch (error) {
-            res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error!")
+            res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send(error)
         }
     }
 }
