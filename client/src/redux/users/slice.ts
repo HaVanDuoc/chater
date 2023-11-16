@@ -1,7 +1,7 @@
 import ActionTypes from "./actionTypes"
 import { createSlice } from "@reduxjs/toolkit"
-import { Status } from "../rootInterfaces"
 import { IUser } from "./interfaces"
+import { Status } from "../types"
 
 interface UserState {
     status: Status

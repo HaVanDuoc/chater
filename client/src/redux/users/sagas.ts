@@ -1,7 +1,9 @@
 import { all, call, put, takeLatest } from "redux-saga/effects"
+import Api from "./api"
 import { actions } from "./slice"
 import ActionTypes from "./actionTypes"
-import Api from "./api"
+// import ActionTypeMessage from "../message/actionTypes"
+// import { actionMessages } from "../message/slice"
 
 export function* loginSaga(action: any): Generator<any, any, any> {
     try {
@@ -13,8 +15,15 @@ export function* loginSaga(action: any): Generator<any, any, any> {
 
         // dispatch succeeded
         yield put(actions[ActionTypes.USER_LOGIN_SUCCEEDED](loginResponse))
+        window.location.href = "/chat"
 
-        return (window.location.href = "/chat")
+        // Alert
+        // yield put(
+        //     actionMessages[ActionTypeMessage.MESSAGE]({
+        //         type: "success",
+        //         content: loginResponse.message,
+        //     }),
+        // )
     } catch (error) {
         console.log("error", error)
         yield put(actions[ActionTypes.USER_LOGIN_FAILED](error))
@@ -22,5 +31,5 @@ export function* loginSaga(action: any): Generator<any, any, any> {
 }
 
 export default function* userSaga() {
-    yield all([takeLatest(ActionTypes.USER_LOGIN_REQUEST, loginSaga)])
+    yield all([takeLatest(actions[ActionTypes.USER_LOGIN_REQUEST].type, loginSaga)])
 }

@@ -11,7 +11,17 @@ function App() {
                         const path = route.path
                         const Page = route.page || Login
 
-                        return <Route key={index} path={path} element={<Page />} />
+                        return (
+                            <Route
+                                key={index}
+                                path={path}
+                                element={
+                                    <>
+                                        <Page />
+                                    </>
+                                }
+                            />
+                        )
                     })}
                 </Routes>
             </BrowserRouter>
