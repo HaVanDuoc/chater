@@ -35,6 +35,9 @@ const userSlice = createSlice({
             state.status = "failed"
             state.error = action.payload
         },
+        [ActionTypes.LOGOUT]: (state) => {
+            state.currentUser = null
+        },
     },
 })
 

@@ -15,10 +15,37 @@ import {
 } from "@ant-design/icons"
 import { useSelector } from "react-redux"
 import { selectUser } from "~/redux/selectors"
+import { useDispatch } from "react-redux"
+import { actions } from "~/redux/users/slice"
+import ActionTypes from "~/redux/users/actionTypes"
 
 const ChatSiderFooter = () => {
     const paddingCSS = "7px 15px"
     const currentUser = useSelector(selectUser)?.currentUser
+    const dispatch = useDispatch()
+
+    const handleLogout = () => {
+        console.log("logout")
+        dispatch(actions[ActionTypes.LOGOUT]({}))
+    }
+
+    const OptionAccount = () => {
+        const menu = [
+            { content: "Tuỳ chọn", icon: <SettingOutlined />, hasDivider: true },
+            { content: "Tài khoản đã hạn chế", icon: <StopOutlined />, hasDivider: true },
+            { content: "Quyền riêng tư & an toàn", icon: <SafetyOutlined />, hasDivider: true },
+            { content: "Trợ giúp", icon: <QuestionCircleOutlined /> },
+            { content: "Báo cáo sự cố", icon: <WarningOutlined />, hasDivider: true },
+            { content: "Giới thiệu", icon: <ExclamationCircleOutlined /> },
+            { content: "Điều khoản", icon: <AlignLeftOutlined /> },
+            { content: "Chính sách quyền riêng tư", icon: <AlignLeftOutlined /> },
+            { content: "Chính sách về cookie", icon: <AlignLeftOutlined />, hasDivider: true },
+            { content: "Dùng thử Chater dành cho Windows", icon: <MessageOutlined /> },
+            { content: "Đăng xuất", icon: <LogoutOutlined />, onClick: handleLogout },
+        ]
+
+        return <PopoverMenu data={menu} />
+    }
 
     return (
         <Footer
@@ -27,7 +54,12 @@ const ChatSiderFooter = () => {
         >
             <Flex align="center">
                 <Popover content={OptionAccount} trigger="click">
-                    <Avatar size={35} icon={<UserOutlined />} src={currentUser?.picture} style={{ cursor: "pointer" }} />
+                    <Avatar
+                        size={35}
+                        icon={<UserOutlined />}
+                        src={currentUser?.picture}
+                        style={{ cursor: "pointer" }}
+                    />
                 </Popover>
                 <Typography
                     style={{
@@ -54,21 +86,3 @@ const ChatSiderFooter = () => {
 }
 
 export default ChatSiderFooter
-
-const OptionAccount = () => {
-    const menu = [
-        { content: "Tuỳ chọn", icon: <SettingOutlined />, hasDivider: true },
-        { content: "Tài khoản đã hạn chế", icon: <StopOutlined />, hasDivider: true },
-        { content: "Quyền riêng tư & an toàn", icon: <SafetyOutlined />, hasDivider: true },
-        { content: "Trợ giúp", icon: <QuestionCircleOutlined /> },
-        { content: "Báo cáo sự cố", icon: <WarningOutlined />, hasDivider: true },
-        { content: "Giới thiệu", icon: <ExclamationCircleOutlined /> },
-        { content: "Điều khoản", icon: <AlignLeftOutlined /> },
-        { content: "Chính sách quyền riêng tư", icon: <AlignLeftOutlined /> },
-        { content: "Chính sách về cookie", icon: <AlignLeftOutlined />, hasDivider: true },
-        { content: "Dùng thử Chater dành cho Windows", icon: <MessageOutlined /> },
-        { content: "Đăng xuất", icon: <LogoutOutlined /> },
-    ]
-
-    return <PopoverMenu data={menu} />
-}

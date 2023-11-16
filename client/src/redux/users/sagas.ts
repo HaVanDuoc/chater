@@ -30,6 +30,18 @@ export function* loginSaga(action: any): Generator<any, any, any> {
     }
 }
 
+export function* logoutSaga(action: any): Generator<any, any, any> {
+    try {
+        window.location.href = "/"
+    } catch (error) {
+        console.log("error", error)
+        yield put(actions[ActionTypes.USER_LOGIN_FAILED](error))
+    }
+}
+
 export default function* userSaga() {
-    yield all([takeLatest(actions[ActionTypes.USER_LOGIN_REQUEST].type, loginSaga)])
+    yield all([
+        takeLatest(actions[ActionTypes.USER_LOGIN_REQUEST].type, loginSaga),
+        takeLatest(actions[ActionTypes.LOGOUT].type, logoutSaga),
+    ])
 }

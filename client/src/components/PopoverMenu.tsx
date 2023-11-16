@@ -13,12 +13,14 @@ const PopoverMenu: React.FC<IPopoverMenu> = ({ data = [] }) => {
                 const content = item.content
                 const icon = item.icon
                 const hasDivider = item.hasDivider
+                const onClick = item.onClick
 
                 return (
                     <ItemPopover
                         content={content}
                         icon={icon}
                         hasDivider={hasDivider}
+                        onClick={onClick}
                         key={index}
                     />
                 )
@@ -33,9 +35,10 @@ export interface IItemPopover {
     content: string
     icon: React.ReactNode
     hasDivider?: boolean
+    onClick?: any
 }
 
-const ItemPopover: React.FC<IItemPopover> = ({ content, icon, hasDivider = false }) => {
+const ItemPopover: React.FC<IItemPopover> = ({ content, icon, hasDivider = false, onClick }) => {
     const WrapperContentPop = styled(Flex)`
         &:hover {
             background: #f3f5f5;
@@ -45,7 +48,7 @@ const ItemPopover: React.FC<IItemPopover> = ({ content, icon, hasDivider = false
     const iconStyle = { backgroundColor: "#ebebeb", padding: 8, borderRadius: "50%" }
 
     return (
-        <Flex vertical key={content}>
+        <Flex vertical key={content} onClick={onClick}>
             <WrapperContentPop
                 align="center"
                 gap={13}

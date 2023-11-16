@@ -2,6 +2,7 @@ const ActionTypes = {
     USER_LOGIN_REQUEST: "USER_LOGIN_REQUEST",
     USER_LOGIN_SUCCEEDED: "USER_LOGIN_SUCCEEDED",
     USER_LOGIN_FAILED: "USER_LOGIN_FAILED",
+    LOGOUT: "LOGOUT",
 }
 
 export default ActionTypes
