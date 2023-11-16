@@ -6,9 +6,18 @@ import Api from "./api"
 export function* loginSaga(action: any): Generator<any, any, any> {
     try {
         const loginResponse = yield call(Api.login, action.payload)
+
+        // Check error of API no response
+        if (loginResponse?.code === "ERR_BAD_REQUEST")
+            return yield put(actions[ActionTypes.USER_LOGIN_FAILED](loginResponse))
+
+        // dispatch succeeded
         yield put(actions[ActionTypes.USER_LOGIN_SUCCEEDED](loginResponse))
+
+        return (window.location.href = "/chat")
     } catch (error) {
-        yield put({ type: ActionTypes.USER_LOGIN_FAILED, error: error })
+        console.log("error", error)
+        yield put(actions[ActionTypes.USER_LOGIN_FAILED](error))
     }
 }
 
