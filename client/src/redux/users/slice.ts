@@ -8,6 +8,7 @@ interface UserState {
     error: any | null
     data: IUser[] | []
     message: string | null
+    currentUser: IUser | null
 }
 
 const initialState: UserState = {
@@ -15,6 +16,7 @@ const initialState: UserState = {
     message: null,
     error: null,
     data: [],
+    currentUser: null,
 }
 
 const userSlice = createSlice({
@@ -27,7 +29,7 @@ const userSlice = createSlice({
         [ActionTypes.USER_LOGIN_SUCCEEDED]: (state, action) => {
             state.status = "succeeded"
             state.message = action.payload.message
-            state.data = action.payload.data
+            state.currentUser = action.payload.data
         },
         [ActionTypes.USER_LOGIN_FAILED]: (state, action) => {
             state.status = "failed"

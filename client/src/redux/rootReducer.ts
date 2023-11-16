@@ -1,9 +1,9 @@
 import { combineReducers } from "@reduxjs/toolkit"
-import userReducer from "./users/slice"
+import { persistedUserReducer } from "./persist/user"
 import messageReducer from "./message/slice"
 
 const rootReducer = combineReducers({
-    users: userReducer,
+    users: persistedUserReducer,
     message: messageReducer,
 })
 
