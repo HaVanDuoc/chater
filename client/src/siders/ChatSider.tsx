@@ -20,7 +20,6 @@ import UserChat from "~/components/sider/UserChat"
 import PopoverMenu from "~/components/PopoverMenu"
 import { useSelector } from "react-redux"
 import { selectUser } from "~/redux/selectors"
-import { getUser } from "~/redux/users/actions"
 import { useAppDispatch } from "~/redux/store"
 
 const ChatSider = () => {

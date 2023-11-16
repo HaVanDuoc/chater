@@ -1,11 +1,16 @@
 import axios from "axios"
-import { IUser } from "./interfaces"
 
-export const getUserData = async (userId: IUser["id"]) => {
-    try {
-        const response = await axios.get(`/api/v1/users/${userId}`)
-        return response.data
-    } catch (error) {
-        throw new Error("Failed to fetch user data")
+namespace Api {
+    export const login = async (access_token: string) => {
+        try {
+            const response = await axios.post(`http://localhost:5000/api/auth/login`, {
+                access_token,
+            })
+            return response.data
+        } catch (error) {
+            return error
+        }
     }
 }
+
+export default Api

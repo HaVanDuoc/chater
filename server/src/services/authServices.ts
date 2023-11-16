@@ -29,7 +29,9 @@ namespace AuthServices {
                 await User.create(userData)
             }
 
-            return { message: "Login successful" }
+            const user = await User.findOne({ email: userData?.email })
+
+            return { message: "Login successful", data: user }
         } catch (error) {
             return error
         }

@@ -1,5 +1,5 @@
 import ActionTypes from "./actionTypes"
-import { PayloadAction, createSlice } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit"
 import { Status } from "../rootInterfaces"
 import { IUser } from "./interfaces"
 
@@ -7,10 +7,12 @@ interface UserState {
     status: Status
     error: any | null
     data: IUser[] | []
+    message: string | null
 }
 
 const initialState: UserState = {
     status: "idle",
+    message: null,
     error: null,
     data: [],
 }
@@ -19,16 +21,17 @@ const userSlice = createSlice({
     name: "user",
     initialState,
     reducers: {
-        [ActionTypes.FETCH_USER]: (state) => {
+        [ActionTypes.USER_LOGIN_REQUEST]: (state) => {
             state.status = "pending"
         },
-        [ActionTypes.FETCH_USER_SUCCEEDED]: (state, action) => {
+        [ActionTypes.USER_LOGIN_SUCCEEDED]: (state, action) => {
             state.status = "succeeded"
-            state.data = action.payload
+            state.message = action.payload.message
+            state.data = action.payload.data
         },
-        [ActionTypes.FETCH_USER_FAILED]: (state, action: PayloadAction<any>) => {
+        [ActionTypes.USER_LOGIN_FAILED]: (state, action) => {
             state.status = "failed"
-            state.error = action.payload.message
+            state.error = action.payload.error
         },
     },
 })

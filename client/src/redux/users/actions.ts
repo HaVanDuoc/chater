@@ -1,4 +1,6 @@
-import { createAction } from "@reduxjs/toolkit"
 import ActionTypes from "./actionTypes"
 
-export const getUser = createAction(ActionTypes.FETCH_USER)
+export const requestLogin = (payload: any) => ({
+    type: ActionTypes.USER_LOGIN_REQUEST,
+    payload,
+})
