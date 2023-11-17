@@ -1,35 +1,43 @@
-import { Button, Flex } from "antd"
+import { Button, Flex, Typography } from "antd"
 import React, { useState } from "react"
 import { ArrowLeftOutlined, SearchOutlined } from "@ant-design/icons"
-import UserChat from "./UserChat"
 import { Flex as BoxResultSearch } from "antd"
 import { paddingSider } from "./styles"
 import { useDispatch } from "react-redux"
 import { actions } from "~/redux/users/slice"
 import ActionTypes from "~/redux/users/actionTypes"
-import { useEffect } from "react"
 import { useSelector } from "react-redux"
 import { selectUser } from "~/redux/selectors"
+import { IUser } from "~/redux/users/interfaces"
+import AvatarOnline from "../AvatarOnline"
+import { useNavigate } from "react-router"
+import { useRef, useEffect } from "react"
 
 interface ISearchSider {
     placeholder: string
 }
 
 const SearchSider: React.FC<ISearchSider> = ({ placeholder }) => {
-    const [focusInput, setFocusInput] = useState<Boolean>(false)
-    const dispatch = useDispatch()
+    const [showResult, setShowResult] = useState<Boolean>(false)
     const search = useSelector(selectUser)?.search
+    const dispatch = useDispatch()
+    const containerSearch = useRef<HTMLDivElement>(null)
 
-    useEffect(() => {
-        console.log("search", search)
-    }, [search])
-
-    const handleFocus = () => {
-        setFocusInput(true)
+    const handleOutsideClick = (event: any) => {
+        if (containerSearch.current && !containerSearch.current.contains(event.target)) {
+            setShowResult(false)
+        }
     }
 
-    const handleBlur = () => {
-        setFocusInput(false)
+    useEffect(() => {
+        document.addEventListener("click", handleOutsideClick)
+        return () => {
+            document.removeEventListener("click", handleOutsideClick)
+        }
+    }, [])
+
+    const handleFocus = () => {
+        setShowResult(true)
     }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,14 +46,19 @@ const SearchSider: React.FC<ISearchSider> = ({ placeholder }) => {
     }
 
     return (
-        <Flex flex={1} style={{ position: "relative", padding: paddingSider }}>
+        <Flex
+            flex={1}
+            style={{ position: "relative", padding: paddingSider }}
+            ref={containerSearch}
+        >
             <Flex align="center" gap={5} flex={1} style={{ position: "relative" }}>
                 <Button
                     icon={<ArrowLeftOutlined />}
                     type="text"
                     shape="circle"
                     size="large"
-                    style={{ display: focusInput ? "block" : "none" }}
+                    style={{ display: showResult ? "block" : "none" }}
+                    onClick={() => setShowResult(false)}
                 />
                 <Flex
                     style={{
@@ -68,36 +81,86 @@ const SearchSider: React.FC<ISearchSider> = ({ placeholder }) => {
                             backgroundColor: "inherit",
                         }}
                         onFocus={handleFocus}
-                        onBlur={handleBlur}
                         onChange={handleChange}
                     />
                 </Flex>
             </Flex>
 
-            <BoxResultSearch
-                vertical
-                style={{
-                    display: focusInput ? "block" : "none",
-                    position: "absolute",
-                    top: "100%",
-                    left: 0,
-                    zIndex: 99,
-                    backgroundColor: "#fff",
-                    flex: 1,
-                    width: "100%",
-                    overflow: "auto",
-                    paddingTop: 15,
-                    paddingLeft: 7,
-                    height: `calc(100vh - 100px)`,
-                }}
-            >
-                {Array.isArray(search) &&
-                    search?.map((user, index) => {
-                        return <UserChat user={user} key={index} />
-                    })}
-            </BoxResultSearch>
+            {showResult && (
+                <BoxResultSearch
+                    vertical
+                    style={{
+                        display: showResult ? "block" : "none",
+                        position: "absolute",
+                        top: "100%",
+                        left: 0,
+                        zIndex: 99,
+                        backgroundColor: "#fff",
+                        flex: 1,
+                        width: "100%",
+                        overflow: "auto",
+                        paddingTop: 15,
+                        paddingLeft: 7,
+                        height: `calc(100vh - 100px)`,
+                    }}
+                >
+                    {Array.isArray(search) &&
+                        search?.map((user: IUser, index) => {
+                            return (
+                                <ItemSearch
+                                    _id={user?._id}
+                                    avatar={user?.picture}
+                                    name={user?.name}
+                                    key={index}
+                                />
+                            )
+                        })}
+                </BoxResultSearch>
+            )}
         </Flex>
     )
 }
 
 export default SearchSider
+
+interface IItemSearch {
+    _id: IUser["_id"]
+    name: IUser["name"]
+    avatar: IUser["picture"]
+}
+
+const ItemSearch: React.FC<IItemSearch> = ({ _id, name, avatar }) => {
+    const [isHovered, setIsHovered] = React.useState(false)
+    const navigate = useNavigate()
+
+    const handleClick = () => {
+        navigate(`/chat/${_id}`)
+    }
+
+    return (
+        <Flex
+            align="center"
+            gap={10}
+            style={{
+                position: "relative",
+                padding: "10px 10px",
+                borderRadius: 5,
+                marginRight: 5,
+                cursor: "pointer",
+                background: isHovered ? "#f3f5f5" : "inherit",
+            }}
+            onMouseEnter={() => {
+                setIsHovered(true)
+            }}
+            onMouseLeave={() => {
+                setIsHovered(false)
+            }}
+            onClick={handleClick}
+        >
+            <AvatarOnline avt={avatar} size={35} online />
+            <Flex vertical gap="none">
+                <Typography.Text style={{ fontSize: 15, fontWeight: 500 }}>{name}</Typography.Text>
+            </Flex>
+        </Flex>
+    )
+}

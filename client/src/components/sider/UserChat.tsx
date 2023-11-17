@@ -36,10 +36,9 @@ const ContentPop = () => {
 
 interface IUserChat {
     user?: IUser
-    key?: any
 }
 
-const UserChat: React.FC<IUserChat> = ({ user, key }) => {
+const UserChat: React.FC<IUserChat> = ({ user }) => {
     const [isHovered, setIsHovered] = React.useState(false)
 
     return (
@@ -60,7 +59,6 @@ const UserChat: React.FC<IUserChat> = ({ user, key }) => {
             onMouseLeave={() => {
                 setIsHovered(false)
             }}
-            key={key}
         >
             <AvatarOnline avt={user?.picture} online />
             <Flex vertical gap="none">

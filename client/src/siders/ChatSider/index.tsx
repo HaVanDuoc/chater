@@ -4,19 +4,10 @@ import TitleSider from "~/components/sider/TitleSider"
 import { Flex as Header } from "antd"
 import { Flex as ListChat } from "antd"
 import UserChat from "~/components/sider/UserChat"
-import { useSelector } from "react-redux"
-import { selectUser } from "~/redux/selectors"
-import { useEffect } from "react"
 import ChatSiderFooter from "./ChatSiderFooter"
 
 const ChatSider = () => {
     const { colorBorder } = theme.useToken().token
-
-    const user = useSelector(selectUser)
-
-    useEffect(() => {
-        console.log("userSelector", user)
-    }, [user])
 
     return (
         <Flex

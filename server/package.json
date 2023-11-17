@@ -29,6 +29,7 @@
         "mongodb": "^6.2.0",
         "mongoose": "^8.0.0",
         "nodemon": "^3.0.1",
+        "socket.io": "^4.7.2",
         "ts-node": "^10.9.1",
         "typescript": "^5.2.2"
     }
