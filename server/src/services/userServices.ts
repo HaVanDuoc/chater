@@ -4,11 +4,12 @@ import User from "../models/User"
 namespace UserServices {
     export const getOne = async (userId: any) => {
         try {
-            const user = await User.findOne({ _id: userId }).exec()
+            const user = await User.findOne({ _id: userId })
+                .populate({ path: "role", select: "name" })
+                .populate({ path: "status", select: "name" })
+                .exec()
 
-            console.log("user", user)
-
-            return { message: "Get data succeeded" }
+            return { message: "Get data succeeded", data: user }
         } catch (error) {
             return error
         }

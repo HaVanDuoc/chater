@@ -30,6 +30,15 @@ namespace AuthServices {
             }
 
             const user = await User.findOne({ email: userData?.email })
+                .populate({
+                    path: "role",
+                    select: "name",
+                })
+                .populate({
+                    path: "status",
+                    select: "name",
+                })
+                .exec()
 
             return { message: "Login successful", data: user }
         } catch (error) {

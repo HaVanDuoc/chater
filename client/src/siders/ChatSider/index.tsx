@@ -10,7 +10,6 @@ import { useEffect } from "react"
 import ChatSiderFooter from "./ChatSiderFooter"
 
 const ChatSider = () => {
-    const paddingCSS = "7px 15px"
     const { colorBorder } = theme.useToken().token
 
     const user = useSelector(selectUser)
@@ -29,7 +28,7 @@ const ChatSider = () => {
                 borderRight: `1px solid ${colorBorder}`,
             }}
         >
-            <Header vertical style={{ padding: paddingCSS }} className="headerSider">
+            <Header vertical className="headerSider">
                 <TitleSider content="Chat" />
                 <SearchSider placeholder="Tìm kiếm trên Chater" />
             </Header>
