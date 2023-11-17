@@ -25,7 +25,6 @@ export function* loginSaga(action: any): Generator<any, any, any> {
         //     }),
         // )
     } catch (error) {
-        console.log("error", error)
         yield put(actions[ActionTypes.USER_LOGIN_FAILED](error))
     }
 }
@@ -39,9 +38,19 @@ export function* logoutSaga(action: any): Generator<any, any, any> {
     }
 }
 
+export function* searchSaga(action: any): Generator<any, any, any> {
+    try {
+        const searchData = yield call(Api.search, action.payload)
+        yield put(actions[ActionTypes.SEARCH_SUCCESS](searchData.data))
+    } catch (error) {
+        yield put(actions[ActionTypes.SEARCH_FAILURE](error))
+    }
+}
+
 export default function* userSaga() {
     yield all([
         takeLatest(actions[ActionTypes.USER_LOGIN_REQUEST].type, loginSaga),
         takeLatest(actions[ActionTypes.LOGOUT].type, logoutSaga),
+        takeLatest(actions[ActionTypes.SEARCH_REQUEST].type, searchSaga),
     ])
 }

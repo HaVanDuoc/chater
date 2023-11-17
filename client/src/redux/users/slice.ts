@@ -9,6 +9,7 @@ interface UserState {
     data: IUser[] | []
     message: string | null
     currentUser: IUser | null
+    search: []
 }
 
 const initialState: UserState = {
@@ -17,6 +18,7 @@ const initialState: UserState = {
     error: null,
     data: [],
     currentUser: null,
+    search: [],
 }
 
 const userSlice = createSlice({
@@ -37,6 +39,17 @@ const userSlice = createSlice({
         },
         [ActionTypes.LOGOUT]: (state) => {
             state.currentUser = null
+        },
+        [ActionTypes.SEARCH_REQUEST]: (state) => {
+            state.status = "pending"
+        },
+        [ActionTypes.SEARCH_SUCCESS]: (state, action) => {
+            state.status = "succeeded"
+            state.search = action.payload
+        },
+        [ActionTypes.SEARCH_FAILURE]: (state, action) => {
+            state.status = "failed"
+            state.error = action.payload
         },
     },
 })

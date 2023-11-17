@@ -15,6 +15,7 @@ import { Button, Flex, Popover, Typography } from "antd"
 import React from "react"
 import AvatarOnline from "../AvatarOnline"
 import PopoverMenu from "../PopoverMenu"
+import { IUser } from "~/redux/users/interfaces"
 
 const ContentPop = () => {
     const menu = [
@@ -33,7 +34,12 @@ const ContentPop = () => {
     return <PopoverMenu data={menu} />
 }
 
-const UserChat = () => {
+interface IUserChat {
+    user?: IUser
+    key?: any
+}
+
+const UserChat: React.FC<IUserChat> = ({ user, key }) => {
     const [isHovered, setIsHovered] = React.useState(false)
 
     return (
@@ -54,11 +60,12 @@ const UserChat = () => {
             onMouseLeave={() => {
                 setIsHovered(false)
             }}
+            key={key}
         >
-            <AvatarOnline online />
+            <AvatarOnline avt={user?.picture} online />
             <Flex vertical gap="none">
                 <Typography.Text style={{ fontSize: 15, fontWeight: 500 }}>
-                    Nguyen Phan Viet Trung
+                    {user?.name}
                 </Typography.Text>
                 <Typography.Text style={{ fontSize: 12 }}>slkdfjsdkfjsd . 12 giờ</Typography.Text>
             </Flex>

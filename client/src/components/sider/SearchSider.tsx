@@ -4,6 +4,12 @@ import { ArrowLeftOutlined, SearchOutlined } from "@ant-design/icons"
 import UserChat from "./UserChat"
 import { Flex as BoxResultSearch } from "antd"
 import { paddingSider } from "./styles"
+import { useDispatch } from "react-redux"
+import { actions } from "~/redux/users/slice"
+import ActionTypes from "~/redux/users/actionTypes"
+import { useEffect } from "react"
+import { useSelector } from "react-redux"
+import { selectUser } from "~/redux/selectors"
 
 interface ISearchSider {
     placeholder: string
@@ -11,6 +17,12 @@ interface ISearchSider {
 
 const SearchSider: React.FC<ISearchSider> = ({ placeholder }) => {
     const [focusInput, setFocusInput] = useState<Boolean>(false)
+    const dispatch = useDispatch()
+    const search = useSelector(selectUser)?.search
+
+    useEffect(() => {
+        console.log("search", search)
+    }, [search])
 
     const handleFocus = () => {
         setFocusInput(true)
@@ -18,6 +30,11 @@ const SearchSider: React.FC<ISearchSider> = ({ placeholder }) => {
 
     const handleBlur = () => {
         setFocusInput(false)
+    }
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const key = event.target.value
+        dispatch(actions[ActionTypes.SEARCH_REQUEST](key))
     }
 
     return (
@@ -52,6 +69,7 @@ const SearchSider: React.FC<ISearchSider> = ({ placeholder }) => {
                         }}
                         onFocus={handleFocus}
                         onBlur={handleBlur}
+                        onChange={handleChange}
                     />
                 </Flex>
             </Flex>
@@ -73,29 +91,10 @@ const SearchSider: React.FC<ISearchSider> = ({ placeholder }) => {
                     height: `calc(100vh - 100px)`,
                 }}
             >
-                <UserChat />
-                <UserChat />
-                <UserChat />
-                <UserChat />
-                <UserChat />
-                <UserChat />
-                <UserChat />
-                <UserChat />
-                <UserChat />
-                <UserChat />
-                <UserChat />
-                <UserChat />
-                <UserChat />
-                <UserChat />
-                <UserChat />
-                <UserChat />
-                <UserChat />
-                <UserChat />
-                <UserChat />
-                <UserChat />
-                <UserChat />
-                <UserChat />
-                <UserChat />
+                {Array.isArray(search) &&
+                    search?.map((user, index) => {
+                        return <UserChat user={user} key={index} />
+                    })}
             </BoxResultSearch>
         </Flex>
     )

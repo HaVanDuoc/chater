@@ -15,12 +15,12 @@ const dotStyle = {
 
 const AvatarOnline: React.FC<IAvatarOnline> = ({
     online = false,
-    avt = <UserOutlined />,
+    avt = null,
     size = 45,
 }) => {
     return (
         <Badge dot={online} status="success" offset={["-5%", "80%"]} style={dotStyle}>
-            <Avatar size={size} icon={avt} />
+            <Avatar size={size} icon={<UserOutlined />} src={avt} />
         </Badge>
     )
 }
