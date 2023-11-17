@@ -5,6 +5,7 @@ const userRoutes = () => {
     const router = Router()
 
     router.get("/getOne/:userId", UserControllers.getOne)
+    router.post("/search", UserControllers.search)
 
     return router
 }
