@@ -3,8 +3,8 @@ import { MessageArgsProps } from "antd"
 import ActionTypes from "./actionTypes"
 
 const initialState: MessageArgsProps & { show: boolean } = {
-    type: "loading",
-    content: "undefined",
+    type: undefined,
+    content: null,
     show: false,
 }
 
@@ -12,10 +12,13 @@ const messageSlice = createSlice({
     name: "message",
     initialState,
     reducers: {
-        [ActionTypes.MESSAGE]: (state, action) => {
+        [ActionTypes.MESSAGE_OPEN]: (state, action) => {
             state.type = action.payload.type
             state.content = action.payload.content
-            state.show = !state.show
+            state.show = true
+        },
+        [ActionTypes.MESSAGE_CLOSE]: () => {
+            return initialState
         },
     },
 })

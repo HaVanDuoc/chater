@@ -2,8 +2,6 @@ import { all, call, put, takeLatest } from "redux-saga/effects"
 import Api from "./api"
 import { actions } from "./slice"
 import ActionTypes from "./actionTypes"
-// import ActionTypeMessage from "../message/actionTypes"
-// import { actionMessages } from "../message/slice"
 
 export function* loginSaga(action: any): Generator<any, any, any> {
     try {
@@ -19,7 +17,7 @@ export function* loginSaga(action: any): Generator<any, any, any> {
 
         // Alert
         // yield put(
-        //     actionMessages[ActionTypeMessage.MESSAGE]({
+        //     actionMessages[ActionTypeMessage.MESSAGE_OPEN]({
         //         type: "success",
         //         content: loginResponse.message,
         //     }),
