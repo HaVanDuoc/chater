@@ -6,7 +6,6 @@ const userPersistConfig = {
     key: "user",
     storage,
     whitelist: ["currentUser"],
-    blacklist: ["message", "data"],
 }
 
 export const persistedUserReducer = persistReducer(userPersistConfig, userReducer)

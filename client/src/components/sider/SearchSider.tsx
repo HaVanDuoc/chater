@@ -111,6 +111,7 @@ const SearchSider: React.FC<ISearchSider> = ({ placeholder }) => {
                                     _id={user?._id}
                                     avatar={user?.picture}
                                     name={user?.name}
+                                    email={user?.email}
                                     key={index}
                                 />
                             )
@@ -127,9 +128,10 @@ interface IItemSearch {
     _id: IUser["_id"]
     name: IUser["name"]
     avatar: IUser["picture"]
+    email: IUser["email"]
 }
 
-const ItemSearch: React.FC<IItemSearch> = ({ _id, name, avatar }) => {
+const ItemSearch: React.FC<IItemSearch> = ({ _id, name, avatar, email }) => {
     const [isHovered, setIsHovered] = React.useState(false)
     const navigate = useNavigate()
 
@@ -160,6 +162,9 @@ const ItemSearch: React.FC<IItemSearch> = ({ _id, name, avatar }) => {
             <AvatarOnline avt={avatar} size={35} online />
             <Flex vertical gap="none">
                 <Typography.Text style={{ fontSize: 15, fontWeight: 500 }}>{name}</Typography.Text>
+                <Typography.Text style={{ fontSize: 12, fontStyle: "italic" }}>
+                    {email}
+                </Typography.Text>
             </Flex>
         </Flex>
     )
