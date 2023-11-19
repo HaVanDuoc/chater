@@ -1,9 +1,9 @@
-import axios from "axios"
+import instance from "~/utils/instanceAxios"
 
 namespace Api {
     export const login = async (access_token: string) => {
         try {
-            const response = await axios.post(`http://localhost:5000/api/auth/login`, {
+            const response = await instance.post(`/auth/login`, {
                 access_token,
             })
             return response.data
@@ -14,7 +14,7 @@ namespace Api {
 
     export const search = async (key: string) => {
         try {
-            const response = await axios.post(`http://localhost:5000/api/user/search`, {
+            const response = await instance.post(`/user/search`, {
                 key,
             })
             return response.data

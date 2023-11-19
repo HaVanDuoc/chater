@@ -1,4 +1,5 @@
 import User, { IUser } from "../models/User"
+import { signToken } from "../helpers"
 
 namespace AuthServices {
     export const login = async (userData: IUser) => {
@@ -29,16 +30,16 @@ namespace AuthServices {
                 await User.create(userData)
             }
 
-            const user = await User.findOne({ email: userData?.email })
-                .populate({
-                    path: "role",
-                    select: "name",
-                })
-                .populate({
-                    path: "status",
-                    select: "name",
-                })
+            const user: any = await User.findOne({ email: userData?.email })
+                .populate("role", "name")
+                .populate("friends", "name picture")
                 .exec()
+
+            // Create token
+            const token = signToken(user?._id, user?.name)
+            if (token) {
+                user["token"] = token
+            }
 
             return { message: "Login successful", data: user }
         } catch (error) {

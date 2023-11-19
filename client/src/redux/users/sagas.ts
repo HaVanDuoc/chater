@@ -13,6 +13,7 @@ export function* loginSaga(action: any): Generator<any, any, any> {
 
         // dispatch succeeded
         yield put(actions[ActionTypes.USER_LOGIN_SUCCEEDED](loginResponse))
+        localStorage.setItem("token", loginResponse?.data?.token)
         window.location.href = "/chat"
 
         // Alert

@@ -6,7 +6,11 @@ export interface IUser {
     given_name: string
     name: string
     picture: string
+    token: string
     role: any
     status: any
+    friends: any
+    chats: any
+    createdAt: string
     updatedAt: string
 }
