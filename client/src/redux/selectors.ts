@@ -10,3 +10,8 @@ export const selectMessage = createSelector(
     (state: RootState) => state.message,
     (message) => message,
 )
+
+export const selectChat = createSelector(
+    (state: RootState) => state.chats,
+    (chats) => chats,
+)

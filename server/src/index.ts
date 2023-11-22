@@ -4,8 +4,8 @@ import dotenv from "dotenv"
 import connectDB from "./utils/connectDB"
 import config from "./config"
 import cors from "cors"
-import { createServer } from "node:http"
-import { Server } from "socket.io"
+import http from "http"
+import { Server, Socket } from "socket.io"
 
 //middleware
 const app = express()
@@ -17,10 +17,10 @@ dotenv.config()
 initRoute(app)
 
 // Connect to socket
-const server = createServer(app)
+const server = http.createServer(app)
 const io = new Server(server)
 
-io.on("connection", (socket) => {
+io.on("connection", (socket: Socket) => {
     console.log("A user connected")
 
     socket.on("disconnect", () => {

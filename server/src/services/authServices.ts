@@ -1,9 +1,12 @@
 import User, { IUser } from "../models/User"
 import { signToken } from "../helpers"
+import executeDB from "./db"
 
 namespace AuthServices {
     export const login = async (userData: IUser) => {
         try {
+            var data: { token?: string; invites?: any[]; chats?: any } = {}
+
             // Check existing user
             // And get user info
             const find = await User.findOne({ email: userData?.email })
@@ -30,18 +33,18 @@ namespace AuthServices {
                 await User.create(userData)
             }
 
+            // Info current user
             const user: any = await User.findOne({ email: userData?.email })
                 .populate("role", "name")
                 .populate("friends", "name picture")
                 .exec()
 
-            // Create token
-            const token = signToken(user?._id, user?.name)
-            if (token) {
-                user["token"] = token
-            }
+            data = { ...user._doc }
+            data["token"] = signToken(user?._id, user?.name) // create token
+            data["invites"] = await executeDB.getInvites(user?._id) // get list invites
+            data.chats = await executeDB.getChats(user?._id)
 
-            return { message: "Login successful", data: user }
+            return { message: "Login successful", data: data }
         } catch (error) {
             return error
         }

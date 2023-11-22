@@ -1,0 +1,7 @@
+const typesChat = {
+    FETCH_CHAT_REQUEST: "FETCH_CHAT_REQUEST",
+    FETCH_CHAT_SUCCESS: "FETCH_CHAT_SUCCESS",
+    FETCH_CHAT_FAILURE: "FETCH_CHAT_FAILURE",
+}
+
+export default typesChat

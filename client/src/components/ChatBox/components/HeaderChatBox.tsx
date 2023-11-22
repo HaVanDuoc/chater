@@ -1,8 +1,14 @@
 import { EllipsisOutlined, PhoneFilled, VideoCameraFilled } from "@ant-design/icons"
 import { Button, Flex, Tooltip, Typography } from "antd"
 import AvatarOnline from "~/components/AvatarOnline"
+import { IChat } from "~/redux/chats/interfaces"
 
-const HeaderChatBox = () => {
+interface IHeaderChatBox {
+    name: IChat["name"]
+    avatar: IChat["avatar"]
+}
+
+const HeaderChatBox: React.FC<IHeaderChatBox> = ({ name, avatar }) => {
     return (
         <Flex
             align="center"
@@ -15,15 +21,15 @@ const HeaderChatBox = () => {
             }}
         >
             <Flex gap={7} align="center">
-                <AvatarOnline online size={38} />
+                <AvatarOnline online size={38} avt={avatar} />
 
                 <Flex vertical gap={0}>
-                    <Typography style={{ fontSize: 16, fontWeight: 500 }}>Việt Trung</Typography>
+                    <Typography style={{ fontSize: 16, fontWeight: 500 }}>{name}</Typography>
                     <Typography style={{ fontSize: 13 }}>Đang hoạt động</Typography>
                 </Flex>
             </Flex>
 
-            <Flex gap={7}>
+            <Flex gap={7} align="center">
                 <Tooltip title="Phone call">
                     <Button
                         icon={<PhoneFilled style={{ color: "dodgerblue" }} />}

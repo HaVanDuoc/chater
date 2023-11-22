@@ -1,6 +1,5 @@
 import React from "react"
 import { Flex, Typography } from "antd"
-import { paddingSider } from "./styles"
 
 interface ITitleSider {
     content: React.ReactNode
@@ -8,7 +7,7 @@ interface ITitleSider {
 
 const TitleSider: React.FC<ITitleSider> = ({ content }) => {
     return (
-        <Flex justify="space-between" align="center" style={{ margin: paddingSider }}>
+        <Flex justify="space-between" align="center">
             <Typography.Title level={3} style={{ fontWeight: "bold" }}>
                 {content}
             </Typography.Title>

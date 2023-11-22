@@ -15,7 +15,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
                     .status(HttpStatusCodes.UNAUTHORIZED)
                     .json({ message: "Phiên đăng nhập hết hạn. Yêu cầu đăng nhập lại" })
             } else {
-                // req.body.currentUser = user
+                req.body.decodeToken = user
                 return next()
             }
         })

@@ -15,7 +15,11 @@ const buttons = [
     { icon: <FileGifOutlined />, title: "Chọn file gif" },
 ]
 
-const FooterChatBox: React.FC = () => {
+interface IFooterChatBox {
+    data: any
+}
+
+const FooterChatBox: React.FC<IFooterChatBox> = ({ data }) => {
     const [form] = Form.useForm()
 
     const onFinish = (values: { message: string }) => {

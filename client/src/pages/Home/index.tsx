@@ -4,12 +4,13 @@ import { useNavigate } from "react-router"
 import { selectUser } from "~/redux/selectors"
 
 const HomePage = () => {
-    const currentUser = useSelector(selectUser)?.currentUser
     const navigate = useNavigate()
+    const currentUser = useSelector(selectUser)?.currentUser
+    const chatId = currentUser?.chats[0]?._id
 
     useEffect(() => {
-        currentUser ? navigate("/chat") : navigate("/login")
-    }, [currentUser, navigate])
+        currentUser ? navigate(`/chat/${chatId}`) : navigate("/login")
+    }, [currentUser, chatId, navigate])
 
     return <Fragment />
 }
