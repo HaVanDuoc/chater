@@ -1,11 +1,12 @@
-import { all, call, put, takeLatest } from "redux-saga/effects"
 import Api from "./api"
-import { actions } from "./slice"
 import ActionTypes from "./actionTypes"
+import { actions } from "./slice"
+import { toast } from "react-toastify"
+import { all, call, put, takeLatest } from "redux-saga/effects"
 
 export function* loginSaga(action: any): Generator<any, any, any> {
     try {
-        const loginResponse = yield call(Api.login, action.payload)
+        const loginResponse = yield call(Api.login, action.payload.access_token)
 
         // Check error of API no response
         if (loginResponse?.code === "ERR_BAD_REQUEST")
@@ -15,15 +16,8 @@ export function* loginSaga(action: any): Generator<any, any, any> {
         yield put(actions[ActionTypes.USER_LOGIN_SUCCEEDED](loginResponse))
         localStorage.setItem("token", loginResponse?.data?.token)
         const newestChatId = loginResponse?.data?.chats[0]?._id
-        window.location.href = `/chat${newestChatId ? "/" + newestChatId : ""}`
-
-        // Alert
-        // yield put(
-        //     actionMessages[ActionTypeMessage.MESSAGE_OPEN]({
-        //         type: "success",
-        //         content: loginResponse.message,
-        //     }),
-        // )
+        action.payload.navigate(`/chat${newestChatId ? "/" + newestChatId : ""}`)
+        toast.success(loginResponse?.message)
     } catch (error) {
         yield put(actions[ActionTypes.USER_LOGIN_FAILED](error))
     }

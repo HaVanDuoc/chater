@@ -44,7 +44,7 @@ namespace AuthServices {
             data["invites"] = await executeDB.getInvites(user?._id) // get list invites
             data.chats = await executeDB.getChats(user?._id)
 
-            return { message: "Login successful", data: data }
+            return { message: "Đăng nhập thành công!", data: data }
         } catch (error) {
             return error
         }

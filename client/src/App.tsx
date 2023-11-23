@@ -1,6 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { routes } from "./routes"
 import Login from "./pages/Login"
+import NotificationToast from "./components/NotificationToast"
+import "react-toastify/dist/ReactToastify.css";
+
 // import { message } from "antd"
 // import { useSelector } from "react-redux"
 // import { selectMessage } from "./redux/selectors"
@@ -29,6 +32,7 @@ function App() {
                                 path={path}
                                 element={
                                     <>
+                                        <NotificationToast />
                                         <Page />
                                     </>
                                 }
