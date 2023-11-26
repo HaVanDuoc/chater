@@ -1,5 +1,5 @@
 import Api from "./api"
-import ActionTypes from "./actionTypes"
+import ActionTypes from "./types"
 import { actions } from "./slice"
 import { toast } from "react-toastify"
 import { all, call, put, takeLatest } from "redux-saga/effects"
@@ -74,10 +74,18 @@ export function* acceptFriend(action: any): Generator<any, any, any> {
 export function* rejectFriend(action: any): Generator<any, any, any> {
     try {
         const reject = yield call(Api.rejectFriend, action.payload)
-        console.log("reject", reject)
         yield put(actions[ActionTypes.REJECT_FRIEND_SUCCESS](reject))
     } catch (error) {
         yield put(actions[ActionTypes.REJECT_FRIEND_FAILURE](error))
+    }
+}
+
+export function* deleteFriend(action: any): Generator<any, any, any> {
+    try {
+        const deleteFriend = yield call(Api.deleteFriend, action.payload)
+        yield put(actions[ActionTypes.DELETE_FRIEND_SUCCESS](deleteFriend))
+    } catch (error) {
+        yield put(actions[ActionTypes.DELETE_FRIEND_FAILURE](error))
     }
 }
 
@@ -90,5 +98,6 @@ export default function* userSaga() {
         takeLatest(actions[ActionTypes.FRIEND_REQUEST].type, requestFriend),
         takeLatest(actions[ActionTypes.ACCEPT_FRIEND_REQUEST].type, acceptFriend),
         takeLatest(actions[ActionTypes.REJECT_FRIEND_REQUEST].type, rejectFriend),
+        takeLatest(actions[ActionTypes.DELETE_FRIEND_REQUEST].type, deleteFriend),
     ])
 }

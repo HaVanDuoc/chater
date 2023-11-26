@@ -17,7 +17,7 @@ import { useSelector } from "react-redux"
 import { selectUser } from "~/redux/selectors"
 import { useDispatch } from "react-redux"
 import { actions } from "~/redux/users/slice"
-import ActionTypes from "~/redux/users/actionTypes"
+import ActionTypes from "~/redux/users/types"
 
 const ChatSiderFooter = () => {
     const paddingCSS = "7px 15px"

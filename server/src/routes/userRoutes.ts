@@ -16,6 +16,8 @@ const userRoutes = () => {
     router.post("/requestFriend/accept", UserControllers.acceptInviteRequestFriend)
     router.post("/requestFriend/reject", UserControllers.rejectInviteRequestFriend)
 
+    router.post("/deleteFriend/:userId", UserControllers.deleteFriend)
+
     return router
 }
 

@@ -6,7 +6,6 @@ import { Flex as ListChat } from "antd"
 import ChatSiderFooter from "./ChatSiderFooter"
 import { useSelector } from "react-redux"
 import { selectUser } from "~/redux/selectors"
-import { useEffect } from "react"
 import BoxAlertInviteAddFriend from "~/components/BoxAlertInviteAddFriend"
 import { paddingSider } from "~/components/sider/styles"
 import BoxChat from "./BoxChat"
@@ -15,10 +14,6 @@ const ChatSider = () => {
     const { colorBorder } = theme.useToken().token
     const user = useSelector(selectUser)
     const chats = user?.currentUser?.chats || []
-
-    // useEffect(() => {
-    //     console.log("user", user)
-    // }, [user])
 
     return (
         <Flex

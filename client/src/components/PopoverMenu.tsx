@@ -38,13 +38,13 @@ export interface IItemPopover {
     onClick?: any
 }
 
-const ItemPopover: React.FC<IItemPopover> = ({ content, icon, hasDivider = false, onClick }) => {
-    const WrapperContentPop = styled(Flex)`
-        &:hover {
-            background: #f3f5f5;
-        }
-    `
+const WrapperContentPop = styled(Flex)`
+    &:hover {
+        background: #f3f5f5;
+    }
+`
 
+const ItemPopover: React.FC<IItemPopover> = ({ content, icon, hasDivider = false, onClick }) => {
     const iconStyle = { backgroundColor: "#ebebeb", padding: 8, borderRadius: "50%" }
 
     return (

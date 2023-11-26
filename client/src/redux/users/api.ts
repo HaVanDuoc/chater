@@ -57,9 +57,16 @@ namespace Api {
 
     export const rejectFriend = async (data: { invite: string }) => {
         try {
-            console.log("data in api", data)
-
             const response = await instance.post(`/user/requestFriend/reject`, data)
+            return response.data
+        } catch (error) {
+            return error
+        }
+    }
+
+    export const deleteFriend = async (friendId: IUser["_id"]) => {
+        try {
+            const response = await instance.delete(`/user/deleteFriend/${friendId}`)
             return response.data
         } catch (error) {
             return error

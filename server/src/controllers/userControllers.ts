@@ -79,6 +79,17 @@ namespace UserControllers {
             res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error!")
         }
     }
+
+    export const deleteFriend = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const current_user_id = req.body.decodeToken._id
+            const { userId: others_id } = req.params
+            const response = await UserServices.deleteFriend(current_user_id, others_id)
+            return res.status(HttpStatusCodes.OK).json(response)
+        } catch (error) {
+            res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error!")
+        }
+    }
 }
 
 export default UserControllers

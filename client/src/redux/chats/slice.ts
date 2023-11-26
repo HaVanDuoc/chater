@@ -20,7 +20,8 @@ const chatSlice = createSlice({
     name: "chat",
     initialState,
     reducers: {
-        [typesChat.FETCH_CHAT_REQUEST]: (state, action) => {
+        // Action FETCH chat
+        [typesChat.FETCH_CHAT_REQUEST]: (state) => {
             state.status = "pending"
         },
         [typesChat.FETCH_CHAT_SUCCESS]: (state, action) => {
@@ -32,10 +33,23 @@ const chatSlice = createSlice({
             state.status = "failed"
             state.error = action.payload
         },
+
+        // Action DELETE chat
+        [typesChat.DELETE_CHAT_REQUEST]: (state) => {
+            state.status = "pending"
+        },
+        [typesChat.DELETE_CHAT_SUCCESS]: (state, action) => {
+            state.status = "succeeded"
+            state.message = action.payload.message
+        },
+        [typesChat.DELETE_CHAT_FAILURE]: (state, action) => {
+            state.status = "failed"
+            state.error = action.payload
+        },
     },
 })
 
-export const actionsChat = chatSlice.actions
+export const chatActions = chatSlice.actions
 
 const chatReducer = chatSlice.reducer
 

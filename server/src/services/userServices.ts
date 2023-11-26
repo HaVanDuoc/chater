@@ -135,6 +135,40 @@ namespace UserServices {
             return error
         }
     }
+
+    export const deleteFriend = async (current_user_id: string, others_id: string) => {
+        const checkFriend = async () => {
+            const user = await User.findById(current_user_id)
+            if (user) {
+                const friend = user.friends.find((id: any) => id === others_id)
+                return friend
+            }
+            return null
+        }
+
+        try {
+            // check friends
+            const check = await checkFriend()
+            if (!check) {
+                return { message: "Cả hai chưa từng là bạn!" }
+            }
+
+            const deleteInCurrentUser = await User.findByIdAndDelete(current_user_id, {
+                $pull: { friends: others_id },
+            })
+            const deleteInOthers = await User.findByIdAndUpdate(others_id, {
+                $pull: { friends: current_user_id },
+            })
+
+            if (deleteInCurrentUser && deleteInOthers) {
+                return { message: "Đã hủy kết bạn!" }
+            }
+
+            return { message: "Error! Please again." }
+        } catch (error) {
+            return error
+        }
+    }
 }
 
 export default UserServices

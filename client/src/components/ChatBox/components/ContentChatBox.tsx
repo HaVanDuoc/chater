@@ -5,7 +5,7 @@ import { UserOutlined } from "@ant-design/icons"
 import { useParams } from "react-router"
 import { useDispatch } from "react-redux"
 import { actions } from "~/redux/users/slice"
-import ActionTypes from "~/redux/users/actionTypes"
+import ActionTypes from "~/redux/users/types"
 import { useSelector } from "react-redux"
 import { selectUser } from "~/redux/selectors"
 

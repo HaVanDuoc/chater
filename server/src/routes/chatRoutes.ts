@@ -6,6 +6,7 @@ const chatRoutes = () => {
 
     router.get("/:userId", ChatControllers.getByUserId)
     router.get("/getChat/:chatId", ChatControllers.getChatById)
+    router.delete("/:chatId", ChatControllers.deleteChat)
 
     return router
 }

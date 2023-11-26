@@ -3,7 +3,7 @@ import { Avatar, Button, Flex, Typography, theme } from "antd"
 import React, { useState } from "react"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router"
-import ActionTypes from "~/redux/users/actionTypes"
+import ActionTypes from "~/redux/users/types"
 import { actions } from "~/redux/users/slice"
 
 interface IItem {

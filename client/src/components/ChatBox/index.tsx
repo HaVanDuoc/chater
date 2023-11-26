@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import { useEffect } from "react"
 import { Flex as WrapChatBox } from "antd"
 import { widthSider } from "~/layouts/DefaultLayout"
 import HeaderChatBox from "./components/HeaderChatBox"
@@ -7,9 +7,9 @@ import FooterChatBox from "./components/FooterChatBox"
 import { useParams } from "react-router"
 import { useSelector } from "react-redux"
 import { selectChat } from "~/redux/selectors"
-import { actionsChat } from "~/redux/chats/slice"
-import typesChat from "~/redux/chats/types"
 import { useDispatch } from "react-redux"
+import { chatActions } from "~/redux/chats/slice"
+import chatTypes from "~/redux/chats/types"
 
 const ChatBox = () => {
     const dispatch = useDispatch()
@@ -23,7 +23,7 @@ const ChatBox = () => {
 
     useEffect(() => {
         if (chatId) {
-            dispatch(actionsChat[typesChat.FETCH_CHAT_REQUEST](chatId))
+            dispatch(chatActions[chatTypes.FETCH_CHAT_REQUEST](chatId))
         }
     }, [chatId, dispatch])
 

@@ -10,3 +10,8 @@ export const selectChat = createSelector(
     (state: RootState) => state.chats,
     (chats) => chats,
 )
+
+export const selectConfirmDialog = createSelector(
+    (state: RootState) => state.confirmDialog,
+    (confirmDialog) => confirmDialog,
+)

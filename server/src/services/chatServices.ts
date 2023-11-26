@@ -29,6 +29,18 @@ namespace ChatServices {
             throw new Error("Login Failed")
         }
     }
+
+    export const deleteChat = async (chatId: string) => {
+        try {
+            const deleteChat = await Chat.findByIdAndDelete(chatId)
+
+            if (deleteChat) {
+                return { message: "Đã xóa cuộc trò chuyện!" }
+            }
+        } catch (error) {
+            throw new Error("Delete chat failed!")
+        }
+    }
 }
 
 export default ChatServices

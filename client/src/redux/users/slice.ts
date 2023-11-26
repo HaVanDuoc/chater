@@ -1,4 +1,4 @@
-import ActionTypes from "./actionTypes"
+import ActionTypes from "./types"
 import { createSlice } from "@reduxjs/toolkit"
 import { IUser } from "./interfaces"
 import { Status } from "../types"
@@ -100,6 +100,19 @@ const userSlice = createSlice({
             state.message = action.payload.message
         },
         [ActionTypes.REJECT_FRIEND_FAILURE]: (state, action) => {
+            state.status = "failed"
+            state.error = action.payload
+        },
+
+        // Action DELETE friend
+        [ActionTypes.DELETE_FRIEND_REQUEST]: (state) => {
+            state.status = "pending"
+        },
+        [ActionTypes.DELETE_FRIEND_SUCCESS]: (state, action) => {
+            state.status = "succeeded"
+            state.message = action.payload.message
+        },
+        [ActionTypes.ACCEPT_FRIEND_FAILURE]: (state, action) => {
             state.status = "failed"
             state.error = action.payload
         },

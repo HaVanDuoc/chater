@@ -2,22 +2,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { routes } from "./routes"
 import Login from "./pages/Login"
 import NotificationToast from "./components/NotificationToast"
-import "react-toastify/dist/ReactToastify.css";
-
-// import { message } from "antd"
-// import { useSelector } from "react-redux"
-// import { selectMessage } from "./redux/selectors"
-// import { useEffect } from "react"
+import "react-toastify/dist/ReactToastify.css"
 
 function App() {
-    // const messageData = useSelector(selectMessage)
-
-    // useEffect(() => {
-    //     const { type, content } = messageData
-    //     messageData.type && message.open({ type, content })
-    //     console.log("messageData", messageData)
-    // }, [messageData])
-
     return (
         <div className="App">
             <BrowserRouter>
