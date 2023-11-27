@@ -16,19 +16,8 @@ export interface IUser {
     status: Schema.Types.ObjectId
     friends: Schema.Types.ObjectId[]
     chats: Schema.Types.ObjectId[]
+    chat?: any
 }
-
-// async function getDefaultRole() {
-//     const role = await Role.findOne({ name: "User" }).select("_id").exec()
-//     console.log("role?._id", role?._id)
-//     return role?._id
-// }
-
-// async function getDefaultStatus() {
-//     const status = await StatusAccount.findOne({ name: "Offline" }).select("_id").exec()
-//     console.log("status", status?._id)
-//     return status?._id
-// }
 
 const userSchema = new Schema<IUser>(
     {

@@ -1,10 +1,10 @@
 import { model, Schema } from "mongoose"
 
 export interface IMessage {
+    chat: Schema.Types.ObjectId
+    sender: Schema.Types.ObjectId
     content: string
-    auth: Schema.Types.ObjectId
-    reply: Schema.Types.ObjectId
-    ofChat: Schema.Types.ObjectId
+    reply?: Schema.Types.ObjectId
 }
 
 const messageSchema = new Schema<IMessage>(
@@ -12,7 +12,7 @@ const messageSchema = new Schema<IMessage>(
         content: {
             type: String,
         },
-        auth: {
+        sender: {
             type: Schema.Types.ObjectId,
             ref: "User",
         },
@@ -20,7 +20,7 @@ const messageSchema = new Schema<IMessage>(
             type: Schema.Types.ObjectId,
             ref: "Message",
         },
-        ofChat: {
+        chat: {
             type: Schema.Types.ObjectId,
             ref: "Chat",
         },

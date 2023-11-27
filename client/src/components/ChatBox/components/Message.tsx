@@ -1,10 +1,11 @@
 import { UserOutlined } from "@ant-design/icons"
-import { Avatar, Flex } from "antd"
+import { Avatar, Flex, Tooltip } from "antd"
 import React from "react"
 import styled from "styled-components"
 
 interface IMessage {
     sender: string
+    avatar: string
     content: string
     isUser: boolean
     isSameSender: boolean
@@ -33,7 +34,7 @@ const WrapMessage = styled(Flex)`
     }
 `
 
-const Message: React.FC<IMessage> = ({ content, isUser, isSameSender, isLast }) => (
+const Message: React.FC<IMessage> = ({ sender, avatar, content, isUser, isSameSender, isLast }) => (
     <WrapMessage
         align="center"
         justify={isUser ? "flex-end" : "flex-start"}
@@ -41,7 +42,9 @@ const Message: React.FC<IMessage> = ({ content, isUser, isSameSender, isLast }) 
         style={{ marginTop: isSameSender ? 2 : 10 }}
     >
         {!isUser && isLast ? (
-            <Avatar icon={<UserOutlined />} />
+            <Tooltip title={sender} placement="left">
+                <Avatar icon={<UserOutlined />} src={avatar} />
+            </Tooltip>
         ) : (
             <Avatar icon={<UserOutlined />} style={{ opacity: 0 }} />
         )}

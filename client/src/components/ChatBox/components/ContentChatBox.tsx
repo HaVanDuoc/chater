@@ -9,44 +9,6 @@ import ActionTypes from "~/redux/users/types"
 import { useSelector } from "react-redux"
 import { selectUser } from "~/redux/selectors"
 
-export const messages = [
-    { sender: "user", content: "Hello!" },
-    { sender: "user", content: "Hello!" },
-    { sender: "user", content: "Hello!" },
-    { sender: "other", content: "Hi, how are you?" },
-    { sender: "other", content: "Hi, how are you?" },
-    { sender: "user", content: "Hello!" },
-    { sender: "other", content: "Hi, how are you?" },
-    { sender: "user", content: "Hello!" },
-    { sender: "other", content: "Hi, how are you?" },
-    { sender: "user", content: "Hello!" },
-    { sender: "other", content: "Hi, how are you?" },
-    { sender: "user", content: "Hello!" },
-    { sender: "other", content: "Hi, how are you?" },
-    { sender: "user", content: "Hello!" },
-    { sender: "other", content: "Hi, how are you?" },
-    { sender: "user", content: "Hello!" },
-    { sender: "other", content: "Hi, how are you?" },
-    { sender: "user", content: "Hello!" },
-    { sender: "other", content: "Hi, how are you?" },
-    { sender: "user", content: "Hello!" },
-    { sender: "other", content: "Hi, how are you?" },
-    { sender: "user", content: "Hello!" },
-    { sender: "other", content: "Hi, how are you?" },
-    { sender: "user", content: "Hello!" },
-    { sender: "other", content: "Hi, how are you?" },
-    { sender: "user", content: "Hello!" },
-    { sender: "other", content: "Hi, how are you?" },
-    { sender: "user", content: "Hello!" },
-    { sender: "other", content: "Hi, how are you?" },
-    { sender: "other", content: "Hi, how are you?" },
-    { sender: "other", content: "Hi, how are you?" },
-    { sender: "other", content: "Hi, how are you?" },
-    { sender: "other", content: "Hi, how are you?" },
-    { sender: "other", content: "Hi, how are you?" },
-    { sender: "user", content: "Oke I'm fine thank you, and you?!" },
-]
-
 const InfoFriend = () => {
     const { userId } = useParams()
     const dispatch = useDispatch()
@@ -86,11 +48,12 @@ const InfoFriend = () => {
 }
 
 interface IContentChatBox {
-    data: any
+    data: any[]
 }
 
-const ContentChatBox: React.FC<IContentChatBox> = ({ data }) => {
+const ContentChatBox: React.FC<IContentChatBox> = ({ data = [] }) => {
     const scrollRef = useRef(null)
+    const current_user_id = useSelector(selectUser)?.currentUser?._id
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -111,17 +74,20 @@ const ContentChatBox: React.FC<IContentChatBox> = ({ data }) => {
             }}
             ref={scrollRef}
         >
-            {data ? (
-                messages.map((message, index) => (
+            {data.length ? (
+                data?.map((message, index) => (
                     <Message
                         key={index}
-                        sender={message.sender}
+                        sender={message.sender?.name}
+                        avatar={message.sender?.picture}
                         content={message.content}
-                        isUser={message.sender === "user"}
-                        isSameSender={index > 0 && messages[index - 1].sender === message.sender}
+                        isUser={message.sender?._id === current_user_id} // current user
+                        isSameSender={
+                            index > 0 && data[index - 1].sender?._id === message?.sender?._id
+                        }
                         isLast={
-                            index === messages.length - 1 ||
-                            messages[index + 1].sender !== message.sender
+                            index === data.length - 1 ||
+                            data[index + 1].sender?._id !== message.sender?._id
                         }
                     />
                 ))

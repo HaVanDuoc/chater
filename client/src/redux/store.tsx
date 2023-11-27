@@ -1,4 +1,4 @@
-import { applyMiddleware, createStore } from "@reduxjs/toolkit"
+import { configureStore } from "@reduxjs/toolkit"
 import createSagaMiddleware from "redux-saga"
 import rootSaga from "./rootSaga"
 import { useDispatch } from "react-redux"
@@ -9,7 +9,7 @@ import { persistedReducer } from "./persist/root"
 const sagaMiddleware = createSagaMiddleware()
 
 // mount it on the Store
-export const store = createStore(persistedReducer, applyMiddleware(sagaMiddleware))
+export const store = configureStore({ reducer: persistedReducer, middleware: [sagaMiddleware] })
 
 // Create persisted store
 export const persistor = persistStore(store)

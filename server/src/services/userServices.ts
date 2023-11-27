@@ -34,8 +34,16 @@ namespace UserServices {
 
     export const search = async (key: string, userId: IUser["_id"]) => {
         try {
-            const result = await User.find({
-                $and: [{ _id: { $ne: userId } }],
+            const current_user = await User.findById(userId).select("friends").exec()
+
+            var result: { friends: any[]; others: any[] } = {
+                friends: [],
+                others: [],
+            }
+
+            // Search in list friends
+            const friends = await User.find({
+                $and: [{ _id: { $ne: userId } }, { _id: { $in: current_user?.friends } }],
                 $or: [
                     { name: { $regex: key, $options: "i" } },
                     { email: { $regex: key, $options: "i" } },
@@ -43,6 +51,22 @@ namespace UserServices {
             })
                 .select("name email picture")
                 .exec()
+
+            if (friends.length) {
+                result.friends = friends
+            } else {
+                const others = await User.find({
+                    $and: [{ _id: { $ne: userId } }],
+                    $or: [
+                        { name: { $regex: key, $options: "i" } },
+                        { email: { $regex: key, $options: "i" } },
+                    ],
+                })
+                    .select("name email picture")
+                    .exec()
+
+                result.others = others
+            }
 
             return { message: "Get data succeeded", data: result }
         } catch (error) {

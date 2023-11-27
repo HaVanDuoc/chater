@@ -4,14 +4,14 @@ import { ArrowLeftOutlined, SearchOutlined } from "@ant-design/icons"
 import { Flex as BoxResultSearch } from "antd"
 import { paddingSider } from "./styles"
 import { useDispatch } from "react-redux"
-import { actions } from "~/redux/users/slice"
-import ActionTypes from "~/redux/users/types"
 import { useSelector } from "react-redux"
-import { selectUser } from "~/redux/selectors"
+import { selectSearch } from "~/redux/selectors"
 import { IUser } from "~/redux/users/interfaces"
 import AvatarOnline from "../AvatarOnline"
 import { useNavigate } from "react-router"
 import { useRef, useEffect } from "react"
+import { searchActions } from "~/redux/searches/slice"
+import searchTypes from "~/redux/searches/types"
 
 interface ISearchSider {
     placeholder: string
@@ -19,9 +19,9 @@ interface ISearchSider {
 
 const SearchSider: React.FC<ISearchSider> = ({ placeholder }) => {
     const [showResult, setShowResult] = useState<Boolean>(false)
-    const search = useSelector(selectUser)?.search
     const dispatch = useDispatch()
     const containerSearch = useRef<HTMLDivElement>(null)
+    const searches = useSelector(selectSearch)?.data
 
     const handleOutsideClick = (event: any) => {
         if (containerSearch.current && !containerSearch.current.contains(event.target)) {
@@ -42,7 +42,7 @@ const SearchSider: React.FC<ISearchSider> = ({ placeholder }) => {
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const key = event.target.value
-        dispatch(actions[ActionTypes.SEARCH_REQUEST](key))
+        dispatch(searchActions[searchTypes.SEARCH_REQUEST]({ key }))
     }
 
     return (
@@ -104,18 +104,40 @@ const SearchSider: React.FC<ISearchSider> = ({ placeholder }) => {
                         height: `calc(100vh - 100px)`,
                     }}
                 >
-                    {Array.isArray(search) &&
-                        search?.map((user: IUser, index) => {
+                    {searches?.friends?.length &&
+                        searches?.friends?.map((user: IUser) => {
                             return (
                                 <ItemSearch
                                     _id={user?._id}
                                     avatar={user?.picture}
                                     name={user?.name}
                                     email={user?.email}
-                                    key={index}
+                                    key={user?._id}
                                 />
                             )
                         })}
+
+                    {searches?.friends?.length === 0 && (
+                        <>
+                            <Typography.Title
+                                level={5}
+                                style={{ paddingLeft: 16, paddingRight: 16 }}
+                            >
+                                Người khác
+                            </Typography.Title>
+                            {searches?.others?.map((user: IUser) => {
+                                return (
+                                    <ItemSearch
+                                        _id={user?._id}
+                                        avatar={user?.picture}
+                                        name={user?.name}
+                                        email={user?.email}
+                                        key={user?._id}
+                                    />
+                                )
+                            })}
+                        </>
+                    )}
                 </BoxResultSearch>
             )}
         </Flex>

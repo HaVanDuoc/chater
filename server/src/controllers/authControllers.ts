@@ -13,7 +13,7 @@ namespace AuthControllers {
                 headers: { [authorization]: `Bearer ${access_token}` },
             })
 
-            const response = await AuthServices.login(userInfo.data)
+            const response = await AuthServices.login(userInfo.data, access_token)
             return res.status(HttpStatusCodes.OK).json(response)
         } catch (error) {
             res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send(error)

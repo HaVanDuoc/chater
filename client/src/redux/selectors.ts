@@ -15,3 +15,13 @@ export const selectConfirmDialog = createSelector(
     (state: RootState) => state.confirmDialog,
     (confirmDialog) => confirmDialog,
 )
+
+export const selectMessage = createSelector(
+    (state: RootState) => state.messages,
+    (messages) => messages,
+)
+
+export const selectSearch = createSelector(
+    (state: RootState) => state.searches,
+    (searches) => searches,
+)

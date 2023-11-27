@@ -7,6 +7,10 @@ import {
 } from "@ant-design/icons"
 import { Button, Flex, Form, Input, Tooltip } from "antd"
 import React from "react"
+import { useDispatch } from "react-redux"
+import { useParams } from "react-router"
+import { messageActions } from "~/redux/messages/slice"
+import messageTypes from "~/redux/messages/types"
 
 const buttons = [
     { icon: <PlusCircleFilled />, title: "Mở hành động khác" },
@@ -21,11 +25,23 @@ interface IFooterChatBox {
 
 const FooterChatBox: React.FC<IFooterChatBox> = ({ data }) => {
     const [form] = Form.useForm()
+    const { chatId } = useParams()
+    const dispatch = useDispatch()
 
     const onFinish = (values: { message: string }) => {
         console.log("Message sent:", values.message)
-        if (!values) return
-        form.resetFields()
+
+        if (values?.message) {
+            const data = {
+                chat: chatId,
+                content: values.message,
+            }
+
+            // dispatch send messages
+            dispatch(messageActions[messageTypes.SEND_MESSAGE_REQUEST](data))
+
+            form.resetFields()
+        }
     }
 
     return (
@@ -46,9 +62,9 @@ const FooterChatBox: React.FC<IFooterChatBox> = ({ data }) => {
 
             <Form form={form} onFinish={onFinish} style={{ flex: 1 }}>
                 <Form.Item name="message" style={{ marginBottom: 0 }}>
-                    <Input.TextArea
+                    <Input
                         autoFocus
-                        autoSize={{ minRows: 1, maxRows: 3 }}
+                        // autoSize={{ minRows: 1, maxRows: 3 }}
                         placeholder="Aa"
                         bordered={false}
                         size="large"

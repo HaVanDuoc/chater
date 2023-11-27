@@ -10,7 +10,7 @@ const userRoutes = () => {
 
     router.post("/getUser", UserControllers.getUser)
     router.get("/getOne/:userId", UserControllers.getOne)
-    router.post("/search", UserControllers.search)
+    // router.post("/search", UserControllers.search)
 
     router.post("/requestFriend", UserControllers.requestFriend)
     router.post("/requestFriend/accept", UserControllers.acceptInviteRequestFriend)
