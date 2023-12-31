@@ -1,5 +1,4 @@
 import Chat from "../models/Chat"
-import Role from "../models/Role"
 import User, { IUser } from "../models/User"
 
 namespace ChatServices {

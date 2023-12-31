@@ -1,15 +1,13 @@
 import HttpStatusCodes from "http-status-codes"
 import { Response } from "express"
-import authRoutes from "./authRoutes"
-import roleRoutes from "./roleRoutes"
+import authRoutes from "./auth.route"
 import userRoutes from "./userRoutes"
 import chatRoutes from "./chatRoutes"
 import messageRoutes from "./messageRoutes"
 import searchRoutes from "./searchRoutes"
 
 const initRoute = (app: any) => {
-    app.use("/api/auth", authRoutes())
-    app.use("/api/role", roleRoutes())
+    app.use("/", authRoutes())
     app.use("/api/user", userRoutes())
     app.use("/api/chat", chatRoutes())
     app.use("/api/message", messageRoutes())

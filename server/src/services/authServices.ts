@@ -42,7 +42,7 @@ namespace AuthServices {
             data = { ...user._doc }
             data["token"] = signToken(user?._id, user?.name) // create token
             data["invites"] = await executeDB.getInvites(user?._id) // get list invites
-            data.chats = await executeDB.getChats(user?._id)
+            // data.chats = await executeDB.getChats(user?._id)
             data["access_token"] = access_token
 
             return { message: "Đăng nhập thành công!", data: data }

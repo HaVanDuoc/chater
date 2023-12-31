@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express"
 import HttpStatusCodes from "http-status-codes"
 import AuthServices from "../services/authServices"
 import axios from "axios"
-import RoleServices from "../services/rolesServices"
 import ChatServices from "../services/chatServices"
 
 namespace ChatControllers {

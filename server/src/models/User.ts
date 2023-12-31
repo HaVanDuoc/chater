@@ -1,22 +1,19 @@
-import { model, Schema, SchemaDefinitionProperty } from "mongoose"
-import Role from "./Role"
-import StatusAccount from "./StatusAccount"
+import { model, Schema } from "mongoose"
 
 export interface IUser {
     _id?: Schema.Types.ObjectId
     email: string
     email_verified: boolean
-    family_name: string
-    given_name: string
+    displayName: string
+    familyName: string
+    givenName: string
     name: string
     picture: string
     token: string
+    hashed_password: string
+    salt: string
     invites: any
-    role: Schema.Types.ObjectId
-    status: Schema.Types.ObjectId
     friends: Schema.Types.ObjectId[]
-    chats: Schema.Types.ObjectId[]
-    chat?: any
 }
 
 const userSchema = new Schema<IUser>(
@@ -30,10 +27,13 @@ const userSchema = new Schema<IUser>(
             type: Boolean,
             default: false,
         },
-        family_name: {
+        displayName: {
             type: String,
         },
-        given_name: {
+        familyName: {
+            type: String,
+        },
+        givenName: {
             type: String,
         },
         name: {
@@ -45,26 +45,16 @@ const userSchema = new Schema<IUser>(
         token: {
             type: String,
         },
-        role: {
-            type: Schema.Types.ObjectId,
-            ref: "Role",
-            default: "65534ed419c0d3e23369a3e2",
+        hashed_password: {
+            type: String,
         },
-        status: {
-            type: Schema.Types.ObjectId,
-            ref: "StatusAccount",
-            default: "65535165d0f88eb84834c824",
+        salt: {
+            type: String,
         },
         friends: [
             {
                 type: Schema.Types.ObjectId,
                 ref: "User",
-            },
-        ],
-        chats: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "Chat",
             },
         ],
     },

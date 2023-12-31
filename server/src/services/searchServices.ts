@@ -37,7 +37,7 @@ namespace SearchServices {
                         .select("_id")
                         .exec()
 
-                    friends[index].chat = chat ? chat._id : null
+                    // friends[index].chat = chat ? chat._id : null
                 }
             } else {
                 const others = await User.find({

@@ -1,12 +1,9 @@
 import { model, Schema } from "mongoose"
 
-export type TypeChat = "default" | "group"
-
 export interface IChat {
     _id?: Schema.Types.ObjectId
     name?: string
     members: Schema.Types.ObjectId[]
-    type?: TypeChat
 }
 
 const chatSchema = new Schema<IChat>(
@@ -20,10 +17,6 @@ const chatSchema = new Schema<IChat>(
                 ref: "User",
             },
         ],
-        type: {
-            type: String,
-            default: "default",
-        },
     },
     { timestamps: true },
 )

@@ -12,25 +12,25 @@ namespace executeDB {
         return response
     }
 
-    export const getChats = async (userId: any) => {
-        try {
-            const response = await User.findById(userId)
-                .populate({
-                    path: "chats",
-                    populate: {
-                        path: "members",
-                        select: "_id name picture",
-                    },
-                })
-                .exec()
+    // export const getChats = async (userId: any) => {
+    //     try {
+    //         const response = await User.findById(userId)
+    //             .populate({
+    //                 path: "chats",
+    //                 populate: {
+    //                     path: "members",
+    //                     select: "_id name picture",
+    //                 },
+    //             })
+    //             .exec()
 
-            console.log("response", response)
+    //         console.log("response", response)
 
-            return response?.chats || []
-        } catch (error) {
-            throw new Error("Login Failed")
-        }
-    }
+    //         return response?.chats || []
+    //     } catch (error) {
+    //         throw new Error("Login Failed")
+    //     }
+    // }
 
     export const createChat = async (data: IChat) => {
         const response = await Chat.create(data)
