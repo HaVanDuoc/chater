@@ -7,12 +7,8 @@ export interface IUser {
     displayName: string
     familyName: string
     givenName: string
-    name: string
     picture: string
-    token: string
-    hashed_password: string
-    salt: string
-    invites: any
+    accessToken: string
     friends: Schema.Types.ObjectId[]
 }
 
@@ -36,19 +32,10 @@ const userSchema = new Schema<IUser>(
         givenName: {
             type: String,
         },
-        name: {
-            type: String,
-        },
         picture: {
             type: String,
         },
-        token: {
-            type: String,
-        },
-        hashed_password: {
-            type: String,
-        },
-        salt: {
+        accessToken: {
             type: String,
         },
         friends: [

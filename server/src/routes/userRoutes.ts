@@ -1,12 +1,12 @@
 import { Router } from "express"
 import UserControllers from "../controllers/userControllers"
-import { verifyToken } from "../middlewares"
+import Middlewares from "../middlewares"
 
 const userRoutes = () => {
     const router = Router()
 
     // middleware
-    router.use(verifyToken)
+    // router.use(Middlewares.verifyToken)
 
     router.post("/getUser", UserControllers.getUser)
     router.get("/getOne/:userId", UserControllers.getOne)

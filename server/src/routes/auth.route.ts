@@ -1,4 +1,4 @@
-import { Router } from "express"
+import { NextFunction, Request, Response, Router } from "express"
 import AuthControllers from "../controllers/auth.controller"
 import passport from "passport"
 import dotenv from "dotenv"
@@ -14,7 +14,7 @@ const authRoutes = () => {
         "/oauth2/redirect/google",
         passport.authenticate("google", {
             successRedirect: `${process.env.CLIENT_HOST}/chat`,
-            failureRedirect: `${process.env.CLIENT_HOST}/login`,
+            failureRedirect: `${process.env.CLIENT_HOST}`,
         }),
     )
     router.get("/logout", AuthControllers.logout)
