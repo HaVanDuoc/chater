@@ -1,12 +1,12 @@
 import { UserAddOutlined } from "@ant-design/icons"
 import { Badge, Button, Empty, Flex, Popover, Typography } from "antd"
 import { useSelector } from "react-redux"
-import { selectUser } from "~/redux/selectors"
+import { selectInvite } from "~/redux/selectors"
 import Item from "./Item"
 import { IUser } from "~/redux/users/interfaces"
 
 const BoxAlertInviteAddFriend = () => {
-    const invites: IUser["invites"] = useSelector(selectUser)?.currentUser?.invites || []
+    const invites: IUser["invites"] = useSelector(selectInvite).invites || []
 
     const content = (
         <Flex vertical gap={10}>
@@ -25,12 +25,7 @@ const BoxAlertInviteAddFriend = () => {
         <>
             <Popover content={content} trigger="click">
                 <Badge count={invites.length} offset={[-10, 10]} size="small">
-                    <Button
-                        type="text"
-                        icon={<UserAddOutlined />}
-                        size="large"
-                        shape="circle"
-                    />
+                    <Button type="text" icon={<UserAddOutlined />} size="large" shape="circle" />
                 </Badge>
             </Popover>
         </>

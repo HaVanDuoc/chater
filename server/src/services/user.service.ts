@@ -4,16 +4,39 @@ import User, { IUser } from "../models/User"
 import executeDB from "./db"
 
 namespace UserServices {
-    export const getUser = async (data: IUser) => {
+    export const getUser = async (userId: string) => {
         try {
-            const user = await User.findOne(data)
-                .populate({ path: "role", select: "name" })
-                // .populate({ path: "status", select: "name" })
-                .populate({ path: "friends", select: "-createdAt -updateAt -__v" })
-                .exec()
-
-            return { message: "Get data succeeded", data: user }
+            const user = await User.findById(userId).exec()
+            return { message: "Get data succeeded", user }
         } catch (error) {
+            return error
+        }
+    }
+
+    export const addFriend = async (
+        sender: Schema.Types.ObjectId,
+        receiver: Schema.Types.ObjectId,
+    ) => {
+        const checkFriend = async () => {
+            const user = await User.findById(sender)
+            if (user) {
+                const friend = user.friends.find((id: any) => id === receiver)
+                return friend
+            }
+            return null
+        }
+
+        try {
+            // check friends
+            const check = await checkFriend()
+            if (check) return { error: true, message: "Cả hai đã là bạn!" }
+
+            // Đầu tiên tìm và cập nhật nếu không có thì tạo một lời mời
+            const findOneAndUpdate = await Invite.findOneAndUpdate({ sender, receiver })
+            if (!findOneAndUpdate) await Invite.create({ sender, receiver })
+            return { message: "Đã gửi yêu cầu kết bạn!" }
+        } catch (error) {
+            console.log("error - addFriend - user.services.ts", error)
             return error
         }
     }
@@ -69,43 +92,6 @@ namespace UserServices {
             }
 
             return { message: "Get data succeeded", data: result }
-        } catch (error) {
-            return error
-        }
-    }
-
-    export const requestFriend = async ({ sender, receiver, type }: IInvite) => {
-        const checkFriend = async () => {
-            const user = await User.findById(sender)
-            if (user) {
-                const friend = user.friends.find((id: any) => id === receiver)
-                return friend
-            }
-            return null
-        }
-
-        try {
-            // check friends
-            const check = await checkFriend()
-            if (check) {
-                return { message: "Cả hai đã là bạn!" }
-            }
-
-            // const addYou = await User.findByIdAndUpdate(myId, { $push: { friends: friendId } })
-            // const addMe = await User.findByIdAndUpdate(friendId, { $push: { friends: myId } })
-
-            const data = {
-                type,
-                sender,
-                receiver,
-            }
-            const createInvite = await Invite.create(data)
-
-            if (createInvite) {
-                return { message: "Đã gửi yêu cầu kết bạn!" }
-            }
-
-            return { message: "Error! Please again." }
         } catch (error) {
             return error
         }

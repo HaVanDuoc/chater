@@ -1,17 +1,19 @@
 import { Button, Flex, Typography } from "antd"
-import React, { useState } from "react"
+import React, { Fragment, useState } from "react"
 import { ArrowLeftOutlined, SearchOutlined } from "@ant-design/icons"
 import { Flex as BoxResultSearch } from "antd"
 import { paddingSider } from "./styles"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
-import { selectSearch } from "~/redux/selectors"
-import { IUser } from "~/redux/users/interfaces"
+import { selectSearch, selectUser } from "~/redux/selectors"
 import AvatarOnline from "../AvatarOnline"
 import { useNavigate } from "react-router"
 import { useRef, useEffect } from "react"
 import { searchActions } from "~/redux/searches/slice"
 import searchTypes from "~/redux/searches/types"
+import { actions as userActions } from "~/redux/slice/user.slice"
+import { types as userTypes } from "~/redux/type/user.type"
+import { IUser } from "~/redux/interface/user.interface"
 
 interface ISearchSider {
     placeholder: string
@@ -22,6 +24,7 @@ const SearchSider: React.FC<ISearchSider> = ({ placeholder }) => {
     const dispatch = useDispatch()
     const containerSearch = useRef<HTMLDivElement>(null)
     const searches = useSelector(selectSearch)?.data
+    const listSuggestFriends = useSelector(selectUser).suggestFriends
 
     const handleOutsideClick = (event: any) => {
         if (containerSearch.current && !containerSearch.current.contains(event.target)) {
@@ -38,6 +41,7 @@ const SearchSider: React.FC<ISearchSider> = ({ placeholder }) => {
 
     const handleFocus = () => {
         setShowResult(true)
+        dispatch(userActions[userTypes.GET_SUGGEST_FRIENDS]({}))
     }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,6 +108,31 @@ const SearchSider: React.FC<ISearchSider> = ({ placeholder }) => {
                         height: `calc(100vh - 100px)`,
                     }}
                 >
+                    {listSuggestFriends.length ? (
+                        <Fragment>
+                            <Typography.Title
+                                level={5}
+                                style={{ paddingLeft: 16, paddingRight: 16 }}
+                            >
+                                Những người bạn có thể biết
+                            </Typography.Title>
+
+                            {listSuggestFriends?.map((user: IUser) => {
+                                return (
+                                    <ItemSearch
+                                        _id={user._id}
+                                        avatar={user.picture}
+                                        name={user.displayName}
+                                        email={user.email}
+                                        key={user._id}
+                                    />
+                                )
+                            })}
+                        </Fragment>
+                    ) : (
+                        <Fragment />
+                    )}
+
                     {searches?.friends?.length &&
                         searches?.friends?.map((user: IUser) => {
                             return (
@@ -158,7 +187,7 @@ const ItemSearch: React.FC<IItemSearch> = ({ _id, name, avatar, email }) => {
     const navigate = useNavigate()
 
     const handleClick = () => {
-        navigate(`/chat/${_id}`)
+        navigate(`/user/${_id}`)
     }
 
     return (

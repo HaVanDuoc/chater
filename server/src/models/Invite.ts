@@ -23,10 +23,6 @@ const inviteSchema = new Schema<IInvite>(
             required: true,
             ref: "User",
         },
-        type: {
-            type: String,
-            default: "FRIEND REQUEST",
-        },
         status: {
             type: String,
             default: "waiting",

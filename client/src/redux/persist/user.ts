@@ -1,6 +1,6 @@
 import { persistReducer } from "redux-persist"
 import storage from "redux-persist/lib/storage"
-import userReducer from "../users/slice"
+import userReducer from "../slice/user.slice"
 
 const userPersistConfig = {
     key: "user",

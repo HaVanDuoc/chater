@@ -1,24 +1,11 @@
-import { useGoogleLogin } from "@react-oauth/google"
 import { Button } from "antd"
-import { useDispatch } from "react-redux"
-import { useNavigate } from "react-router"
-import ActionTypes from "~/redux/users/types"
-import { actions } from "~/redux/users/slice"
-import instance from "~/config/axios.config"
 
 const ButtonLoginWithGoogle = () => {
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-
     const handleLogin = async () => {
         try {
             const currentUrl = window.location.href
             const encodedParam = encodeURI(`?redirectUrl=${currentUrl}`)
-            window.location.href = `http://localhost:5000/login/google${encodedParam}`
-
-            // const response = await instance.get(`/login/google`)
-
-            // console.log("response", response)
+            window.open(`http://localhost:5000/api/auth/login/google${encodedParam}`, "_self")
         } catch (error) {
             console.error("Error initiating Google OAuth:", error)
         }

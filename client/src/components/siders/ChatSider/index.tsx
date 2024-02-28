@@ -1,4 +1,4 @@
-import { Flex, theme } from "antd"
+import { Flex, Typography, theme } from "antd"
 import SearchSider from "~/components/sider/SearchSider"
 import TitleSider from "~/components/sider/TitleSider"
 import { Flex as Header } from "antd"
@@ -18,6 +18,7 @@ const ChatSider = () => {
     return (
         <Flex
             vertical
+            justify="space-between"
             style={{
                 position: "relative",
                 height: "100%",
@@ -46,9 +47,17 @@ const ChatSider = () => {
                     flex: 1,
                 }}
             >
-                {chats.map((chat: any, index: number) => {
-                    return <BoxChat data={chat} key={index} />
-                })}
+                {chats.length ? (
+                    chats.map((chat: any, index: number) => {
+                        return <BoxChat data={chat} key={index} />
+                    })
+                ) : (
+                    <Flex flex={1} justify="center" align="center">
+                        <Typography.Title level={5}>
+                            Bạn chưa tham gia đoạn chat nào!
+                        </Typography.Title>
+                    </Flex>
+                )}
             </ListChat>
 
             <ChatSiderFooter />

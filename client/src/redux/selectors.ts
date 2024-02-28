@@ -1,6 +1,11 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "./store"
 
+export const selectInvite = createSelector(
+    (state: RootState) => state.invites,
+    (invite) => invite,
+)
+
 export const selectUser = createSelector(
     (state: RootState) => state.users,
     (user) => user,

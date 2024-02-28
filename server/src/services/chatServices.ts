@@ -2,9 +2,9 @@ import Chat from "../models/Chat"
 import User, { IUser } from "../models/User"
 
 namespace ChatServices {
-    export const getByUserId = async (userId: any) => {
+    export const getChatByUserId = async (current_user_id: any, other_user_id: any) => {
         try {
-            const user = await User.findById(userId)
+            const user = await User.findById(other_user_id)
                 .populate({
                     path: "chats",
                     populate: {

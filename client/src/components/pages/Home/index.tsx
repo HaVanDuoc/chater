@@ -5,12 +5,11 @@ import { selectUser } from "~/redux/selectors"
 
 const HomePage = () => {
     const navigate = useNavigate()
-    const currentUser = useSelector(selectUser)?.currentUser
-    const chatId = currentUser?.chats[0]?._id
+    const getCurrentUser = useSelector(selectUser)?.status
 
     useEffect(() => {
-        currentUser ? navigate(`/chat/${chatId}`) : navigate("/login")
-    }, [currentUser, chatId, navigate])
+        getCurrentUser ? navigate("/chat") : navigate("/login")
+    }, [navigate, getCurrentUser])
 
     return <Fragment />
 }

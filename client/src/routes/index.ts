@@ -14,6 +14,7 @@ export const routes: IRoutesArray = [
     { path: "/", page: HomePage },
     { path: "/chat", page: ChatPage },
     { path: "/chat/:chatId", page: ChatPage },
+    { path: "/user/:userId", page: ChatPage },
     { path: "/active", page: ActivePage },
     { path: "/login", page: LoginPage },
 ]

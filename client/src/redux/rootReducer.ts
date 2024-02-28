@@ -4,9 +4,12 @@ import chatReducer from "./chats/slice"
 import confirmDialogReducer from "./confirmDialog/slice"
 import messageReducer from "./messages/slice"
 import searchReducer from "./searches/slice"
+import inviteReducer from "./slice/invite.slice"
+import userReducer from "./slice/user.slice"
 
 const rootReducer = combineReducers({
-    users: persistedUserReducer,
+    users: userReducer,
+    invites: inviteReducer,
     chats: chatReducer,
     confirmDialog: confirmDialogReducer,
     messages: messageReducer,

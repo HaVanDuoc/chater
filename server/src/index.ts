@@ -11,24 +11,28 @@ import bodyParser from "body-parser"
 import cookieParser from "cookie-parser"
 
 const app = express()
+dotenv.config()
+const CLIENT_URL = process.env.CLIENT_URL || ""
+const SERVER_URL = process.env.SERVER_URL || ""
 
 //middleware
-dotenv.config()
-app.use(cors())
+app.use(cors({ origin: [CLIENT_URL, SERVER_URL], credentials: true }))
 app.use(cookieParser())
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(
     session({
         secret: process.env["SECRET_KEY"] || "*",
-        resave: false,
-        saveUninitialized: false,
+        resave: true,
+        saveUninitialized: true,
         cookie: { maxAge: 60 * 60 * 1000 }, // 1 hour
         store: new MongoStore({
             mongoUrl: process.env["MONGO_URI"],
         }),
     }),
 )
+app.use(passport.initialize())
+app.use(passport.session())
 app.use(passport.authenticate("session"))
 
 // Router

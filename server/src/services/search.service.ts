@@ -1,5 +1,5 @@
 import Chat from "../models/Chat"
-import User from "../models/User"
+import User, { IUser } from "../models/User"
 
 namespace SearchServices {
     export const search = async (key: string, current_user_id: string) => {
@@ -54,6 +54,22 @@ namespace SearchServices {
             }
 
             return { message: "Get data succeeded", data: result }
+        } catch (error) {
+            return error
+        }
+    }
+
+    export const suggest = async (user_id: any) => {
+        try {
+            const listFriendsOfCurrentUser = await User.findById(user_id).select("friends").exec()
+
+            const listSuggest = await User.find({
+                $and: [{ _id: { $ne: user_id } }],
+            })
+                .select("displayName email picture")
+                .exec()
+
+            return { message: "Get data succeeded", data: listSuggest }
         } catch (error) {
             return error
         }

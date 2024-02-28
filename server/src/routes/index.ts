@@ -1,20 +1,22 @@
-import HttpStatusCodes from "http-status-codes"
 import { Response } from "express"
 import authRoutes from "./auth.route"
-import userRoutes from "./userRoutes"
-import chatRoutes from "./chatRoutes"
+import userRoutes from "./user.route"
+import chatRoutes from "./chat.route"
 import messageRoutes from "./messageRoutes"
-import searchRoutes from "./searchRoutes"
+import searchRoutes from "./search.route"
+import inviteRoutes from "./invite.route"
+import { HttpStatusCode } from "axios"
 
 const initRoute = (app: any) => {
-    app.use("/", authRoutes())
-    app.use("/api/user", userRoutes())
-    app.use("/api/chat", chatRoutes())
+    app.use("/api/auth", authRoutes)
+    app.use("/api/chat", chatRoutes)
+    app.use("/api/user", userRoutes)
     app.use("/api/message", messageRoutes())
-    app.use("/api/search", searchRoutes())
+    app.use("/api/search", searchRoutes)
+    app.use("/api/invite", inviteRoutes)
 
-    return app.use((res: Response) => {
-        return res.status(HttpStatusCodes.NOT_FOUND).json({ error: "NOT FOUND" })
+    return app.use((req: Request, res: Response) => {
+        return res.status(HttpStatusCode.NotFound).json({ error: true, message: "NOT FOUND" })
     })
 }
 

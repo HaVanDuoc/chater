@@ -15,23 +15,18 @@ import {
 } from "@ant-design/icons"
 import { useSelector } from "react-redux"
 import { selectUser } from "~/redux/selectors"
-import { useDispatch } from "react-redux"
-import { actions } from "~/redux/users/slice"
-import ActionTypes from "~/redux/users/types"
-import instance from "~/config/axios.config"
-import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import api from "~/config/api.config"
 
 const ChatSiderFooter = () => {
     const paddingCSS = "7px 15px"
     const currentUser = useSelector(selectUser)?.currentUser
-    const dispatch = useDispatch()
     const navigate = useNavigate()
 
     const handleLogout = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/logout")
-            if (response.data.message === "Logout successful") {
+            const response = await api.get("/auth/logout")
+            if (!response.data.error) {
                 navigate("/login")
             } else {
                 console.error("Logout failed")
@@ -81,7 +76,7 @@ const ChatSiderFooter = () => {
                         fontWeight: 500,
                     }}
                 >
-                    {currentUser?.name}
+                    {currentUser?.displayName}
                 </Typography>
             </Flex>
 

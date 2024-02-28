@@ -1,4 +1,4 @@
-import instance from "~/config/axios.config"
+import instance from "~/config/api.config"
 import { IMessage } from "./interfaces"
 
 namespace Api {

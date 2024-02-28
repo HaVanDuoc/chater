@@ -1,13 +1,24 @@
 import { NextFunction, Request, Response } from "express"
 import HttpStatusCodes from "http-status-codes"
-import UserServices from "../services/userServices"
+import UserServices from "../services/user.service"
 import { decodeToken } from "../helpers"
 import { authorization } from "../utils/variables"
 namespace UserControllers {
     export const getUser = async (req: Request, res: Response) => {
         try {
-            const data = req.body.data
-            const response = await UserServices.getUser(data)
+            const userId = req.params.userId
+            const response = await UserServices.getUser(userId)
+            return res.status(HttpStatusCodes.OK).json(response)
+        } catch (error) {
+            res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error!")
+        }
+    }
+
+    export const addFriend = async (req: Request, res: Response) => {
+        try {
+            const sender: any = req.user
+            const receiver: any = req.params.receiver
+            const response = await UserServices.addFriend(sender, receiver)
             return res.status(HttpStatusCodes.OK).json(response)
         } catch (error) {
             res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error!")
@@ -31,18 +42,6 @@ namespace UserControllers {
             const userId = user._id
             const key = req.body.key
             const response = await UserServices.search(key, userId)
-            return res.status(HttpStatusCodes.OK).json(response)
-        } catch (error) {
-            res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error!")
-        }
-    }
-
-    export const requestFriend = async (req: Request, res: Response) => {
-        try {
-            const sender = req.body.decodeToken._id
-            const receiver = req.body.receiver
-            const type = req.body.type
-            const response = await UserServices.requestFriend({ sender, receiver, type })
             return res.status(HttpStatusCodes.OK).json(response)
         } catch (error) {
             res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error!")
