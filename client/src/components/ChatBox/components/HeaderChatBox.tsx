@@ -1,7 +1,7 @@
 import { EllipsisOutlined, PhoneFilled, VideoCameraFilled } from "@ant-design/icons"
 import { Button, Flex, Tooltip, Typography } from "antd"
 import AvatarOnline from "~/components/AvatarOnline"
-import { IChat } from "~/redux/chats/interfaces"
+import { IChat } from "~/redux/interface/chat.interface"
 
 interface IHeaderChatBox {
     name: IChat["name"]

@@ -10,6 +10,8 @@ export interface IUser {
     picture: string
     accessToken: string
     friends: Schema.Types.ObjectId[]
+    invite?: any
+    isFriend?: boolean
 }
 
 const userSchema = new Schema<IUser>(
@@ -44,6 +46,14 @@ const userSchema = new Schema<IUser>(
                 ref: "User",
             },
         ],
+        invite: {
+            type: Schema.Types.Mixed,
+            default: {},
+        },
+        isFriend: {
+            type: Schema.Types.Boolean,
+            default: false,
+        },
     },
     { timestamps: true },
 )

@@ -14,20 +14,25 @@ import {
     WarningOutlined,
 } from "@ant-design/icons"
 import { useSelector } from "react-redux"
-import { selectUser } from "~/redux/selectors"
+import { selectAuth } from "~/redux/selectors"
 import { useNavigate } from "react-router-dom"
 import api from "~/config/api.config"
+import { useDispatch } from "react-redux"
+import { authActions } from "~/redux/slice/auth.slice"
+import { authTypes } from "~/redux/type/auth.type"
 
 const ChatSiderFooter = () => {
     const paddingCSS = "7px 15px"
-    const currentUser = useSelector(selectUser)?.currentUser
+    const currentUser = useSelector(selectAuth)?.user
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const handleLogout = async () => {
         try {
             const response = await api.get("/auth/logout")
             if (!response.data.error) {
                 navigate("/login")
+                dispatch(authActions[authTypes.LOGOUT]({}))
             } else {
                 console.error("Logout failed")
             }

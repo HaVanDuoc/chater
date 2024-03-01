@@ -1,13 +1,42 @@
 import { Schema } from "mongoose"
-import Invite, { IInvite } from "../models/Invite"
+import Invite from "../models/Invite"
 import User, { IUser } from "../models/User"
-import executeDB from "./db"
 
 namespace UserServices {
-    export const getUser = async (userId: string) => {
+    export const getUser = async (auth_id?: any, user_id?: string) => {
         try {
-            const user = await User.findById(userId).exec()
-            return { message: "Get data succeeded", user }
+            var res: any = {}
+
+            // Get Info
+            let user = await User.findById(user_id).exec()
+            if (user) res = user
+
+            // Check friend
+            const isFriend = user?.friends.includes(auth_id)
+            res["isFriend"] = isFriend
+
+            // If not friend, check invite
+            if (!isFriend) {
+                const invite = await Invite.findOne({
+                    $or: [
+                        { receiver: auth_id, sender: user_id },
+                        {
+                            $and: [
+                                { receiver: { $ne: auth_id } },
+                                { sender: auth_id },
+                                { receiver: user_id },
+                            ],
+                        },
+                    ],
+                })
+
+                // Add invite into user, for response to client
+                if (invite) {
+                    res["invite"] = invite
+                }
+            }
+
+            return { message: "Get data succeeded", user: res }
         } catch (error) {
             return error
         }
@@ -18,9 +47,9 @@ namespace UserServices {
         receiver: Schema.Types.ObjectId,
     ) => {
         const checkFriend = async () => {
-            const user = await User.findById(sender)
-            if (user) {
-                const friend = user.friends.find((id: any) => id === receiver)
+            const senderInfo = await User.findById(sender)
+            if (senderInfo) {
+                const friend = senderInfo.friends.find((id: any) => id === receiver)
                 return friend
             }
             return null
@@ -32,7 +61,14 @@ namespace UserServices {
             if (check) return { error: true, message: "Cả hai đã là bạn!" }
 
             // Đầu tiên tìm và cập nhật nếu không có thì tạo một lời mời
-            const findOneAndUpdate = await Invite.findOneAndUpdate({ sender, receiver })
+            console.log("sender", sender)
+            console.log("receiver", receiver)
+            const findOneAndUpdate = await Invite.findOne({
+                $and: [{ sender: sender }, { receiver: receiver }],
+            })
+
+            console.log("findOneAndUpdate", findOneAndUpdate)
+
             if (!findOneAndUpdate) await Invite.create({ sender, receiver })
             return { message: "Đã gửi yêu cầu kết bạn!" }
         } catch (error) {
@@ -92,55 +128,6 @@ namespace UserServices {
             }
 
             return { message: "Get data succeeded", data: result }
-        } catch (error) {
-            return error
-        }
-    }
-
-    export const acceptInviteRequestFriend = async (invite: Schema.Types.ObjectId) => {
-        try {
-            const inviteData = await Invite.findById(invite)
-
-            if (inviteData) {
-                const sender = inviteData.sender
-                const receiver = inviteData.receiver
-
-                const addReceiverToSenderListFriends = await User.findByIdAndUpdate(sender, {
-                    $push: { friends: receiver },
-                })
-                const addSenderToReceiverListFriends = await User.findByIdAndUpdate(receiver, {
-                    $push: { friends: sender },
-                })
-                const updateInvite = await Invite.findByIdAndUpdate(invite, { status: "accept" })
-                const members = [sender, receiver]
-                const createChat: any = await executeDB.createChat({ members })
-                const pushChatToEveryMember = members.map(async (member) => {
-                    await User.findByIdAndUpdate(member, { $push: { chats: createChat?._id } })
-                })
-
-                if (
-                    addReceiverToSenderListFriends &&
-                    addSenderToReceiverListFriends &&
-                    updateInvite &&
-                    pushChatToEveryMember
-                ) {
-                    return { message: "Đã đồng ý kết bạn!" }
-                }
-
-                return { message: "Error! Please again." }
-            }
-        } catch (error) {
-            return error
-        }
-    }
-
-    export const rejectInviteRequestFriend = async (invite: Schema.Types.ObjectId) => {
-        try {
-            const reject = await Invite.findByIdAndUpdate(invite, { status: "reject" })
-
-            if (reject) {
-                return { message: "Đã từ chối kết bạn!" }
-            }
         } catch (error) {
             return error
         }

@@ -64,7 +64,7 @@ namespace SearchServices {
             const listFriendsOfCurrentUser = await User.findById(user_id).select("friends").exec()
 
             const listSuggest = await User.find({
-                $and: [{ _id: { $ne: user_id } }],
+                _id: { $ne: user_id, $nin: listFriendsOfCurrentUser?.friends },
             })
                 .select("displayName email picture")
                 .exec()

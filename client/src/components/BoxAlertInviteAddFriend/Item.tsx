@@ -5,13 +5,15 @@ import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router"
 import ActionTypes from "~/redux/users/types"
 import { actions } from "~/redux/users/slice"
+import { inviteActions } from "~/redux/slice/invite.slice"
+import { inviteTypes } from "~/redux/type/invite.type"
 
 interface IItem {
     data: {
         _id: string
         sender: {
             _id: string
-            name: string
+            displayName: string
             picture: string
         }
     }
@@ -25,7 +27,7 @@ const Item: React.FC<IItem> = ({ data }) => {
 
     const invite_id = data?._id
     const sender_id = data?.sender?._id
-    const sender_name = data?.sender?.name
+    const sender_name = data?.sender?.displayName
     const sender_picture = data?.sender?.picture
 
     return (
@@ -37,6 +39,7 @@ const Item: React.FC<IItem> = ({ data }) => {
                 backgroundColor: isHover ? colorBgTextHover : "inherit",
                 padding: 10,
                 borderRadius: 5,
+                cursor: "pointer",
             }}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
@@ -45,7 +48,7 @@ const Item: React.FC<IItem> = ({ data }) => {
                 align="center"
                 gap={7}
                 onClick={() => {
-                    navigate(`/chat/${sender_id}`)
+                    navigate(`/user/${sender_id}`)
                 }}
             >
                 <Avatar icon={<UserOutlined />} src={sender_picture || ""} />
@@ -55,7 +58,8 @@ const Item: React.FC<IItem> = ({ data }) => {
                 <Button
                     type="primary"
                     onClick={() => {
-                        dispatch(actions[ActionTypes.ACCEPT_FRIEND_REQUEST](invite_id))
+                        dispatch(inviteActions[inviteTypes.ACCEPT_INVITE](invite_id))
+                        dispatch(inviteActions[inviteTypes.GET_LIST_INVITES]({}))
                     }}
                 >
                     Đồng ý

@@ -5,15 +5,14 @@ import { Flex as Header } from "antd"
 import { Flex as ListChat } from "antd"
 import ChatSiderFooter from "./ChatSiderFooter"
 import { useSelector } from "react-redux"
-import { selectUser } from "~/redux/selectors"
+import { selectChat } from "~/redux/selectors"
 import BoxAlertInviteAddFriend from "~/components/BoxAlertInviteAddFriend"
 import { paddingSider } from "~/components/sider/styles"
 import BoxChat from "./BoxChat"
 
 const ChatSider = () => {
     const { colorBorder } = theme.useToken().token
-    const user = useSelector(selectUser)
-    const chats = user?.currentUser?.chats || []
+    const chats = useSelector(selectChat).listChats
 
     return (
         <Flex
@@ -49,7 +48,7 @@ const ChatSider = () => {
             >
                 {chats.length ? (
                     chats.map((chat: any, index: number) => {
-                        return <BoxChat data={chat} key={index} />
+                        return <BoxChat chat={chat} key={index} />
                     })
                 ) : (
                     <Flex flex={1} justify="center" align="center">

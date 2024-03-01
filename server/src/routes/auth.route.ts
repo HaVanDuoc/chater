@@ -11,6 +11,30 @@ dotenv.config()
 const router = Router()
 const CLIENT_URL = `${process.env.CLIENT_URL}`
 
+router.get("/session", async (req: Request, res: Response) => {
+    if (req.isAuthenticated() && req.session && req.session.cookie && req.session.cookie.expires) {
+        const currentTime = new Date().getTime()
+        const sessionExpirationTime = new Date(req.session.cookie.expires).getTime()
+
+        if (currentTime > sessionExpirationTime) {
+            req.logout(() => {
+                res.status(HttpStatusCode.Unauthorized).json({
+                    error: true,
+                    message: "Session Expired",
+                })
+            })
+        } else {
+            const auth_id = req.user
+            const user = await User.findById(auth_id)
+            if (user) {
+                res.status(HttpStatusCode.Ok).json({ user, message: "Login Successful" })
+            }
+        }
+    } else {
+        res.status(HttpStatusCode.Unauthorized).json({ error: true, message: "Unauthorized" })
+    }
+})
+
 router.get("/login/google", passport.authenticate("google"))
 
 router.get(
@@ -23,24 +47,24 @@ router.get(
     },
 )
 
-router.get("/login/success", Middlewares.isAuthenticated, async (req: Request, res: Response) => {
-    try {
-        const auth_id = req.user
-        console.log("auth_id", auth_id)
-        const user = await User.findById(auth_id).exec()
+// router.get("/login/success", Middlewares.isAuthenticated, async (req: Request, res: Response) => {
+//     try {
+//         const auth_id = req.user
+//         console.log("auth_id", auth_id)
+//         const user = await User.findById(auth_id).exec()
 
-        return res.status(HttpStatusCode.Ok).json({
-            message: "Login Successful",
-            user: user,
-        })
-    } catch (error) {
-        console.log("Error login", error)
-        return res.status(HttpStatusCode.BadRequest).json({
-            error: true,
-            message: "Error login",
-        })
-    }
-})
+//         return res.status(HttpStatusCode.Ok).json({
+//             message: "Login Successful",
+//             user: user,
+//         })
+//     } catch (error) {
+//         console.log("Error login", error)
+//         return res.status(HttpStatusCode.BadRequest).json({
+//             error: true,
+//             message: "Error login",
+//         })
+//     }
+// })
 
 router.get("/login/failed", (req: Request, res: Response) => {
     return res.status(HttpStatusCode.BadRequest).send({

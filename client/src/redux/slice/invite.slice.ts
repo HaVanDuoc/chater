@@ -1,41 +1,67 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { Status } from "../types"
 import { IInvite } from "../interface/invite.interface"
-import { types } from "../type/invite.type"
+import { inviteTypes } from "../type/invite.type"
+import { Status } from "../types"
 
 interface InviteState {
     status: Status
-    message: string | null
-    invites: IInvite[]
+    message?: string
+    listInvites?: IInvite[]
 }
 
 const initialState: InviteState = {
     status: "idle",
-    message: null,
-    invites: [],
+    message: "",
+    listInvites: [],
 }
 
 const inviteSlice = createSlice({
-    name: "user",
+    name: "invite",
     initialState,
     reducers: {
-        // GET INVITES
-        [types.GET_INVITE]: (state) => {
+        // GET LIST INVITES
+        [inviteTypes.GET_LIST_INVITES]: (state) => {
             state.status = "pending"
         },
-        [types.GET_INVITE_SUCCEEDED]: (state, action) => {
+        [inviteTypes.GET_LIST_INVITES_SUCCESS]: (state, action) => {
             state.status = "succeeded"
             state.message = action.payload.message
-            state.invites = action.payload.invites
+            state.listInvites = action.payload.invites
         },
-        [types.GET_INVITE_FAILED]: (state, action) => {
+        [inviteTypes.GET_LIST_INVITES_FAILED]: (state, action) => {
+            state.status = "failed"
+            state.message = action.payload.message
+        },
+
+        // Accept invite
+        [inviteTypes.ACCEPT_INVITE]: (state) => {
+            state.status = "pending"
+        },
+        [inviteTypes.ACCEPT_INVITE_SUCCESS]: (state, action) => {
+            state.status = "succeeded"
+            state.message = action.payload.message
+        },
+        [inviteTypes.ACCEPT_INVITE_FAILED]: (state, action) => {
+            state.status = "failed"
+            state.message = action.payload.message
+        },
+
+        // Reject invite
+        [inviteTypes.REJECT_INVITE]: (state) => {
+            state.status = "pending"
+        },
+        [inviteTypes.REJECT_INVITE_SUCCESS]: (state, action) => {
+            state.status = "succeeded"
+            state.message = action.payload.message
+        },
+        [inviteTypes.REJECT_INVITE_FAILED]: (state, action) => {
             state.status = "failed"
             state.message = action.payload.message
         },
     },
 })
 
-export const actions = inviteSlice.actions
+export const inviteActions = inviteSlice.actions
 
 const inviteReducer = inviteSlice.reducer
 

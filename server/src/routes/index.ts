@@ -6,11 +6,15 @@ import messageRoutes from "./messageRoutes"
 import searchRoutes from "./search.route"
 import inviteRoutes from "./invite.route"
 import { HttpStatusCode } from "axios"
+import Middlewares from "../middlewares"
 
 const initRoute = (app: any) => {
     app.use("/api/auth", authRoutes)
-    app.use("/api/chat", chatRoutes)
+
+    app.use(Middlewares.isAuthenticated)
+
     app.use("/api/user", userRoutes)
+    app.use("/api/chat", chatRoutes)
     app.use("/api/message", messageRoutes())
     app.use("/api/search", searchRoutes)
     app.use("/api/invite", inviteRoutes)

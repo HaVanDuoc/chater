@@ -1,4 +1,4 @@
-export type StatusInvite = "waiting" | "accept" | "reject"
+export type StatusInvite = "waiting" | "accept" | "reject" | "redeem"
 
 export interface IInvite {
     _id: string

@@ -12,7 +12,7 @@ import { useRef, useEffect } from "react"
 import { searchActions } from "~/redux/searches/slice"
 import searchTypes from "~/redux/searches/types"
 import { actions as userActions } from "~/redux/slice/user.slice"
-import { types as userTypes } from "~/redux/type/user.type"
+import { userTypes } from "~/redux/type/user.type"
 import { IUser } from "~/redux/interface/user.interface"
 
 interface ISearchSider {
@@ -108,7 +108,7 @@ const SearchSider: React.FC<ISearchSider> = ({ placeholder }) => {
                         height: `calc(100vh - 100px)`,
                     }}
                 >
-                    {listSuggestFriends.length ? (
+                    {listSuggestFriends?.length ? (
                         <Fragment>
                             <Typography.Title
                                 level={5}

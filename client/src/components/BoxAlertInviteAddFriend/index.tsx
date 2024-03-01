@@ -6,18 +6,20 @@ import Item from "./Item"
 import { IUser } from "~/redux/users/interfaces"
 
 const BoxAlertInviteAddFriend = () => {
-    const invites: IUser["invites"] = useSelector(selectInvite).invites || []
+    const invites: IUser["invites"] = useSelector(selectInvite).listInvites || []
 
     const content = (
         <Flex vertical gap={10}>
             <Typography.Text strong>Bạn có {invites.length} lời mời kết bạn</Typography.Text>
-            {invites.length ? (
-                invites.map((item, index) => {
-                    return <Item data={item} key={index} />
-                })
-            ) : (
-                <Empty description={false} />
-            )}
+            <Flex vertical>
+                {invites.length ? (
+                    invites.map((item, index) => {
+                        return <Item data={item} key={index} />
+                    })
+                ) : (
+                    <Empty description={false} />
+                )}
+            </Flex>
         </Flex>
     )
 

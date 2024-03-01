@@ -1,50 +1,56 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { Status } from "../types"
-import typesChat from "./types"
+import { IChat } from "../interface/chat.interface"
+import { chatTypes } from "../type/chat.type"
 
 interface ChatState {
     status: Status
     message: string | null
-    error: any | null
-    data: any
+    listChats: IChat[]
+    chat: {
+        members: []
+    }
 }
 
 const initialState: ChatState = {
     status: "idle",
     message: null,
-    error: null,
-    data: {},
+    listChats: [],
+    chat: {
+        members: [],
+    },
 }
 
 const chatSlice = createSlice({
     name: "chat",
     initialState,
     reducers: {
-        // Action FETCH chat
-        [typesChat.FETCH_CHAT_REQUEST]: (state) => {
+        // GET LIST CHATS
+        [chatTypes.GET_LIST_CHATS]: (state) => {
             state.status = "pending"
         },
-        [typesChat.FETCH_CHAT_SUCCESS]: (state, action) => {
+        [chatTypes.GET_LIST_CHATS_SUCCESS]: (state, action) => {
             state.status = "succeeded"
             state.message = action.payload.message
-            state.data = action.payload.data
+            state.listChats = action.payload.chats
         },
-        [typesChat.FETCH_CHAT_REQUEST]: (state, action) => {
+        [chatTypes.GET_LIST_CHATS_FAILED]: (state, action) => {
             state.status = "failed"
-            state.error = action.payload
+            state.message = action.payload.message
         },
 
-        // Action DELETE chat
-        [typesChat.DELETE_CHAT_REQUEST]: (state) => {
+        // GET CHAT
+        [chatTypes.GET_CHAT]: (state) => {
             state.status = "pending"
         },
-        [typesChat.DELETE_CHAT_SUCCESS]: (state, action) => {
+        [chatTypes.GET_CHAT_SUCCESS]: (state, action) => {
             state.status = "succeeded"
             state.message = action.payload.message
+            state.chat = action.payload.chat
         },
-        [typesChat.DELETE_CHAT_FAILURE]: (state, action) => {
+        [chatTypes.GET_CHAT_FAILED]: (state, action) => {
             state.status = "failed"
-            state.error = action.payload
+            state.message = action.payload.message
         },
     },
 })

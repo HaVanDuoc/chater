@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express"
 import HttpStatusCodes from "http-status-codes"
-import AuthServices from "../services/authServices"
 import MessageServices from "../services/messageServices"
 
 namespace MessageControllers {

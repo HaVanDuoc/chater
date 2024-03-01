@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { Status } from "../types"
-import { types } from "../type/user.type"
+import { userTypes } from "../type/user.type"
 import { IUser } from "../interface/user.interface"
 
 interface UserState {
@@ -28,113 +28,99 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         //
-        [types.GET_CURRENT_USER]: (state) => {
+        [userTypes.GET_SUGGEST_FRIENDS]: (state) => {
             state.status = "pending"
         },
-        [types.GET_CURRENT_USER_SUCCEEDED]: (state, action) => {
-            state.status = "succeeded"
-            state.message = action.payload.message
-            state.currentUser = action.payload.user
-        },
-        [types.GET_CURRENT_USER_FAILED]: (state, action) => {
-            state.status = "failed"
-            state.error = action.payload
-        },
-
-        //
-        [types.GET_SUGGEST_FRIENDS]: (state) => {
-            state.status = "pending"
-        },
-        [types.GET_SUGGEST_FRIENDS_SUCCEEDED]: (state, action) => {
+        [userTypes.GET_SUGGEST_FRIENDS_SUCCEEDED]: (state, action) => {
             state.status = "succeeded"
             state.message = action.payload.message
             state.suggestFriends = action.payload.data
         },
-        [types.GET_SUGGEST_FRIENDS_FAILED]: (state, action) => {
+        [userTypes.GET_SUGGEST_FRIENDS_FAILED]: (state, action) => {
             state.status = "failed"
             state.error = action.payload
         },
 
         // Get user
-        [types.GET_USER]: (state) => {
+        [userTypes.GET_USER]: (state) => {
             state.status = "pending"
         },
-        [types.GET_USER_SUCCEEDED]: (state, action) => {
+        [userTypes.GET_USER_SUCCEEDED]: (state, action) => {
             state.status = "succeeded"
             state.message = action.payload.message
             state.data = action.payload.user
         },
-        [types.GET_USER_FAILED]: (state, action) => {
+        [userTypes.GET_USER_FAILED]: (state, action) => {
             state.status = "failed"
             state.error = action.payload
         },
 
         // ADD FRIEND
-        [types.ADD_FRIEND]: (state) => {
+        [userTypes.ADD_FRIEND]: (state) => {
             state.status = "pending"
         },
-        [types.ADD_FRIEND_SUCCEEDED]: (state, action) => {
+        [userTypes.ADD_FRIEND_SUCCEEDED]: (state, action) => {
             state.status = "succeeded"
             state.message = action.payload.message
         },
-        [types.ADD_FRIEND_FAILED]: (state, action) => {
+        [userTypes.ADD_FRIEND_FAILED]: (state, action) => {
             state.status = "failed"
             state.error = action.payload.message
         },
 
         //
-        [types.LOGOUT]: (state) => {
+        [userTypes.LOGOUT]: (state) => {
             state.currentUser = null
         },
 
         //
-        [types.SEARCH_REQUEST]: (state) => {
+        [userTypes.SEARCH_REQUEST]: (state) => {
             state.status = "pending"
         },
-        [types.SEARCH_SUCCESS]: (state, action) => {
+        [userTypes.SEARCH_SUCCESS]: (state, action) => {
             state.status = "succeeded"
             state.search = action.payload
         },
-        [types.SEARCH_FAILURE]: (state, action) => {
+        [userTypes.SEARCH_FAILURE]: (state, action) => {
             state.status = "failed"
             state.error = action.payload
         },
 
         // Action accept request friend
-        [types.ACCEPT_FRIEND_REQUEST]: (state) => {
+        [userTypes.ACCEPT_FRIEND_REQUEST]: (state) => {
             state.status = "pending"
         },
-        [types.ACCEPT_FRIEND_SUCCESS]: (state, action) => {
+        [userTypes.ACCEPT_FRIEND_SUCCESS]: (state, action) => {
             state.status = "succeeded"
             state.message = action.payload.message
         },
-        [types.ACCEPT_FRIEND_FAILURE]: (state, action) => {
+        [userTypes.ACCEPT_FRIEND_FAILURE]: (state, action) => {
             state.status = "failed"
             state.error = action.payload
         },
 
         // Action reject request friend
-        [types.REJECT_FRIEND_REQUEST]: (state) => {
+        [userTypes.REJECT_FRIEND_REQUEST]: (state) => {
             state.status = "pending"
         },
-        [types.REJECT_FRIEND_SUCCESS]: (state, action) => {
+        [userTypes.REJECT_FRIEND_SUCCESS]: (state, action) => {
             state.status = "succeeded"
             state.message = action.payload.message
         },
-        [types.REJECT_FRIEND_FAILURE]: (state, action) => {
+        [userTypes.REJECT_FRIEND_FAILURE]: (state, action) => {
             state.status = "failed"
             state.error = action.payload
         },
 
         // Action DELETE friend
-        [types.DELETE_FRIEND_REQUEST]: (state) => {
+        [userTypes.DELETE_FRIEND_REQUEST]: (state) => {
             state.status = "pending"
         },
-        [types.DELETE_FRIEND_SUCCESS]: (state, action) => {
+        [userTypes.DELETE_FRIEND_SUCCESS]: (state, action) => {
             state.status = "succeeded"
             state.message = action.payload.message
         },
-        [types.ACCEPT_FRIEND_FAILURE]: (state, action) => {
+        [userTypes.ACCEPT_FRIEND_FAILURE]: (state, action) => {
             state.status = "failed"
             state.error = action.payload
         },

@@ -6,8 +6,9 @@ import { authorization } from "../utils/variables"
 namespace UserControllers {
     export const getUser = async (req: Request, res: Response) => {
         try {
-            const userId = req.params.userId
-            const response = await UserServices.getUser(userId)
+            const auth_id = req.user
+            const user_id = req.params.userId
+            const response = await UserServices.getUser(auth_id, user_id)
             return res.status(HttpStatusCodes.OK).json(response)
         } catch (error) {
             res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error!")
@@ -42,26 +43,6 @@ namespace UserControllers {
             const userId = user._id
             const key = req.body.key
             const response = await UserServices.search(key, userId)
-            return res.status(HttpStatusCodes.OK).json(response)
-        } catch (error) {
-            res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error!")
-        }
-    }
-
-    export const acceptInviteRequestFriend = async (req: Request, res: Response) => {
-        try {
-            const invite = req.body.invite
-            const response = await UserServices.acceptInviteRequestFriend(invite)
-            return res.status(HttpStatusCodes.OK).json(response)
-        } catch (error) {
-            res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error!")
-        }
-    }
-
-    export const rejectInviteRequestFriend = async (req: Request, res: Response) => {
-        try {
-            const invite = req.body.invite
-            const response = await UserServices.rejectInviteRequestFriend(invite)
             return res.status(HttpStatusCodes.OK).json(response)
         } catch (error) {
             res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error!")

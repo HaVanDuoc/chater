@@ -65,18 +65,18 @@ const userSlice = createSlice({
             state.error = action.payload
         },
 
-        // Action request friend
-        [ActionTypes.FRIEND_REQUEST]: (state) => {
-            state.status = "pending"
-        },
-        [ActionTypes.FRIEND_REQUEST_SUCCESS]: (state, action) => {
-            state.status = "succeeded"
-            state.message = action.payload.message
-        },
-        [ActionTypes.FRIEND_REQUEST_FAILURE]: (state, action) => {
-            state.status = "failed"
-            state.error = action.payload.message
-        },
+        // // Action request friend
+        // [ActionTypes.FRIEND_REQUEST]: (state) => {
+        //     state.status = "pending"
+        // },
+        // [ActionTypes.FRIEND_REQUEST_SUCCESS]: (state, action) => {
+        //     state.status = "succeeded"
+        //     state.message = action.payload.message
+        // },
+        // [ActionTypes.FRIEND_REQUEST_FAILURE]: (state, action) => {
+        //     state.status = "failed"
+        //     state.error = action.payload.message
+        // },
 
         // Action accept request friend
         [ActionTypes.ACCEPT_FRIEND_REQUEST]: (state) => {

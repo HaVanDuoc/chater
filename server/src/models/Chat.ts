@@ -3,12 +3,16 @@ import { model, Schema } from "mongoose"
 export interface IChat {
     _id?: Schema.Types.ObjectId
     name?: string
+    avatar?: string
     members: Schema.Types.ObjectId[]
 }
 
 const chatSchema = new Schema<IChat>(
     {
         name: {
+            type: String,
+        },
+        avatar: {
             type: String,
         },
         members: [

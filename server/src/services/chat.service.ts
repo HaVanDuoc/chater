@@ -1,7 +1,35 @@
 import Chat from "../models/Chat"
-import User, { IUser } from "../models/User"
+import User from "../models/User"
 
 namespace ChatServices {
+    export const getListChats = async (auth_id: any) => {
+        try {
+            const chats = await Chat.find({ members: { $in: [auth_id] } })
+                .populate({
+                    path: "members",
+                    select: "_id displayName picture",
+                })
+                .exec()
+
+            return { message: "Get chats successful", chats: chats }
+        } catch (error) {
+            console.log("error getListChats Services", error)
+            return { error: true, message: error }
+        }
+    }
+
+    export const getChat = async (chatId: any) => {
+        try {
+            const chat = await Chat.findById(chatId)
+                .populate("members", "displayName picture")
+                .exec()
+            return { message: "Get chat successful", chat: chat }
+        } catch (error) {
+            console.log("error getChat Service", error)
+            return { error: true, message: "Get chat failed" }
+        }
+    }
+
     export const getChatByUserId = async (current_user_id: any, other_user_id: any) => {
         try {
             const user = await User.findById(other_user_id)
@@ -15,15 +43,6 @@ namespace ChatServices {
                 .exec()
 
             return { message: "Get successful", data: user }
-        } catch (error) {
-            throw new Error("Login Failed")
-        }
-    }
-
-    export const getChatById = async (chatId: any) => {
-        try {
-            const data = await Chat.findById(chatId).populate("members", "name picture").exec()
-            return { message: "Get successful", data: data }
         } catch (error) {
             throw new Error("Login Failed")
         }

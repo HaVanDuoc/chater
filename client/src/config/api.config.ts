@@ -1,9 +1,10 @@
 import axios from "axios"
 
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || "*"
+
 export const api = axios.create({
-    baseURL: `${process.env.REACT_APP_SERVER_URL}/api`,
+    baseURL: `${SERVER_URL}/api`,
     timeout: 0,
-    // headers: { authorization: `Bearer ${token}` },
     withCredentials: true,
 })
 

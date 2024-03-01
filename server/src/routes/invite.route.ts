@@ -1,19 +1,15 @@
-import { Request, Response, Router } from "express"
-import passport from "passport"
+import { Router } from "express"
 import dotenv from "dotenv"
-import "../config/passport.config"
-import { HttpStatusCode } from "axios"
-import User from "../models/User"
-import Middlewares from "../middlewares"
-import Invite from "../models/Invite"
 import InviteController from "../controllers/invite.controller"
+import "../config/passport.config"
 
 dotenv.config()
 
 const router = Router()
 
-// router.use(Middlewares.isAuthenticated)
-
-router.get("/", InviteController.getInvite)
+router.get("/", InviteController.getListInvites)
+router.post("/:inviteId/accept", InviteController.acceptInvite)
+router.post("/:inviteId/reject", InviteController.rejectInvite)
+router.post("/:inviteId/redeem", InviteController.redeemInvite)
 
 export default router

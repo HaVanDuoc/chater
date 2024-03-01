@@ -1,22 +1,29 @@
-import { BrowserRouter, Routes, Route, redirect } from "react-router-dom"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { routes } from "./routes"
 import NotificationToast from "./components/NotificationToast"
 import "react-toastify/dist/ReactToastify.css"
 import { Fragment, useEffect } from "react"
-import { useDispatch } from "react-redux"
+import io from "socket.io-client"
 import { useSelector } from "react-redux"
-import { selectUser } from "./redux/selectors"
-import { actions as userActions } from "./redux/slice/user.slice"
-import { types as userTypes } from "./redux/type/user.type"
+import { selectAuth } from "./redux/selectors"
+import { useDispatch } from "react-redux"
+import { inviteTypes } from "./redux/type/invite.type"
+import { inviteActions } from "./redux/slice/invite.slice"
+import { chatActions } from "./redux/slice/chat.slice"
+import { chatTypes } from "./redux/type/chat.type"
+
+// const socket = io("http://localhost:5000")
 
 function App() {
     const dispatch = useDispatch()
-
-    const currentUser = useSelector(selectUser).currentUser
+    const logged = useSelector(selectAuth).user
 
     useEffect(() => {
-        dispatch(userActions[userTypes.GET_CURRENT_USER]({})) // Get current user
-    }, [dispatch, currentUser])
+        if (logged) {
+            dispatch(inviteActions[inviteTypes.GET_LIST_INVITES]({}))
+            dispatch(chatActions[chatTypes.GET_LIST_CHATS]({}))
+        }
+    }, [dispatch, logged])
 
     return (
         <div className="App">
