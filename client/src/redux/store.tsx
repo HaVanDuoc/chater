@@ -20,3 +20,9 @@ sagaMiddleware.run(rootSaga)
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
 export const useAppDispatch = () => useDispatch<AppDispatch>()
+
+// Reset state
+export const purgeState = () => {
+    persistor.purge()
+    console.log("State đã được làm mới")
+}

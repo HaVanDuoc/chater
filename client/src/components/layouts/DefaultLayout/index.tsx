@@ -1,15 +1,15 @@
 import { Layout } from "antd"
-import ChatBox from "~/components/ChatBox"
 
 const { Sider, Content } = Layout
 
 interface IDefaultLayout {
     sider: React.ReactNode
+    content: React.ReactNode
 }
 
 export const widthSider = 350
 
-const DefaultLayout = ({ sider }: IDefaultLayout) => {
+const DefaultLayout = ({ sider, content }: IDefaultLayout) => {
     return (
         <Layout style={{ minHeight: "100vh", position: "relative" }}>
             <Sider
@@ -25,9 +25,7 @@ const DefaultLayout = ({ sider }: IDefaultLayout) => {
                 {sider}
             </Sider>
             <Layout>
-                <Content>
-                    <ChatBox />
-                </Content>
+                <Content>{content}</Content>
             </Layout>
         </Layout>
     )

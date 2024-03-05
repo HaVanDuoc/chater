@@ -1,17 +1,33 @@
-import Chat from "../models/Chat"
+import Chat, { IChat } from "../models/Chat"
+import Message, { IMessage } from "../models/Message"
 import User from "../models/User"
 
 namespace ChatServices {
     export const getListChats = async (auth_id: any) => {
         try {
-            const chats = await Chat.find({ members: { $in: [auth_id] } })
+            const chats: (IChat & { messages?: IMessage[] })[] = await Chat.find({
+                members: { $in: [auth_id] },
+            })
                 .populate({
                     path: "members",
                     select: "_id displayName picture",
                 })
                 .exec()
 
-            return { message: "Get chats successful", chats: chats }
+            const chatsWithMessages = await Promise.all(
+                chats.map(async (chat) => {
+                    const messages = await Message.find({ chat: chat._id })
+                        .select("sender content createdAt updatedAt")
+                        .populate("sender", "displayName picture")
+                        .limit(50)
+                        .exec()
+
+                    // Trả về chat mới với messages được thêm vào
+                    return { ...(chat as any).toObject(), messages }
+                }),
+            )
+
+            return { message: "Get chats successful", chats: chatsWithMessages }
         } catch (error) {
             console.log("error getListChats Services", error)
             return { error: true, message: error }
@@ -23,7 +39,16 @@ namespace ChatServices {
             const chat = await Chat.findById(chatId)
                 .populate("members", "displayName picture")
                 .exec()
-            return { message: "Get chat successful", chat: chat }
+
+            const getMessages = await Message.find({ chat: chatId })
+                .select("sender content updatedAt")
+                .populate("sender", "displayName picture")
+                .exec()
+
+            return {
+                message: "Get chat successful",
+                chat: { id: chat?.id, members: chat?.members, messages: getMessages },
+            }
         } catch (error) {
             console.log("error getChat Service", error)
             return { error: true, message: "Get chat failed" }

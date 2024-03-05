@@ -1,7 +1,7 @@
-import ActivePage from "~/components/pages/Active"
 import ChatPage from "~/components/pages/Chat"
 import HomePage from "~/components/pages/Home"
 import LoginPage from "~/components/pages/Login"
+import UserPage from "~/components/pages/User"
 
 interface IRoutes {
     path?: string
@@ -14,7 +14,6 @@ export const routes: IRoutesArray = [
     { path: "/", page: HomePage },
     { path: "/chat", page: ChatPage },
     { path: "/chat/:chatId", page: ChatPage },
-    { path: "/user/:userId", page: ChatPage },
-    { path: "/active", page: ActivePage },
+    { path: "/user/:userId", page: UserPage },
     { path: "/login", page: LoginPage },
 ]

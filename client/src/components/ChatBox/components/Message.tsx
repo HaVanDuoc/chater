@@ -17,8 +17,7 @@ const WrapMessage = styled(Flex)`
         width: fit-content;
         max-width: 60%;
         padding: 10px;
-        // margin-bottom: 10px;
-        border-radius: 45px;
+        border-radius: 13px;
     }
 
     .user-message {
@@ -32,26 +31,33 @@ const WrapMessage = styled(Flex)`
         background-color: #f1f0f0;
         color: black;
     }
+
+    .message-content {
+        width: 100%;
+        overflow-wrap: break-word;
+    }
 `
 
-const Message: React.FC<IMessage> = ({ sender, avatar, content, isUser, isSameSender, isLast }) => (
-    <WrapMessage
-        align="center"
-        justify={isUser ? "flex-end" : "flex-start"}
-        gap="small"
-        style={{ marginTop: isSameSender ? 2 : 10 }}
-    >
-        {!isUser && isLast ? (
-            <Tooltip title={sender} placement="left">
-                <Avatar icon={<UserOutlined />} src={avatar} />
-            </Tooltip>
-        ) : (
-            <Avatar icon={<UserOutlined />} style={{ opacity: 0 }} />
-        )}
-        <Flex className={`message ${isUser ? "user-message" : "other-message"}`}>
-            <Flex className="message-content">{content}</Flex>
-        </Flex>
-    </WrapMessage>
-)
+const Message: React.FC<IMessage> = ({ sender, avatar, content, isUser, isSameSender, isLast }) => {
+    return (
+        <WrapMessage
+            align="center"
+            justify={isUser ? "flex-end" : "flex-start"}
+            gap="small"
+            style={{ marginTop: isSameSender ? 2 : 10 }}
+        >
+            {!isUser && isLast ? (
+                <Tooltip title={sender} placement="left">
+                    <Avatar icon={<UserOutlined />} src={avatar} />
+                </Tooltip>
+            ) : (
+                <Avatar icon={<UserOutlined />} style={{ opacity: 0 }} />
+            )}
+            <Flex className={`message ${isUser ? "user-message" : "other-message"}`}>
+                <p className="message-content">{content}</p>
+            </Flex>
+        </WrapMessage>
+    )
+}
 
 export default Message

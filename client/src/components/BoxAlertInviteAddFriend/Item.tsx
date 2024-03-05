@@ -3,32 +3,28 @@ import { Avatar, Button, Flex, Typography, theme } from "antd"
 import React, { useState } from "react"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router"
-import ActionTypes from "~/redux/users/types"
-import { actions } from "~/redux/users/slice"
+import { IInvite } from "~/redux/interface/invite.interface"
+import { IUser } from "~/redux/interface/user.interface"
 import { inviteActions } from "~/redux/slice/invite.slice"
 import { inviteTypes } from "~/redux/type/invite.type"
 
 interface IItem {
-    data: {
-        _id: string
-        sender: {
-            _id: string
-            displayName: string
-            picture: string
-        }
-    }
+    invite_id: IInvite["_id"]
+    sender_id: IUser["_id"]
+    sender_displayName: IUser["displayName"]
+    sender_picture: IUser["picture"]
 }
 
-const Item: React.FC<IItem> = ({ data }) => {
+const Item: React.FC<IItem> = ({ invite_id, sender_id, sender_displayName, sender_picture }) => {
     const [isHover, setHover] = useState<boolean>(false)
     const { colorBgTextHover } = theme.useToken().token
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const invite_id = data?._id
-    const sender_id = data?.sender?._id
-    const sender_name = data?.sender?.displayName
-    const sender_picture = data?.sender?.picture
+    // const invite_id = invite?._id
+    // const sender_id = invite?.sender?._id
+    // const sender_name = invite?.sender?.displayName
+    // const sender_picture = invite?.sender?.picture
 
     return (
         <Flex
@@ -52,7 +48,7 @@ const Item: React.FC<IItem> = ({ data }) => {
                 }}
             >
                 <Avatar icon={<UserOutlined />} src={sender_picture || ""} />
-                <Typography.Text>{sender_name}</Typography.Text>
+                <Typography.Text>{sender_displayName}</Typography.Text>
             </Flex>
             <Flex gap={8}>
                 <Button

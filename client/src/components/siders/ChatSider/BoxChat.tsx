@@ -6,14 +6,13 @@ import ContentPopoverBoxChat from "./ContentPopoverBoxChat"
 import { EllipsisOutlined } from "@ant-design/icons"
 import { IChat } from "~/redux/interface/chat.interface"
 import { useSelector } from "react-redux"
-import { selectAuth } from "~/redux/selectors"
-import { useSearchParams } from "react-router-dom"
+import { selectCurrentUser } from "~/redux/selectors"
 
 interface IBoxChat {
     chat: IChat
 }
 
-export const getGroupAvatar = (members: any[], current_user_id: any) => {
+export const getGroupAvatarAndName = (members: any[], current_user_id: any) => {
     if (members.length === 2) {
         // Nếu có 2 thành viên, lấy avatar và tên của thành viên còn lại
         const currentUser = members.find((member) => member._id !== current_user_id)
@@ -37,11 +36,12 @@ export const getGroupAvatar = (members: any[], current_user_id: any) => {
 
 const BoxChat: React.FC<IBoxChat> = ({ chat }) => {
     const [isHovered, setIsHovered] = useState(false)
-    const current_user_id = useSelector(selectAuth).user?._id
-    const { avatar, name } = getGroupAvatar(chat.members, current_user_id)
+
+    const { chatId } = useParams()
+    const current_user_id = useSelector(selectCurrentUser).data?._id
+    const { avatar, name } = getGroupAvatarAndName(chat?.members ?? [], current_user_id)
     const navigate = useNavigate()
     const chat_id = chat._id
-    const { chatId } = useParams()
 
     return (
         <Flex

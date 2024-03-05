@@ -8,6 +8,7 @@ dotenv.config()
 const router = Router()
 
 router.get("/", InviteController.getListInvites)
+router.post("/:receiver/send", InviteController.sendInvite)
 router.post("/:inviteId/accept", InviteController.acceptInvite)
 router.post("/:inviteId/reject", InviteController.rejectInvite)
 router.post("/:inviteId/redeem", InviteController.redeemInvite)

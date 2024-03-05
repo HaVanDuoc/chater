@@ -14,30 +14,33 @@ import {
     WarningOutlined,
 } from "@ant-design/icons"
 import { useSelector } from "react-redux"
-import { selectAuth } from "~/redux/selectors"
 import { useNavigate } from "react-router-dom"
 import api from "~/config/api.config"
 import { useDispatch } from "react-redux"
-import { authActions } from "~/redux/slice/auth.slice"
-import { authTypes } from "~/redux/type/auth.type"
+import { selectCurrentUser } from "~/redux/selectors"
+import { userActions } from "~/redux/slice/user.slice"
+import { userTypes } from "~/redux/type/user.type"
+import { purgeState } from "~/redux/store"
 
 const ChatSiderFooter = () => {
     const paddingCSS = "7px 15px"
-    const currentUser = useSelector(selectAuth)?.user
+    const currentUser = useSelector(selectCurrentUser).data
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
     const handleLogout = async () => {
         try {
             const response = await api.get("/auth/logout")
-            if (!response.data.error) {
+            if (!response?.data?.error) {
+                purgeState() // reset state
+                dispatch(userActions[userTypes.LOGOUT_SUCCESS](response.data))
                 navigate("/login")
-                dispatch(authActions[authTypes.LOGOUT]({}))
             } else {
+                dispatch(userActions[userTypes.LOGOUT_FAILED](response.data))
                 console.error("Logout failed")
             }
         } catch (error: any) {
-            console.error("Error during logout:", error.message)
+            console.error("Error during logout:", error)
         }
     }
 

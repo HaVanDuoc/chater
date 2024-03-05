@@ -3,76 +3,41 @@ import Invite from "../models/Invite"
 import User, { IUser } from "../models/User"
 
 namespace UserServices {
-    export const getUser = async (auth_id?: any, user_id?: string) => {
+    export const getUser = async (user_id?: string) => {
         try {
-            var res: any = {}
-
-            // Get Info
             let user = await User.findById(user_id).exec()
-            if (user) res = user
-
-            // Check friend
-            const isFriend = user?.friends.includes(auth_id)
-            res["isFriend"] = isFriend
-
-            // If not friend, check invite
-            if (!isFriend) {
-                const invite = await Invite.findOne({
-                    $or: [
-                        { receiver: auth_id, sender: user_id },
-                        {
-                            $and: [
-                                { receiver: { $ne: auth_id } },
-                                { sender: auth_id },
-                                { receiver: user_id },
-                            ],
-                        },
-                    ],
-                })
-
-                // Add invite into user, for response to client
-                if (invite) {
-                    res["invite"] = invite
-                }
-            }
-
-            return { message: "Get data succeeded", user: res }
+            return { message: "Get data succeeded", user }
         } catch (error) {
             return error
         }
     }
 
-    export const addFriend = async (
-        sender: Schema.Types.ObjectId,
-        receiver: Schema.Types.ObjectId,
-    ) => {
-        const checkFriend = async () => {
-            const senderInfo = await User.findById(sender)
-            if (senderInfo) {
-                const friend = senderInfo.friends.find((id: any) => id === receiver)
-                return friend
-            }
-            return null
-        }
-
+    // Suggest Friends
+    export const getSuggestFriends = async (user_id: any) => {
         try {
-            // check friends
-            const check = await checkFriend()
-            if (check) return { error: true, message: "Cả hai đã là bạn!" }
+            const listFriendsOfCurrentUser = await User.findById(user_id).select("friends").exec()
 
-            // Đầu tiên tìm và cập nhật nếu không có thì tạo một lời mời
-            console.log("sender", sender)
-            console.log("receiver", receiver)
-            const findOneAndUpdate = await Invite.findOne({
-                $and: [{ sender: sender }, { receiver: receiver }],
+            const listSuggest = await User.find({
+                _id: { $ne: user_id, $nin: listFriendsOfCurrentUser?.friends },
             })
+                .select("displayName email picture")
+                .exec()
 
-            console.log("findOneAndUpdate", findOneAndUpdate)
-
-            if (!findOneAndUpdate) await Invite.create({ sender, receiver })
-            return { message: "Đã gửi yêu cầu kết bạn!" }
+            return { message: "Get list suggest success", data: listSuggest }
         } catch (error) {
-            console.log("error - addFriend - user.services.ts", error)
+            return error
+        }
+    }
+    // Suggest Friends
+    export const getListFriends = async (current_user_id: any) => {
+        try {
+            const list = await User.findById(current_user_id)
+                .select("friends")
+                .populate("friends", "displayName picture email")
+                .exec()
+
+            return { message: "Get list friend success", data: list?.friends }
+        } catch (error) {
             return error
         }
     }

@@ -1,18 +1,19 @@
-import { Flex, Typography, theme } from "antd"
-import SearchSider from "~/components/sider/SearchSider"
+import BoxAlertInviteAddFriend from "~/components/BoxAlertInviteAddFriend"
 import TitleSider from "~/components/sider/TitleSider"
-import { Flex as Header } from "antd"
-import { Flex as ListChat } from "antd"
+import SearchSider from "~/components/sider/SearchSider"
 import ChatSiderFooter from "./ChatSiderFooter"
+import BoxChat from "./BoxChat"
+import { Flex, Typography, theme } from "antd"
+import { Flex as Header } from "antd"
+import { IChat } from "~/redux/interface/chat.interface"
+import { Flex as ListChat } from "antd"
 import { useSelector } from "react-redux"
 import { selectChat } from "~/redux/selectors"
-import BoxAlertInviteAddFriend from "~/components/BoxAlertInviteAddFriend"
 import { paddingSider } from "~/components/sider/styles"
-import BoxChat from "./BoxChat"
 
 const ChatSider = () => {
     const { colorBorder } = theme.useToken().token
-    const chats = useSelector(selectChat).listChats
+    const chats = useSelector(selectChat).getListChat.data
 
     return (
         <Flex
@@ -46,8 +47,8 @@ const ChatSider = () => {
                     flex: 1,
                 }}
             >
-                {chats.length ? (
-                    chats.map((chat: any, index: number) => {
+                {chats ? (
+                    chats.map((chat: IChat, index: number) => {
                         return <BoxChat chat={chat} key={index} />
                     })
                 ) : (

@@ -1,9 +1,29 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "./store"
 
-export const selectAuth = createSelector(
-    (state: RootState) => state.auth,
-    (auth) => auth,
+export const selectCurrentUser = createSelector(
+    (state: RootState) => state.currentUser,
+    (currentUser) => currentUser,
+)
+
+export const selectUser = createSelector(
+    (state: RootState) => state.user,
+    (user) => user,
+)
+
+export const selectFriend = createSelector(
+    (state: RootState) => state.friend,
+    (friend) => friend,
+)
+
+export const selectSuggestFriend = createSelector(
+    (state: RootState) => state.suggestFriend,
+    (suggestFriend) => suggestFriend,
+)
+
+export const selectAlert = createSelector(
+    (state: RootState) => state.alert,
+    (alert) => alert,
 )
 
 export const selectInvite = createSelector(
@@ -11,19 +31,9 @@ export const selectInvite = createSelector(
     (invite) => invite,
 )
 
-export const selectUser = createSelector(
-    (state: RootState) => state.users,
-    (user) => user,
-)
-
 export const selectChat = createSelector(
     (state: RootState) => state.chats,
     (chats) => chats,
-)
-
-export const selectConfirmDialog = createSelector(
-    (state: RootState) => state.confirmDialog,
-    (confirmDialog) => confirmDialog,
 )
 
 export const selectMessage = createSelector(

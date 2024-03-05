@@ -9,6 +9,7 @@ export interface IInvite {
     sender: Schema.Types.ObjectId
     receiver: Schema.Types.ObjectId
     status?: StatusInvite
+    chatId?: Schema.Types.ObjectId
 }
 
 const inviteSchema = new Schema<IInvite>(
@@ -26,6 +27,9 @@ const inviteSchema = new Schema<IInvite>(
         status: {
             type: String,
             default: "waiting",
+        },
+        chatId: {
+            type: Schema.Types.ObjectId,
         },
     },
     { timestamps: true },

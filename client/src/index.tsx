@@ -5,6 +5,7 @@ import { persistor, store } from "./redux/store"
 import { Provider } from "react-redux"
 import { GoogleOAuthProvider } from "@react-oauth/google"
 import { PersistGate } from "redux-persist/integration/react"
+import SocketProvider from "./socket"
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 root.render(
@@ -12,7 +13,9 @@ root.render(
         <GoogleOAuthProvider clientId="857605937611-j80q77op127m043iph9jgo04r9a78eqq.apps.googleusercontent.com">
             <Provider store={store}>
                 <PersistGate loading={null} persistor={persistor}>
-                    <App />
+                    <SocketProvider>
+                        <App />
+                    </SocketProvider>
                 </PersistGate>
             </Provider>
         </GoogleOAuthProvider>

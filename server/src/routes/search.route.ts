@@ -3,7 +3,6 @@ import SearchControllers from "../controllers/search.controller"
 
 const router = Router()
 
-router.post("/", SearchControllers.search)
-router.get("/suggest", SearchControllers.suggest)
+router.get("/:key", SearchControllers.search)
 
 export default router

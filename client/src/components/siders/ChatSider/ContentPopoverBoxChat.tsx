@@ -12,7 +12,7 @@ import {
 } from "@ant-design/icons"
 import PopoverMenu from "~/components/PopoverMenu"
 import { IChat } from "~/redux/interface/chat.interface"
-import { IUser } from "~/redux/users/interfaces"
+import { IUser } from "~/redux/interface/user.interface"
 
 const ContentPopoverBoxChat = (chatId: IChat["_id"]) => {
     const handleDeleteChat = (chatId: IUser["_id"]) => {
@@ -29,12 +29,12 @@ const ContentPopoverBoxChat = (chatId: IChat["_id"]) => {
         { content: "Chat video", icon: <VideoCameraOutlined />, hasDivider: true },
         { content: "Chặn", icon: <MinusCircleOutlined /> },
         { content: "Lưu trữ đoạn chat", icon: <ReconciliationOutlined /> },
+        { content: "Báo cáo", icon: <WarningOutlined /> },
         {
             content: "Xóa đoạn chat",
             icon: <DeleteOutlined />,
             onClick: () => handleDeleteChat(chatId),
         },
-        { content: "Báo cáo", icon: <WarningOutlined /> },
     ]
 
     return <PopoverMenu data={menu} />

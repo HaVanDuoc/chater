@@ -1,0 +1,6 @@
+export const friendTypes = {
+    // Get list friend
+    GET_LIST_FRIEND: "GET_LIST_FRIEND",
+    GET_LIST_FRIEND_SUCCESS: "GET_LIST_FRIEND_SUCCESS",
+    GET_LIST_FRIEND_FAILED: "GET_USER_FAILED",
+}

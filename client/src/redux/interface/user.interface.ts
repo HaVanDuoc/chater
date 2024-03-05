@@ -2,16 +2,14 @@ export interface IUser {
     _id: string
     email: string
     email_verified: boolean
-    family_name: string
-    given_name: string
+    familyName?: string
+    givenName?: string
     name: string
-    displayName: string
+    displayName?: string
     picture: string
-    token: string
-    role: any
     status: any
-    friends: any
-    chats: any
+    friends: any[]
+    chats: any[]
     invites: any[]
     createdAt: string
     updatedAt: string

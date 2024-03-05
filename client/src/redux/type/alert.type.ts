@@ -1,0 +1,6 @@
+export const alertTypes = {
+    ALERT: "ALERT",
+    ALERT_SUCCESS: "ALERT_SUCCESS",
+    ALERT_FAILED: "ALERT_FAILED",
+    ALERT_RESET: "ALERT_RESET",
+}

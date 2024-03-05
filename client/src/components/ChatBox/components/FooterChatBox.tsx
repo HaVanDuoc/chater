@@ -6,11 +6,11 @@ import {
     SmileOutlined,
 } from "@ant-design/icons"
 import { Button, Flex, Form, Input, Tooltip } from "antd"
-import React from "react"
 import { useDispatch } from "react-redux"
 import { useParams } from "react-router"
-import { messageActions } from "~/redux/messages/slice"
-import messageTypes from "~/redux/messages/types"
+import { messageActions } from "~/redux/slice/message.slice"
+import messageTypes from "~/redux/type/message.type"
+// import { sendMessage } from "~/socket"
 
 const buttons = [
     { icon: <PlusCircleFilled />, title: "Mở hành động khác" },
@@ -19,11 +19,7 @@ const buttons = [
     { icon: <FileGifOutlined />, title: "Chọn file gif" },
 ]
 
-interface IFooterChatBox {
-    data: any
-}
-
-const FooterChatBox: React.FC<IFooterChatBox> = ({ data }) => {
+const FooterChatBox = () => {
     const [form] = Form.useForm()
     const { chatId } = useParams()
     const dispatch = useDispatch()
@@ -31,17 +27,17 @@ const FooterChatBox: React.FC<IFooterChatBox> = ({ data }) => {
     const onFinish = (values: { message: string }) => {
         console.log("Message sent:", values.message)
 
-        if (values?.message) {
-            const data = {
-                chat: chatId,
-                content: values.message,
-            }
+        // sendMessage(values.message)
 
-            // dispatch send messages
-            dispatch(messageActions[messageTypes.SEND_MESSAGE_REQUEST](data))
-
-            form.resetFields()
-        }
+        // if (values?.message) {
+        //     dispatch(
+        //         messageActions[messageTypes.SEND_MESSAGE]({
+        //             chat: chatId,
+        //             content: values.message,
+        //         }),
+        //     )
+        //     form.resetFields()
+        // }
     }
 
     return (
@@ -62,15 +58,20 @@ const FooterChatBox: React.FC<IFooterChatBox> = ({ data }) => {
 
             <Form form={form} onFinish={onFinish} style={{ flex: 1 }}>
                 <Form.Item name="message" style={{ marginBottom: 0 }}>
-                    <Input
+                    <Input.TextArea
                         autoFocus
-                        // autoSize={{ minRows: 1, maxRows: 3 }}
+                        autoSize={{ minRows: 1, maxRows: 4 }}
                         placeholder="Aa"
                         bordered={false}
                         size="large"
                         style={{ background: "#f1f0f0", borderRadius: 20, marginRight: 8, flex: 1 }}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                e.preventDefault()
+                                form.submit()
+                            }
+                        }}
                     />
-                    {/* <Button icon={<SmileFilled />} style={{ position: "absolute", right: 0 }} /> */}
                 </Form.Item>
             </Form>
 

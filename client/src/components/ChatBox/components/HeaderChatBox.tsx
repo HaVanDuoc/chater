@@ -4,8 +4,8 @@ import AvatarOnline from "~/components/AvatarOnline"
 import { IChat } from "~/redux/interface/chat.interface"
 
 interface IHeaderChatBox {
-    name: IChat["name"]
-    avatar: IChat["avatar"]
+    name?: IChat["name"]
+    avatar?: IChat["avatar"]
 }
 
 const HeaderChatBox: React.FC<IHeaderChatBox> = ({ name, avatar }) => {

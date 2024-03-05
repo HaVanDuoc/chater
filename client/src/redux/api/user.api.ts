@@ -2,37 +2,9 @@ import api from "~/config/api.config"
 import { IUser } from "../interface/user.interface"
 
 namespace API {
-    export const getCurrentUser = async () => {
-        try {
-            const response = await api.get("/auth/login/success")
-            return response.data
-        } catch (error: any) {
-            return error.response.data
-        }
-    }
-
-    export const getSuggestFriends = async () => {
-        try {
-            const response = await api.get("/search/suggest")
-            return response.data
-        } catch (error) {
-            return error
-        }
-    }
-
     export const getUser = async (userId: string) => {
         try {
             const response = await api.get(`/user/${userId}`)
-            return response.data
-        } catch (error) {
-            return error
-        }
-    }
-
-    export const addFriend = async (receiver: string) => {
-        try {
-            const response = await api.post(`/user/${receiver}/add`)
-            console.log("response", response)
             return response.data
         } catch (error) {
             return error

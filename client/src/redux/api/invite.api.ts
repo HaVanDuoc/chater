@@ -10,6 +10,15 @@ namespace API {
         }
     }
 
+    export const sendInvite = async (receiver: string) => {
+        try {
+            const response = await api.post(`/invite/${receiver}/send`)
+            return response.data
+        } catch (error) {
+            return error
+        }
+    }
+
     export const acceptInvite = async (invite_id: string) => {
         try {
             const response = await api.post(`/invite/${invite_id}/accept`)

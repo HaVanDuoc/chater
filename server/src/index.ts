@@ -41,7 +41,7 @@ app.use(
         secret: process.env["SECRET_KEY"] || "*",
         resave: true,
         saveUninitialized: true,
-        cookie: { maxAge: 60 * 60 * 1000 }, // 1 hour
+        cookie: { maxAge: 4 * 60 * 60 * 1000 }, // 4 hour
         store: new MongoStore({
             mongoUrl: process.env["MONGO_URI"],
         }),

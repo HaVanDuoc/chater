@@ -12,14 +12,28 @@ export function* getListChats(): Generator<any, any, any> {
     }
 }
 
-export function* getChat(action: any): Generator<any, any, any> {
-    try {
-        const chat = yield call(API.getChat, action.payload.chatId)
-        yield put(chatActions[chatTypes.GET_CHAT_SUCCESS](chat))
-    } catch (error) {
-        yield put(chatActions[chatTypes.GET_CHAT_FAILED](error))
-    }
-}
+// export function* getChat(action: any): Generator<any, any, any> {
+//     try {
+//         const chat = yield call(API.getChat, action.payload.chatId)
+//         yield put(chatActions[chatTypes.GET_CHAT_SUCCESS](chat))
+//     } catch (error) {
+//         yield put(chatActions[chatTypes.GET_CHAT_FAILED](error))
+//     }
+// }
+
+// export function* getMessages(action: any): Generator<any, any, any> {
+//     try {
+//         const messages = yield call(API.getMessages, action.payload.chatId)
+//         yield put(
+//             chatActions[chatTypes.GET_MESSAGES_SUCCESS]({
+//                 messages: messages.messages,
+//                 chatId: action.payload.chatId,
+//             }),
+//         )
+//     } catch (error) {
+//         yield put(chatActions[chatTypes.GET_MESSAGES_FAILED](error))
+//     }
+// }
 
 // export function* deleteChat(action: any): Generator<any, any, any> {
 //     try {
@@ -33,7 +47,8 @@ export function* getChat(action: any): Generator<any, any, any> {
 export default function* chatSaga() {
     yield all([
         takeLatest(chatActions[chatTypes.GET_LIST_CHATS].type, getListChats),
-        takeLatest(chatActions[chatTypes.GET_CHAT].type, getChat),
+        // takeLatest(chatActions[chatTypes.GET_CHAT].type, getChat),
+        // takeLatest(chatActions[chatTypes.GET_MESSAGES].type, getMessages),
         // takeLatest(chatActions[chatTypes.DELETE_CHAT_REQUEST].type, deleteChat),
     ])
 }
