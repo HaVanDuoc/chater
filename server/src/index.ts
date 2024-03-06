@@ -10,7 +10,7 @@ import bodyParser from "body-parser"
 import cookieParser from "cookie-parser"
 import { createServer } from "node:http"
 import { Server } from "socket.io"
-import socket from "./socketIO"
+import socket from "./socket"
 import cors from "cors"
 
 dotenv.config()

@@ -45,3 +45,8 @@ export const selectSearch = createSelector(
     (state: RootState) => state.searches,
     (searches) => searches,
 )
+
+export const selectSocket = createSelector(
+    (state: RootState) => state.socket,
+    (socket) => socket,
+)

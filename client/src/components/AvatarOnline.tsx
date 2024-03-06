@@ -1,6 +1,8 @@
 import { UserOutlined } from "@ant-design/icons"
 import { Avatar, Badge } from "antd"
 import React from "react"
+import { useSelector } from "react-redux"
+import { selectUser } from "~/redux/selectors"
 
 interface IAvatarOnline {
     online?: boolean
@@ -18,6 +20,7 @@ const AvatarOnline: React.FC<IAvatarOnline> = ({
     avt = null,
     size = 45,
 }) => {
+    
     return (
         <Badge dot={online} status="success" offset={["-5%", "80%"]} style={dotStyle}>
             <Avatar size={size} icon={<UserOutlined />} src={avt} />

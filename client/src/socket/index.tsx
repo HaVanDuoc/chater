@@ -1,38 +1,43 @@
-import { Fragment, useEffect, useState } from "react"
+import { Fragment, useEffect } from "react"
+import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
 import { io } from "socket.io-client"
-import { selectCurrentUser } from "~/redux/selectors"
+import { selectCurrentUser, selectSocket } from "~/redux/selectors"
+import { socketActions } from "~/redux/slice/socket.slice"
+import { socketTypes } from "~/redux/type/socket.type"
 
 interface ISocketProvider {
     children: React.ReactNode
 }
 
-// socket.on("message-to-server", (message) => {
-//     console.log("Tin nhắn từ server:", message)
-// })
-
-// export const sendMessage = (data: any) => {
-//     socket.emit("sendMessage", data)
-// }
-
 const SocketProvider: React.FC<ISocketProvider> = ({ children }) => {
-    const [socket, setSocket] = useState<any>(null)
+    const socket = useSelector(selectSocket).socket
 
-    const currentUser = useSelector(selectCurrentUser).data
     const SERVER_URL = process.env.REACT_APP_SERVER_URL || "*"
+    const currentUser = useSelector(selectCurrentUser).data?._id
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        if (currentUser) {
-            const socket = io(SERVER_URL)
-            setSocket(socket)
+        if (currentUser && !socket) {
+            const socket = io(SERVER_URL, { query: { userId: currentUser } })
 
-            socket.close()
+            dispatch(socketActions[socketTypes.SET_SOCKET](socket))
+
+            // Socket on get online users
+            socket.on("getOnlineUsers", (listOnline) => {
+                dispatch(socketActions[socketTypes.GET_ONLINE_USERS](listOnline))
+            })
+
+            // Clean up function to close socket when unmounting
+            return () => {
+                socket.close()
+            }
         } else {
             if (socket) {
                 socket.close()
-                setSocket(null)
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentUser])
 
     return <Fragment>{children}</Fragment>

@@ -8,6 +8,7 @@ import suggestFriendReducer from "./slice/suggestFriends.slice"
 import currentUserReducer from "./slice/currentUser.slice"
 import userReducer from "./slice/user.slice"
 import friendReducer from "./slice/friend.slice"
+import socketReducer from "./slice/socket.slice"
 
 const rootReducer = combineReducers({
     currentUser: currentUserReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
     invites: inviteReducer,
     chats: chatReducer,
     messages: messageReducer,
+    socket: socketReducer,
     searches: searchReducer,
     alert: alertReducer,
 })

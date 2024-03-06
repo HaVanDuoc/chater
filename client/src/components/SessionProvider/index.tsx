@@ -13,6 +13,7 @@ import { chatActions } from "~/redux/slice/chat.slice"
 import { chatTypes } from "~/redux/type/chat.type"
 import { useNavigate } from "react-router"
 import API from "~/redux/api/chat.api"
+import { purgeState } from "~/redux/store"
 
 interface ISessionProvider {
     children: React.ReactNode
@@ -35,6 +36,7 @@ const SessionProvider: React.FC<ISessionProvider> = ({ children }) => {
             navigate(`/chat/${listChat?.chats?.[0]?._id}`)
         } catch (error: any) {
             dispatch(currentUserActions[currentUserTypes.CHECK_SESSION_FAILED](error))
+            purgeState()
             navigate("/login")
         }
     }, [dispatch, navigate])

@@ -17,14 +17,16 @@ import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import api from "~/config/api.config"
 import { useDispatch } from "react-redux"
-import { selectCurrentUser } from "~/redux/selectors"
+import { selectCurrentUser, selectSocket } from "~/redux/selectors"
 import { userActions } from "~/redux/slice/user.slice"
 import { userTypes } from "~/redux/type/user.type"
 import { purgeState } from "~/redux/store"
 
 const ChatSiderFooter = () => {
-    const paddingCSS = "7px 15px"
     const currentUser = useSelector(selectCurrentUser).data
+    const socket = useSelector(selectSocket).socket
+
+    const paddingCSS = "7px 15px"
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -32,7 +34,7 @@ const ChatSiderFooter = () => {
         try {
             const response = await api.get("/auth/logout")
             if (!response?.data?.error) {
-                purgeState() // reset state
+                if (socket) socket.close()
                 dispatch(userActions[userTypes.LOGOUT_SUCCESS](response.data))
                 navigate("/login")
             } else {

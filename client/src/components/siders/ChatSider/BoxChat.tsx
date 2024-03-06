@@ -6,7 +6,7 @@ import ContentPopoverBoxChat from "./ContentPopoverBoxChat"
 import { EllipsisOutlined } from "@ant-design/icons"
 import { IChat } from "~/redux/interface/chat.interface"
 import { useSelector } from "react-redux"
-import { selectCurrentUser } from "~/redux/selectors"
+import { selectCurrentUser, selectSocket } from "~/redux/selectors"
 
 interface IBoxChat {
     chat: IChat
@@ -34,14 +34,24 @@ export const getGroupAvatarAndName = (members: any[], current_user_id: any) => {
     }
 }
 
+export const isChatOnline = (members: any, listOnline: any, current_user_id: any) => {
+    return members.some(
+        (member: any) => listOnline.includes(member._id) && member._id !== current_user_id,
+    )
+}
+
 const BoxChat: React.FC<IBoxChat> = ({ chat }) => {
     const [isHovered, setIsHovered] = useState(false)
 
     const { chatId } = useParams()
     const current_user_id = useSelector(selectCurrentUser).data?._id
-    const { avatar, name } = getGroupAvatarAndName(chat?.members ?? [], current_user_id)
+    const members = chat?.members ?? []
+    const { avatar, name } = getGroupAvatarAndName(members, current_user_id)
     const navigate = useNavigate()
     const chat_id = chat._id
+
+    const listOnline = useSelector(selectSocket).getOnlineUsers
+    const isOnline = isChatOnline(members, listOnline, current_user_id)
 
     return (
         <Flex
@@ -66,7 +76,7 @@ const BoxChat: React.FC<IBoxChat> = ({ chat }) => {
                 navigate(`/chat/${chat_id}`)
             }}
         >
-            <AvatarOnline avt={avatar} online />
+            <AvatarOnline avt={avatar} online={isOnline ? true : false} />
             <Flex vertical gap="none">
                 <Typography.Text style={{ fontSize: 15, fontWeight: 500 }}>{name}</Typography.Text>
                 <Typography.Text style={{ fontSize: 12 }}>

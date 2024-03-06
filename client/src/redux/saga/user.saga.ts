@@ -1,8 +1,9 @@
 import API from "../api/user.api"
 import { all, call, put, takeLatest } from "redux-saga/effects"
-import { toast } from "react-toastify"
+
 import { userActions } from "../slice/user.slice"
 import { userTypes } from "../type/user.type"
+import { purgeState } from "../store"
 
 function* getUserSaga(action: any): Generator<any, any, any> {
     try {
@@ -10,6 +11,14 @@ function* getUserSaga(action: any): Generator<any, any, any> {
         yield put(userActions[userTypes.GET_USER_SUCCEEDED](user))
     } catch (error) {
         yield put(userActions[userTypes.GET_USER_FAILED](error))
+    }
+}
+
+function* logoutSaga(): Generator<any, any, any> {
+    try {
+        purgeState()
+    } catch (error) {
+        yield put(userActions[userTypes.LOGOUT_FAILED](error))
     }
 }
 
@@ -54,6 +63,7 @@ function* deleteFriend(action: any): Generator<any, any, any> {
 export default function* userSaga() {
     yield all([
         takeLatest(userActions[userTypes.GET_USER].type, getUserSaga),
+        takeLatest(userActions[userTypes.LOGOUT_SUCCESS].type, logoutSaga),
         // takeLatest(userActions[userTypes.SEARCH_REQUEST].type, searchSaga),
         // takeLatest(userActions[userTypes.ADD_FRIEND].type, addFriend),
         // takeLatest(userActions[userTypes.ACCEPT_FRIEND_REQUEST].type, acceptFriend),
