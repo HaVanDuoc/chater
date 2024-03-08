@@ -5,6 +5,7 @@ export interface IChat {
     name?: string
     avatar?: string
     members: Schema.Types.ObjectId[]
+    messages: Schema.Types.ObjectId[]
 }
 
 const chatSchema = new Schema<IChat>(
@@ -19,6 +20,12 @@ const chatSchema = new Schema<IChat>(
             {
                 type: Schema.Types.ObjectId,
                 ref: "User",
+            },
+        ],
+        messages: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Message",
             },
         ],
     },

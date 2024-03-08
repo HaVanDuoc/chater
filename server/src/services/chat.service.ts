@@ -1,33 +1,45 @@
-import Chat, { IChat } from "../models/Chat"
-import Message, { IMessage } from "../models/Message"
+import Chat from "../models/Chat"
+import Message from "../models/Message"
 import User from "../models/User"
 
 namespace ChatServices {
     export const getListChats = async (auth_id: any) => {
         try {
-            const chats: (IChat & { messages?: IMessage[] })[] = await Chat.find({
+            const chats = await Chat.find({
                 members: { $in: [auth_id] },
             })
                 .populate({
                     path: "members",
                     select: "_id displayName picture",
                 })
+                .populate({
+                    path: "messages",
+                    populate: {
+                        path: "sender",
+                        select: "displayName picture",
+                    },
+                    options: {
+                        limit: 50,
+                        sort: { createdAt: -1 },
+                    },
+                })
+                .sort({ updatedAt: -1 })
                 .exec()
 
-            const chatsWithMessages = await Promise.all(
-                chats.map(async (chat) => {
-                    const messages = await Message.find({ chat: chat._id })
-                        .select("sender content createdAt updatedAt")
-                        .populate("sender", "displayName picture")
-                        .limit(50)
-                        .exec()
+            // const chatsWithMessages = await Promise.all(
+            //     chats.map(async (chat) => {
+            //         const messages = await Message.find({ chat: chat._id })
+            //             .select("sender content createdAt updatedAt")
+            //             .populate("sender", "displayName picture")
+            //             .limit(50)
+            //             .exec()
 
-                    // Trả về chat mới với messages được thêm vào
-                    return { ...(chat as any).toObject(), messages }
-                }),
-            )
+            //         // Trả về chat mới với messages được thêm vào
+            //         return { ...(chat as any).toObject(), messages }
+            //     }),
+            // )
 
-            return { message: "Get chats successful", chats: chatsWithMessages }
+            return { message: "Get chats successful", chats: chats }
         } catch (error) {
             console.log("error getListChats Services", error)
             return { error: true, message: error }

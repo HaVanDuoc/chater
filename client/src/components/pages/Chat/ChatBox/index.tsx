@@ -1,14 +1,13 @@
-import { Fragment } from "react"
-import { Flex as WrapChatBox } from "antd"
 import HeaderChatBox from "./components/HeaderChatBox"
 import ContentChatBox from "./components/ContentChatBox"
 import FooterChatBox from "./components/FooterChatBox"
+import { Fragment } from "react"
+import { Flex as WrapChatBox } from "antd"
 import { useParams } from "react-router"
 import { useSelector } from "react-redux"
 import { selectChat, selectCurrentUser } from "~/redux/selectors"
-import { widthSider } from "../layouts/DefaultLayout"
-import { getGroupAvatarAndName } from "../siders/ChatSider/BoxChat"
-
+import { getGroupAvatarAndName } from "~/components/siders/ChatSider/BoxChat"
+import { widthSider } from "~/components/layouts/DefaultLayout"
 const ChatBox = () => {
     const { chatId } = useParams()
     const currentUser = useSelector(selectCurrentUser).data?._id

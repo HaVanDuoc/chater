@@ -8,9 +8,6 @@ import MongoStore from "connect-mongo"
 import passport from "passport"
 import bodyParser from "body-parser"
 import cookieParser from "cookie-parser"
-import { createServer } from "node:http"
-import { Server } from "socket.io"
-import socket from "./socket"
 import cors from "cors"
 
 dotenv.config()
@@ -23,16 +20,9 @@ const corsOptions = {
 }
 
 const app = express()
-const server = createServer(app)
-const io = new Server(server, { cors: corsOptions })
 
 //middleware
-app.use(
-    cors({
-        origin: [CLIENT_URL, SERVER_URL],
-        credentials: true,
-    }),
-)
+app.use(cors(corsOptions))
 app.use(cookieParser())
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -54,10 +44,7 @@ app.use(passport.authenticate("session"))
 // Router
 initRoute(app)
 
-// Socket IO
-socket(io)
-
-server.listen(config.port, () => {
+app.listen(config.port, () => {
     console.log(`[server] Server is running at http://localhost:${config.port}`)
     connectDatabase()
 })

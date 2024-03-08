@@ -8,7 +8,6 @@ namespace Api {
         reply?: IMessage["reply"]
     }) => {
         try {
-            console.log('data', data)
             const response = await instance.post(`/message/send`, data)
             return response.data
         } catch (error) {

@@ -1,3 +1,4 @@
+import Chat from "../models/Chat"
 import Message, { IMessage } from "../models/Message"
 
 namespace MessageServices {
@@ -11,7 +12,18 @@ namespace MessageServices {
             })
 
             if (newMessage) {
-                return { message: "Đã gửi tin nhắn!", data: newMessage }
+                const pushMessageToChat = await Chat.findByIdAndUpdate(data.chat, {
+                    $push: { messages: newMessage._id },
+                })
+
+                const findNewMessage = await Message.findById(newMessage._id).populate(
+                    "sender",
+                    "displayName picture",
+                )
+
+                if (findNewMessage && pushMessageToChat) {
+                    return { message: "Đã gửi tin nhắn!", data: findNewMessage }
+                }
             }
         } catch (error) {
             return error

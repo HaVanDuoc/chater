@@ -7,6 +7,8 @@ import { EllipsisOutlined } from "@ant-design/icons"
 import { IChat } from "~/redux/interface/chat.interface"
 import { useSelector } from "react-redux"
 import { selectCurrentUser, selectSocket } from "~/redux/selectors"
+import moment from "moment"
+import "moment/locale/vi"
 
 interface IBoxChat {
     chat: IChat
@@ -36,7 +38,7 @@ export const getGroupAvatarAndName = (members: any[], current_user_id: any) => {
 
 export const isChatOnline = (members: any, listOnline: any, current_user_id: any) => {
     return members.some(
-        (member: any) => listOnline.includes(member._id) && member._id !== current_user_id,
+        (member: any) => listOnline?.includes(member._id) && member._id !== current_user_id,
     )
 }
 
@@ -49,6 +51,12 @@ const BoxChat: React.FC<IBoxChat> = ({ chat }) => {
     const { avatar, name } = getGroupAvatarAndName(members, current_user_id)
     const navigate = useNavigate()
     const chat_id = chat._id
+    const newestMessage = {
+        content: chat?.messages?.[0].content,
+        time: chat?.messages?.[0]?.createdAt
+            ? moment.utc(chat.messages[0].createdAt).locale("vi").fromNow()
+            : "",
+    }
 
     const listOnline = useSelector(selectSocket).getOnlineUsers
     const isOnline = isChatOnline(members, listOnline, current_user_id)
@@ -79,9 +87,13 @@ const BoxChat: React.FC<IBoxChat> = ({ chat }) => {
             <AvatarOnline avt={avatar} online={isOnline ? true : false} />
             <Flex vertical gap="none">
                 <Typography.Text style={{ fontSize: 15, fontWeight: 500 }}>{name}</Typography.Text>
-                <Typography.Text style={{ fontSize: 12 }}>
-                    Hoạt động mới nhất . 12 giờ
-                </Typography.Text>
+                <Flex align="center">
+                    <Typography.Text
+                        style={{ fontSize: 12, display: "flex", alignItems: "center" }}
+                    >
+                        {newestMessage.content}
+                    </Typography.Text>
+                </Flex>
             </Flex>
             <Popover
                 placement="rightTop"

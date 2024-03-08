@@ -14,7 +14,7 @@ const ContentChatBox = () => {
 
     const chat = useSelector(selectChat).getListChat.data?.find((c) => c._id === chatId)
 
-    const messages = chat?.messages
+    const messages = chat?.messages?.slice().reverse()
 
     useEffect(() => {
         if (scrollRef.current) {

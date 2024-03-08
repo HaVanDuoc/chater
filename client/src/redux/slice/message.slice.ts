@@ -1,4 +1,4 @@
-import messageTypes from "../type/message.type"
+import { messageTypes } from "../type/message.type"
 import { createSlice } from "@reduxjs/toolkit"
 import { Status } from "../types"
 import { IMessage } from "../interface/message.interface"

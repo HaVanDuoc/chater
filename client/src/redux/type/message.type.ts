@@ -1,7 +1,5 @@
-const messageTypes = {
+export const messageTypes = {
     SEND_MESSAGE: "SEND_MESSAGE",
     SEND_MESSAGE_SUCCESS: "SEND_MESSAGE_SUCCESS",
     SEND_MESSAGE_FAILED: "SEND_MESSAGE_FAILED",
 }
-
-export default messageTypes

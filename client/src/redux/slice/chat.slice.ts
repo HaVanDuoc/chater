@@ -7,7 +7,7 @@ interface ChatState {
     getListChat: {
         status: Status
         message: string | null
-        data: IChat[] | null
+        data: IChat[]
     }
 }
 
@@ -15,7 +15,7 @@ const initialState: ChatState = {
     getListChat: {
         status: "idle",
         message: null,
-        data: null,
+        data: [],
     },
 }
 
@@ -23,7 +23,7 @@ const chatSlice = createSlice({
     name: "chat",
     initialState,
     reducers: {
-        // GET LIST CHATS
+        // Get list chats
         [chatTypes.GET_LIST_CHATS]: (state) => {
             state.getListChat.status = "pending"
         },
@@ -37,41 +37,12 @@ const chatSlice = createSlice({
             state.getListChat.message = action.payload.message
         },
 
-        // // GET CHAT
-        // [chatTypes.GET_CHAT]: (state) => {
-        //     state.status = "pending"
-        // },
-        // [chatTypes.GET_CHAT_SUCCESS]: (state, action) => {
-        //     state.status = "succeeded"
-        //     state.message = action.payload.message
-        //     state.chat = action.payload.chat
-        // },
-        // [chatTypes.GET_CHAT_FAILED]: (state, action) => {
-        //     state.status = "failed"
-        //     state.message = action.payload.message
-        // },
-
-        // // Get messages
-        // [chatTypes.GET_MESSAGES]: (state) => {
-        //     state.status = "pending"
-        // },
-        // [chatTypes.GET_MESSAGES_SUCCESS]: (state, action) => {
-        //     const chatId = action.payload.chatId
-        //     const messages = action.payload.messages
-        //     const chatIndex = state.listChats.findIndex((chat) => chat._id === chatId)
-
-        //     state.status = "succeeded"
-        //     state.message = action.payload.message
-        //     state.listChats[chatIndex].messages = messages
-        // },
-        // [chatTypes.GET_MESSAGES_FAILED]: (state, action) => {
-        //     state.status = "failed"
-        //     state.message = action.payload.message
-        // },
-
-        // Send messages
-        [chatTypes.ADD_MESSAGE]: (state, action) => {
-            // state.listChats.push(action.payload.data)
+        // Add message to store
+        [chatTypes.ADD_NEW_MESSAGE]: (state, action) => {
+            const index = state.getListChat.data.findIndex(
+                (chat) => chat._id === action.payload.chatId,
+            )
+            state.getListChat.data[index].messages?.unshift(action.payload.message)
         },
     },
 })

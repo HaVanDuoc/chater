@@ -9,8 +9,7 @@ import { Button, Flex, Form, Input, Tooltip } from "antd"
 import { useDispatch } from "react-redux"
 import { useParams } from "react-router"
 import { messageActions } from "~/redux/slice/message.slice"
-import messageTypes from "~/redux/type/message.type"
-// import { sendMessage } from "~/socket"
+import { messageTypes } from "~/redux/type/message.type"
 
 const buttons = [
     { icon: <PlusCircleFilled />, title: "Mở hành động khác" },
@@ -25,19 +24,17 @@ const FooterChatBox = () => {
     const dispatch = useDispatch()
 
     const onFinish = (values: { message: string }) => {
-        console.log("Message sent:", values.message)
+        // console.log("Message sent:", values.message)
 
-        // sendMessage(values.message)
-
-        // if (values?.message) {
-        //     dispatch(
-        //         messageActions[messageTypes.SEND_MESSAGE]({
-        //             chat: chatId,
-        //             content: values.message,
-        //         }),
-        //     )
-        //     form.resetFields()
-        // }
+        if (values?.message) {
+            dispatch(
+                messageActions[messageTypes.SEND_MESSAGE]({
+                    chat: chatId,
+                    content: values.message,
+                }),
+            )
+            form.resetFields()
+        }
     }
 
     return (

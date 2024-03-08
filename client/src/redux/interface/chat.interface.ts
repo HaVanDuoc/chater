@@ -6,6 +6,7 @@ export interface IMessage {
     sender: IUser
     content: string
     reply?: string
+    createdAt?: any
 }
 export interface IChat {
     _id: any

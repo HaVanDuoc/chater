@@ -5,13 +5,13 @@ import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
 import { useParams } from "react-router"
 import { widthSider } from "~/components/layouts/DefaultLayout"
-import HeaderChatBox from "../../../ChatBox/components/HeaderChatBox"
 import { selectCurrentUser, selectInvite, selectUser } from "~/redux/selectors"
 import { userActions } from "~/redux/slice/user.slice"
 import { userTypes } from "~/redux/type/user.type"
 import { inviteActions } from "~/redux/slice/invite.slice"
 import { inviteTypes } from "~/redux/type/invite.type"
 import { IInvite } from "~/redux/interface/invite.interface"
+import HeaderChatBox from "../../Chat/ChatBox/components/HeaderChatBox"
 
 const ListImages = () => (
     <Flex gap={15}>

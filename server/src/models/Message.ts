@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose"
 
 export interface IMessage {
-    chat: Schema.Types.ObjectId
+    chat?: Schema.Types.ObjectId
     sender: Schema.Types.ObjectId
     content: string
     reply?: Schema.Types.ObjectId

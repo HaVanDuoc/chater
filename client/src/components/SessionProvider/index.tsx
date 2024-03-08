@@ -33,6 +33,7 @@ const SessionProvider: React.FC<ISessionProvider> = ({ children }) => {
             dispatch(chatActions[chatTypes.GET_LIST_CHATS]({})) // Get list chat
 
             const listChat = await API.getListChats()
+            navigate(`/chat`)
             navigate(`/chat/${listChat?.chats?.[0]?._id}`)
         } catch (error: any) {
             dispatch(currentUserActions[currentUserTypes.CHECK_SESSION_FAILED](error))
