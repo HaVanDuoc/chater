@@ -1,0 +1,54 @@
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - PORT = 5000
+      - MONGO_URI = mongodb+srv://havanduocdev:9C139LlSzdPFG2IG@cluster0.dm5apdb.mongodb.net/?retryWrites=true&w=majority
+      - JWT_PRIVATE_KEY = CHATERHAVANDUOC
+      - CLIENT_URL = http://localhost:3000
+      - CLIENT_PORT = 3000
+      - SERVER_URL = http://localhost:5000
+      - SERVER_PORT = 5000
+    ports:
+      - 5000:5000
+    expose:
+      - 5000
+
+  socket:
+    build:
+      context: ./socket
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - PORT = 4000
+      - CLIENT_URL = http://localhost:3000
+      - SERVER_URL = http://localhost:5000
+    ports:
+      - 4000:4000
+    expose:
+      - 4000
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    depends_on:
+      - server
+      - socket
+    volumes:
+      - ./client/build:/usr/share/nginx/html
+      - ./client/nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "3000:3000"
+    expose:
+      - 3000
+    environment:
+      - PUBLIC_FOLDER = http://localhost:3000
+      - SERVER_HOST = http://localhost:5000/api
+      - SERVER_URL = http://localhost:5000
+      - SOCKET_URL = http://localhost:4000
+
+  # docker compose -p chater up -d
