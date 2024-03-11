@@ -1,11 +1,12 @@
 import API from "../api/invite.api"
 import { inviteTypes } from "../type/invite.type"
 import { inviteActions } from "../slice/invite.slice"
-import { all, call, put, takeLatest } from "redux-saga/effects"
+import { all, call, put, select, takeLatest } from "redux-saga/effects"
 import { toast } from "react-toastify"
+import { selectSocket } from "../selectors"
 
 // GET LIST INVITE
-export function* getListInvites(): Generator<any, any, any> {
+function* getListInvites(): Generator<any, any, any> {
     try {
         const invites = yield call(API.getListInvites)
         yield put(inviteActions[inviteTypes.GET_LIST_INVITES_SUCCESS](invites))
@@ -18,40 +19,72 @@ export function* getListInvites(): Generator<any, any, any> {
 // Send Invite
 function* sendInvite(action: any): Generator<any, any, any> {
     try {
-        const result = yield call(API.sendInvite, action.payload)
-        yield put(inviteActions[inviteTypes.SEND_INVITE_SUCCESS](result))
-        toast.success(result.message)
+        const user_id = action.payload
+        const socket = yield select(selectSocket)
+        const result = yield call(API.sendInvite, user_id)
+
+        if (result) {
+            yield put(inviteActions[inviteTypes.SEND_INVITE_SUCCESS](result))
+            socket.socket.emit("sendInvite", result.data)
+            toast.success(result.message)
+        }
     } catch (error) {
         yield put(inviteActions[inviteTypes.SEND_INVITE_FAILED](error))
     }
 }
 
 // ACCEPT
-export function* acceptInvite(action: any): Generator<any, any, any> {
+function* acceptInvite(action: any): Generator<any, any, any> {
     try {
+        const socket = yield select(selectSocket)
         const accept = yield call(API.acceptInvite, action.payload)
-        yield put(inviteActions[inviteTypes.ACCEPT_INVITE_SUCCESS](accept))
-        toast.success(accept.message)
+        const { invite, chat } = accept.data
+
+        if (accept) {
+            yield put(inviteActions[inviteTypes.ACCEPT_INVITE_SUCCESS](invite))
+            socket.socket.emit("acceptInvite", { invite, chat })
+        }
     } catch (error) {
         yield put(inviteActions[inviteTypes.ACCEPT_INVITE_FAILED](error))
     }
 }
 
 // REJECT
-export function* rejectInvite(action: any): Generator<any, any, any> {
+function* rejectInvite(action: any): Generator<any, any, any> {
     try {
+        const socket = yield select(selectSocket)
         const reject = yield call(API.rejectInvite, action.payload)
-        yield put(inviteActions[inviteTypes.REJECT_INVITE_SUCCESS](reject))
+        if (reject) {
+            yield put(inviteActions[inviteTypes.REJECT_INVITE_SUCCESS](reject))
+            socket.socket.emit("sendInvite", reject.data)
+            toast.success(reject.message)
+        }
     } catch (error) {
         yield put(inviteActions[inviteTypes.REJECT_INVITE_FAILED](error))
     }
 }
 
+// Redeem
+function* redeemInvite(action: any): Generator<any, any, any> {
+    try {
+        const socket = yield select(selectSocket)
+        const redeem = yield call(API.redeemInvite, action.payload)
+        if (redeem) {
+            yield put(inviteActions[inviteTypes.REDEEM_INVITE_SUCCESS](redeem))
+            socket.socket.emit("sendInvite", redeem.data)
+            toast.success(redeem.message)
+        }
+    } catch (error) {
+        yield put(inviteActions[inviteTypes.REDEEM_INVITE_FAILED](error))
+    }
+}
+
 export default function* inviteSaga() {
     yield all([
-        takeLatest(inviteActions[inviteTypes.GET_LIST_INVITES].type, getListInvites),
-        takeLatest(inviteActions[inviteTypes.SEND_INVITE].type, sendInvite),
-        takeLatest(inviteActions[inviteTypes.ACCEPT_INVITE].type, acceptInvite),
-        // takeLatest(inviteActions[inviteTypes.REJECT_INVITE].type, rejectInvite),
+        takeLatest(inviteTypes.GET_LIST_INVITES, getListInvites),
+        takeLatest(inviteTypes.SEND_INVITE, sendInvite),
+        takeLatest(inviteTypes.ACCEPT_INVITE, acceptInvite),
+        takeLatest(inviteTypes.REJECT_INVITE, rejectInvite),
+        takeLatest(inviteTypes.REDEEM_INVITE, redeemInvite),
     ])
 }

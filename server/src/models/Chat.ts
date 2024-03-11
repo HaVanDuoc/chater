@@ -6,6 +6,7 @@ export interface IChat {
     avatar?: string
     members: Schema.Types.ObjectId[]
     messages: Schema.Types.ObjectId[]
+    group?: boolean
 }
 
 const chatSchema = new Schema<IChat>(
@@ -28,6 +29,9 @@ const chatSchema = new Schema<IChat>(
                 ref: "Message",
             },
         ],
+        group: {
+            type: Boolean,
+        },
     },
     { timestamps: true },
 )

@@ -36,6 +36,15 @@ namespace API {
             return error
         }
     }
+
+    export const redeemInvite = async (invite_id: string) => {
+        try {
+            const response = await api.post(`/invite/${invite_id}/redeem`)
+            return response.data
+        } catch (error) {
+            return error
+        }
+    }
 }
 
 export default API

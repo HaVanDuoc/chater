@@ -57,55 +57,6 @@ const userSlice = createSlice({
             state.logout.status = "failed"
             state.logout.message = action.payload.message
         },
-
-        //
-        // [userTypes.SEARCH_REQUEST]: (state) => {
-        //     state.status = "pending"
-        // },
-        // [userTypes.SEARCH_SUCCESS]: (state, action) => {
-        //     state.status = "succeeded"
-        //     state.search = action.payload
-        // },
-        // [userTypes.SEARCH_FAILURE]: (state, action) => {
-        //     state.status = "failed"
-        //     state.error = action.payload
-        // },
-        // // Action accept request friend
-        // [userTypes.ACCEPT_FRIEND_REQUEST]: (state) => {
-        //     state.status = "pending"
-        // },
-        // [userTypes.ACCEPT_FRIEND_SUCCESS]: (state, action) => {
-        //     state.status = "succeeded"
-        //     state.message = action.payload.message
-        // },
-        // [userTypes.ACCEPT_FRIEND_FAILURE]: (state, action) => {
-        //     state.status = "failed"
-        //     state.error = action.payload
-        // },
-        // // Action reject request friend
-        // [userTypes.REJECT_FRIEND_REQUEST]: (state) => {
-        //     state.status = "pending"
-        // },
-        // [userTypes.REJECT_FRIEND_SUCCESS]: (state, action) => {
-        //     state.status = "succeeded"
-        //     state.message = action.payload.message
-        // },
-        // [userTypes.REJECT_FRIEND_FAILURE]: (state, action) => {
-        //     state.status = "failed"
-        //     state.error = action.payload
-        // },
-        // // Action DELETE friend
-        // [userTypes.DELETE_FRIEND_REQUEST]: (state) => {
-        //     state.status = "pending"
-        // },
-        // [userTypes.DELETE_FRIEND_SUCCESS]: (state, action) => {
-        //     state.status = "succeeded"
-        //     state.message = action.payload.message
-        // },
-        // [userTypes.ACCEPT_FRIEND_FAILURE]: (state, action) => {
-        //     state.status = "failed"
-        //     state.error = action.payload
-        // },
     },
 })
 

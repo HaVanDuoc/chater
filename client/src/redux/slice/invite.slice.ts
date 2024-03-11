@@ -12,10 +12,22 @@ interface InviteState {
     sendInvite: {
         status: Status
         message: string | null
+        data: IInvite | null
     }
     acceptInvite: {
         status: Status
         message: String | null
+        data: IInvite | null
+    }
+    rejectInvite: {
+        status: Status
+        message: String | null
+        data: IInvite | null
+    }
+    redeemInvite: {
+        status: Status
+        message: String | null
+        data: IInvite | null
     }
 }
 
@@ -28,10 +40,22 @@ const initialState: InviteState = {
     sendInvite: {
         status: "idle",
         message: null,
+        data: null,
     },
     acceptInvite: {
         status: "idle",
         message: null,
+        data: null,
+    },
+    rejectInvite: {
+        status: "idle",
+        message: null,
+        data: null,
+    },
+    redeemInvite: {
+        status: "idle",
+        message: null,
+        data: null,
     },
 }
 
@@ -61,6 +85,7 @@ const inviteSlice = createSlice({
         [inviteTypes.SEND_INVITE_SUCCESS]: (state, action) => {
             state.sendInvite.status = "succeeded"
             state.sendInvite.message = action.payload.message
+            state.sendInvite.data = action.payload.data
         },
         [inviteTypes.SEND_INVITE_FAILED]: (state, action) => {
             state.sendInvite.status = "failed"
@@ -74,24 +99,40 @@ const inviteSlice = createSlice({
         [inviteTypes.ACCEPT_INVITE_SUCCESS]: (state, action) => {
             state.acceptInvite.status = "succeeded"
             state.acceptInvite.message = action.payload.message
+            state.acceptInvite.data = action.payload.data
         },
         [inviteTypes.ACCEPT_INVITE_FAILED]: (state, action) => {
             state.acceptInvite.status = "failed"
             state.acceptInvite.message = action.payload.message
         },
 
-        // // Reject invite
-        // [inviteTypes.REJECT_INVITE]: (state) => {
-        //     state.status = "pending"
-        // },
-        // [inviteTypes.REJECT_INVITE_SUCCESS]: (state, action) => {
-        //     state.status = "succeeded"
-        //     state.message = action.payload.message
-        // },
-        // [inviteTypes.REJECT_INVITE_FAILED]: (state, action) => {
-        //     state.status = "failed"
-        //     state.message = action.payload.message
-        // },
+        // Reject invite
+        [inviteTypes.REJECT_INVITE]: (state) => {
+            state.rejectInvite.status = "pending"
+        },
+        [inviteTypes.REJECT_INVITE_SUCCESS]: (state, action) => {
+            state.rejectInvite.status = "succeeded"
+            state.rejectInvite.message = action.payload.message
+            state.rejectInvite.data = action.payload.data
+        },
+        [inviteTypes.REJECT_INVITE_FAILED]: (state, action) => {
+            state.rejectInvite.status = "failed"
+            state.rejectInvite.message = action.payload.message
+        },
+
+        // Redeem invite
+        [inviteTypes.REDEEM_INVITE]: (state) => {
+            state.redeemInvite.status = "pending"
+        },
+        [inviteTypes.REDEEM_INVITE_SUCCESS]: (state, action) => {
+            state.redeemInvite.status = "succeeded"
+            state.redeemInvite.message = action.payload.message
+            state.redeemInvite.data = action.payload.data
+        },
+        [inviteTypes.REDEEM_INVITE_FAILED]: (state, action) => {
+            state.redeemInvite.status = "failed"
+            state.redeemInvite.message = action.payload.message
+        },
     },
 })
 

@@ -88,12 +88,15 @@ namespace ChatServices {
     export const deleteChat = async (chatId: string) => {
         try {
             const deleteChat = await Chat.findByIdAndDelete(chatId)
-
             if (deleteChat) {
-                return { message: "Đã xóa cuộc trò chuyện!" }
+                const deleteMessages = await Message.deleteMany({ chat: chatId })
+
+                if (deleteMessages) {
+                    return { message: "Đã xóa cuộc trò chuyện!", data: deleteChat }
+                }
             }
         } catch (error) {
-            throw new Error("Delete chat failed!")
+            throw new Error("Đã xảy ra lỗi. Vui lòng thử lại!")
         }
     }
 }

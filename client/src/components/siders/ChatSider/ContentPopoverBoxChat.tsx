@@ -10,14 +10,18 @@ import {
     VideoCameraOutlined,
     WarningOutlined,
 } from "@ant-design/icons"
+import { useDispatch } from "react-redux"
 import PopoverMenu from "~/components/PopoverMenu"
 import { IChat } from "~/redux/interface/chat.interface"
-import { IUser } from "~/redux/interface/user.interface"
+import { chatActions } from "~/redux/slice/chat.slice"
+import { chatTypes } from "~/redux/type/chat.type"
 
 const ContentPopoverBoxChat = (chatId: IChat["_id"]) => {
-    const handleDeleteChat = (chatId: IUser["_id"]) => {
-        console.log("click")
-        // dispatch(modalActions[modalTypes.OPEN])
+    const dispatch = useDispatch()
+
+    const handleDeleteChat = (chatId: IChat["_id"]) => {
+        console.log("Delete Chat")
+        dispatch(chatActions[chatTypes.DELETE_CHAT](chatId))
     }
 
     const menu = [

@@ -1,5 +1,5 @@
 import { Schema } from "mongoose"
-import Invite, { IInvite } from "../models/Invite"
+import Invite from "../models/Invite"
 import User from "../models/User"
 import Chat from "../models/Chat"
 
@@ -25,6 +25,7 @@ namespace InviteService {
     export const sendInvite = async (
         sender: Schema.Types.ObjectId,
         receiver: Schema.Types.ObjectId,
+        chatId?: Schema.Types.ObjectId,
     ) => {
         const checkFriend = async () => {
             const senderInfo = await User.findById(sender)
@@ -36,21 +37,34 @@ namespace InviteService {
         }
 
         try {
-            // check friends
-            const check = await checkFriend()
-            if (check) return { error: true, message: "Cả hai đã là bạn!" }
+            if (!chatId) {
+                // check friends
+                const check = await checkFriend()
+                if (check) return { error: true, message: "Cả hai đã là bạn!" }
 
-            // Đầu tiên tìm và cập nhật nếu không có thì tạo một lời mời
-            console.log("sender", sender)
-            console.log("receiver", receiver)
-            const findOneAndUpdate = await Invite.findOne({
-                $and: [{ sender: sender }, { receiver: receiver }],
-            })
+                // Đầu tiên tìm và cập nhật nếu không có thì tạo một lời mời
+                const findOneAndUpdate = await Invite.findOne({
+                    $and: [{ sender: sender }, { receiver: receiver }],
+                })
 
-            console.log("findOneAndUpdate", findOneAndUpdate)
+                if (!findOneAndUpdate) {
+                    const newInvite = await Invite.create({ sender, receiver })
+                    return { message: "Đã gửi yêu cầu kết bạn!", data: newInvite }
+                }
 
-            if (!findOneAndUpdate) await Invite.create({ sender, receiver })
-            return { message: "Đã gửi yêu cầu kết bạn!" }
+                return { message: "Đã gửi yêu cầu kết bạn!", data: findOneAndUpdate }
+            } else {
+                const findOneAndUpdate = await Invite.findOne({
+                    $and: [{ sender: sender }, { receiver: receiver }, { chatId: chatId }],
+                })
+
+                if (!findOneAndUpdate) {
+                    const newInvite = await Invite.create({ sender, receiver, chatId })
+                    return { message: "Đã gửi lời mời nhóm!", data: newInvite }
+                }
+
+                return { message: "Đã gửi lời mời nhóm!", data: findOneAndUpdate }
+            }
         } catch (error) {
             console.log("error - addFriend - user.services.ts", error)
             return error
@@ -69,7 +83,6 @@ namespace InviteService {
             // Has 2 types invite: Add friend and add group
             // if hasn't chatId => Add Friend
             // And vice versa
-
             if (invite && !chatId) {
                 // First, case add friend
                 // has 3 step:
@@ -88,9 +101,6 @@ namespace InviteService {
                     $push: { friends: sender },
                 })
 
-                // update status invite
-                const updateInvite = await Invite.findByIdAndUpdate(invite_id, { status: "accept" })
-
                 // create chatbox
                 const members = [sender, receiver]
                 const createChat: any = await Chat.create({ members })
@@ -98,10 +108,16 @@ namespace InviteService {
                 if (
                     addReceiverToSenderListFriends &&
                     addSenderToReceiverListFriends &&
-                    updateInvite &&
                     createChat
                 ) {
-                    return { message: "Đã đồng ý kết bạn!" }
+                    // Delete invite
+                    const deleteInvite = await Invite.findByIdAndDelete(invite_id)
+                    if (deleteInvite) {
+                        return {
+                            message: "Đã đồng ý kết bạn!",
+                            data: { invite: deleteInvite, chat: createChat },
+                        }
+                    }
                 }
 
                 return { error: true, message: "Error! Please again." }
@@ -110,7 +126,7 @@ namespace InviteService {
                     $push: { members: current_user_id },
                 })
 
-                if (addGroup) return { message: "Bạn đã tham gia nhóm chat!" }
+                if (addGroup) return { message: "Bạn đã tham gia nhóm chat!", data: addGroup }
             }
         } catch (error) {
             console.log("ERROR accept invite", error)
@@ -118,25 +134,26 @@ namespace InviteService {
         }
     }
 
-    export const redeemInvite = async (invite_id: Schema.Types.ObjectId) => {
+    export const rejectInvite = async (invite_id: Schema.Types.ObjectId) => {
         try {
-            const redeem = await Invite.findOneAndUpdate(invite_id, { status: "redeem" })
-            return { message: "Đã thu hồi lời mời" }
+            const reject = await Invite.findByIdAndDelete(invite_id)
+            if (reject) {
+                return { message: "Đã từ chối kết bạn!", data: reject }
+            }
         } catch (error) {
-            console.log("ERROR redeemInvite services", error)
+            console.log("ERROR rejectInvite services", error)
             return { error: true, message: "Error! Please again." }
         }
     }
 
-    export const rejectInvite = async (invite: Schema.Types.ObjectId) => {
+    export const redeemInvite = async (invite_id: Schema.Types.ObjectId) => {
         try {
-            const reject = await Invite.findByIdAndUpdate(invite, { status: "reject" })
-
-            if (reject) {
-                return { message: "Đã từ chối kết bạn!" }
+            const redeem = await Invite.findOneAndDelete(invite_id)
+            if (redeem) {
+                return { message: "Đã thu hồi lời mời", data: redeem }
             }
         } catch (error) {
-            console.log("ERROR rejectInvite services", error)
+            console.log("ERROR redeemInvite services", error)
             return { error: true, message: "Error! Please again." }
         }
     }

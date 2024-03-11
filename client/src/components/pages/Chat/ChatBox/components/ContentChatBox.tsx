@@ -11,9 +11,7 @@ const ContentChatBox = () => {
     const scrollRef = useRef(null)
     const { chatId } = useParams()
     const current_user_id = useSelector(selectCurrentUser)?.data?._id
-
     const chat = useSelector(selectChat).getListChat.data?.find((c) => c._id === chatId)
-
     const messages = chat?.messages?.slice().reverse()
 
     useEffect(() => {

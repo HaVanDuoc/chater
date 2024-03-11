@@ -1,14 +1,42 @@
 import { Button, Flex, Popover, Typography } from "antd"
-import { useState } from "react"
+import moment from "moment"
+import { useEffect, useState } from "react"
+import { useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router"
 import AvatarOnline from "~/components/AvatarOnline"
+import { IChat } from "~/redux/interface/chat.interface"
+import { selectChat, selectCurrentUser, selectSocket } from "~/redux/selectors"
 import ContentPopoverBoxChat from "./ContentPopoverBoxChat"
 import { EllipsisOutlined } from "@ant-design/icons"
-import { IChat } from "~/redux/interface/chat.interface"
-import { useSelector } from "react-redux"
-import { selectCurrentUser, selectSocket } from "~/redux/selectors"
-import moment from "moment"
-import "moment/locale/vi"
+
+const ListBoxChat = () => {
+    const chats = useSelector(selectChat).getListChat.data
+
+    console.log(chats)
+
+    return (
+        <Flex
+            vertical
+            style={{
+                margin: "10px 0px 10px 7px",
+                overflowY: "auto",
+                flex: 1,
+            }}
+        >
+            {chats && chats.length ? (
+                chats.map((chat: IChat, index: number) => {
+                    return <BoxChat chat={chat} key={index} />
+                })
+            ) : (
+                <Flex flex={1} justify="center" align="center">
+                    <Typography.Title level={5}>Bạn chưa tham gia đoạn chat nào!</Typography.Title>
+                </Flex>
+            )}
+        </Flex>
+    )
+}
+
+export default ListBoxChat
 
 interface IBoxChat {
     chat: IChat
@@ -44,6 +72,7 @@ export const isChatOnline = (members: any, listOnline: any, current_user_id: any
 
 const BoxChat: React.FC<IBoxChat> = ({ chat }) => {
     const [isHovered, setIsHovered] = useState(false)
+    const [online, setOnline] = useState(false)
 
     const { chatId } = useParams()
     const current_user_id = useSelector(selectCurrentUser).data?._id
@@ -52,14 +81,16 @@ const BoxChat: React.FC<IBoxChat> = ({ chat }) => {
     const navigate = useNavigate()
     const chat_id = chat._id
     const newestMessage = {
-        content: chat?.messages?.[0].content,
+        content: chat?.messages?.[0]?.content,
         time: chat?.messages?.[0]?.createdAt
             ? moment.utc(chat.messages[0].createdAt).locale("vi").fromNow()
             : "",
     }
 
     const listOnline = useSelector(selectSocket).getOnlineUsers
-    const isOnline = isChatOnline(members, listOnline, current_user_id)
+    useEffect(() => {
+        setOnline(isChatOnline(members, listOnline, current_user_id))
+    }, [listOnline])
 
     return (
         <Flex
@@ -84,17 +115,21 @@ const BoxChat: React.FC<IBoxChat> = ({ chat }) => {
                 navigate(`/chat/${chat_id}`)
             }}
         >
-            <AvatarOnline avt={avatar} online={isOnline ? true : false} />
+            <AvatarOnline avt={avatar} online={online} />
+
             <Flex vertical gap="none">
                 <Typography.Text style={{ fontSize: 15, fontWeight: 500 }}>{name}</Typography.Text>
                 <Flex align="center">
                     <Typography.Text
                         style={{ fontSize: 12, display: "flex", alignItems: "center" }}
                     >
-                        {newestMessage.content}
+                        {newestMessage.content
+                            ? `${newestMessage.content} - ${newestMessage.time}`
+                            : "Chater: Hãy bắt đầu cuộc trò truyện!"}
                     </Typography.Text>
                 </Flex>
             </Flex>
+
             <Popover
                 placement="rightTop"
                 content={() => ContentPopoverBoxChat(chat_id)}
@@ -114,5 +149,3 @@ const BoxChat: React.FC<IBoxChat> = ({ chat }) => {
         </Flex>
     )
 }
-
-export default BoxChat

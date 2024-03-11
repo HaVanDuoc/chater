@@ -44,7 +44,7 @@ namespace API {
 
     export const deleteFriend = async (friendId: IUser["_id"]) => {
         try {
-            const response = await api.delete(`/user/deleteFriend/${friendId}`)
+            const response = await api.delete(`/user/friend/${friendId}`)
             return response.data
         } catch (error) {
             return error

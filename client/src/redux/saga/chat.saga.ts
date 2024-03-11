@@ -1,9 +1,12 @@
-import { all, call, put, takeLatest } from "redux-saga/effects"
 import API from "../api/chat.api"
+import APIUser from "../api/user.api"
+import { all, call, put, select, takeLatest } from "redux-saga/effects"
 import { chatActions } from "../slice/chat.slice"
 import { chatTypes } from "../type/chat.type"
+import { selectCurrentUser, selectSocket } from "../selectors"
+import { toast } from "react-toastify"
 
-export function* getListChats(): Generator<any, any, any> {
+function* getListChats(): Generator<any, any, any> {
     try {
         const chats = yield call(API.getListChats)
         yield put(chatActions[chatTypes.GET_LIST_CHATS_SUCCESS](chats))
@@ -12,43 +15,38 @@ export function* getListChats(): Generator<any, any, any> {
     }
 }
 
-// export function* getChat(action: any): Generator<any, any, any> {
-//     try {
-//         const chat = yield call(API.getChat, action.payload.chatId)
-//         yield put(chatActions[chatTypes.GET_CHAT_SUCCESS](chat))
-//     } catch (error) {
-//         yield put(chatActions[chatTypes.GET_CHAT_FAILED](error))
-//     }
-// }
+function* deleteChat(action: any): Generator<any, any, any> {
+    try {
+        const chat_id = action.payload
 
-// export function* getMessages(action: any): Generator<any, any, any> {
-//     try {
-//         const messages = yield call(API.getMessages, action.payload.chatId)
-//         yield put(
-//             chatActions[chatTypes.GET_MESSAGES_SUCCESS]({
-//                 messages: messages.messages,
-//                 chatId: action.payload.chatId,
-//             }),
-//         )
-//     } catch (error) {
-//         yield put(chatActions[chatTypes.GET_MESSAGES_FAILED](error))
-//     }
-// }
+        const socket = yield select(selectSocket)
+        const deleteChat = yield call(API.deleteChat, chat_id)
 
-// export function* deleteChat(action: any): Generator<any, any, any> {
-//     try {
-//         const deleteChat = yield call(Api.deleteChat, action.payload)
-//         yield put(chatActions[chatTypes.DELETE_CHAT_SUCCESS](deleteChat))
-//     } catch (error) {
-//         yield put(chatActions[chatTypes.DELETE_CHAT_FAILURE](error))
-//     }
-// }
+        if (!deleteChat.group) {
+            const currentUser = yield select(selectCurrentUser)
+            const friend_id = deleteChat.data.members.find(
+                (member: any) => member !== currentUser.data._id,
+            )
+            if (friend_id) {
+                const deleteFriend = yield call(APIUser.deleteFriend, friend_id)
+                if (deleteFriend) {
+                    toast.success(deleteFriend.message)
+                }
+            }
+            if (socket) socket.socket.emit("deleteFriend", { friend_id, chat_id: deleteChat._id })
+        } else {
+            toast.success(deleteChat.message)
+        }
+
+        yield put(chatActions[chatTypes.DELETE_CHAT_SUCCESS](deleteChat))
+    } catch (error) {
+        yield put(chatActions[chatTypes.DELETE_CHAT_FAILED](error))
+    }
+}
 
 export default function* chatSaga() {
     yield all([
-        takeLatest(chatActions[chatTypes.GET_LIST_CHATS].type, getListChats),
-        // takeLatest(chatActions[chatTypes.GET_CHAT].type, getChat),
-        // takeLatest(chatActions[chatTypes.GET_MESSAGES].type, getMessages),
-        // takeLatest(chatActions[chatTypes.DELETE_CHAT_REQUEST].type, deleteChat),
+        takeLatest(chatTypes.GET_LIST_CHATS, getListChats),
+        takeLatest(chatActions[chatTypes.DELETE_CHAT].type, deleteChat),
     ])
 }

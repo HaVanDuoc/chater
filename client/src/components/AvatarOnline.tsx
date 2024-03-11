@@ -1,8 +1,6 @@
 import { UserOutlined } from "@ant-design/icons"
 import { Avatar, Badge } from "antd"
 import React from "react"
-import { useSelector } from "react-redux"
-import { selectUser } from "~/redux/selectors"
 
 interface IAvatarOnline {
     online?: boolean

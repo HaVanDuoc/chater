@@ -6,8 +6,9 @@ import { Flex as WrapChatBox } from "antd"
 import { useParams } from "react-router"
 import { useSelector } from "react-redux"
 import { selectChat, selectCurrentUser } from "~/redux/selectors"
-import { getGroupAvatarAndName } from "~/components/siders/ChatSider/BoxChat"
 import { widthSider } from "~/components/layouts/DefaultLayout"
+import { getGroupAvatarAndName } from "~/components/siders/ChatSider/ListBoxChat"
+
 const ChatBox = () => {
     const { chatId } = useParams()
     const currentUser = useSelector(selectCurrentUser).data?._id

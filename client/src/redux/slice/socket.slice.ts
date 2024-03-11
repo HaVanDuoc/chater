@@ -22,6 +22,9 @@ const socketSlice = createSlice({
         [socketTypes.GET_ONLINE_USERS]: (state, action) => {
             state.getOnlineUsers = action.payload
         },
+        // [socketTypes.PURGE_SOCKET]: (state) => {
+        //     return initialState
+        // },
     },
 })
 

@@ -9,6 +9,12 @@ interface ChatState {
         message: string | null
         data: IChat[]
     }
+    deleteChat: {
+        status: Status
+        message: string | null
+        data: IChat[]
+    }
+    refetch: boolean
 }
 
 const initialState: ChatState = {
@@ -17,6 +23,12 @@ const initialState: ChatState = {
         message: null,
         data: [],
     },
+    deleteChat: {
+        status: "idle",
+        message: null,
+        data: [],
+    },
+    refetch: false,
 }
 
 const chatSlice = createSlice({
@@ -43,6 +55,33 @@ const chatSlice = createSlice({
                 (chat) => chat._id === action.payload.chatId,
             )
             state.getListChat.data[index].messages?.unshift(action.payload.message)
+        },
+
+        // Delete chat in store
+        [chatTypes.DELETE_CHAT_STORE]: (state, action) => {
+            const indexDelete = state.getListChat.data.findIndex(
+                (chat) => chat._id === action.payload.chatId,
+            )
+            state.getListChat.data = state.getListChat.data.filter(
+                (_, index) => index !== indexDelete,
+            )
+        },
+
+        // Delete chat
+        [chatTypes.DELETE_CHAT]: (state) => {
+            state.deleteChat.status = "pending"
+        },
+        [chatTypes.DELETE_CHAT_SUCCESS]: (state, action) => {
+            state.deleteChat.status = "succeeded"
+            state.deleteChat.message = action.payload.message
+            state.deleteChat.data = action.payload.data
+            state.getListChat.data = state.getListChat.data.filter(
+                (chat) => chat._id !== action.payload.data._id,
+            )
+        },
+        [chatTypes.DELETE_CHAT_FAILED]: (state, action) => {
+            state.deleteChat.status = "failed"
+            state.deleteChat.message = action.payload.message
         },
     },
 })

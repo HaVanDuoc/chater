@@ -1,19 +1,18 @@
 import api from "~/config/api.config"
+import API from "~/redux/api/chat.api"
 import React, { Fragment, useCallback, useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { currentUserActions } from "~/redux/slice/currentUser.slice"
 import { currentUserTypes } from "~/redux/type/currentUser.type"
-import { inviteActions } from "~/redux/slice/invite.slice"
-import { inviteTypes } from "~/redux/type/invite.type"
 import { suggestFriendActions } from "~/redux/slice/suggestFriends.slice"
 import { suggestFriendTypes } from "~/redux/type/suggestFriends.type"
 import { friendActions } from "~/redux/slice/friend.slice"
 import { friendTypes } from "~/redux/type/friend.type"
-import { chatActions } from "~/redux/slice/chat.slice"
-import { chatTypes } from "~/redux/type/chat.type"
 import { useNavigate } from "react-router"
-import API from "~/redux/api/chat.api"
 import { purgeState } from "~/redux/store"
+import { useSetCurrentPath } from "~/hook"
+import { getListInvites } from "~/redux/actions/invite.action"
+import { getListChats } from "~/redux/actions/chat.action"
 
 interface ISessionProvider {
     children: React.ReactNode
@@ -27,14 +26,18 @@ const SessionProvider: React.FC<ISessionProvider> = ({ children }) => {
         try {
             const session = await api.get("/auth/session")
             dispatch(currentUserActions[currentUserTypes.CHECK_SESSION_SUCCESS](session.data))
-            dispatch(inviteActions[inviteTypes.GET_LIST_INVITES]({})) // Get list invites
+            dispatch(getListInvites()) // Get list invites
             dispatch(suggestFriendActions[suggestFriendTypes.GET_SUGGEST_FRIENDS]({})) // Get list friend suggest
             dispatch(friendActions[friendTypes.GET_LIST_FRIEND]({})) // Get list friend
-            dispatch(chatActions[chatTypes.GET_LIST_CHATS]({})) // Get list chat
+            dispatch(getListChats()) // Get list chat
 
             const listChat = await API.getListChats()
-            navigate(`/chat`)
-            navigate(`/chat/${listChat?.chats?.[0]?._id}`)
+            const currentPath = sessionStorage.getItem("currentPath")
+            currentPath && currentPath !== "/login" && currentPath !== "/"
+                ? navigate(currentPath)
+                : listChat?.chats?.[0]?._id
+                ? navigate(`/chat/${listChat?.chats?.[0]?._id}`)
+                : navigate("/chat")
         } catch (error: any) {
             dispatch(currentUserActions[currentUserTypes.CHECK_SESSION_FAILED](error))
             purgeState()
@@ -46,6 +49,8 @@ const SessionProvider: React.FC<ISessionProvider> = ({ children }) => {
         checkSessionExpire()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    useSetCurrentPath()
 
     return <Fragment>{children}</Fragment>
 }

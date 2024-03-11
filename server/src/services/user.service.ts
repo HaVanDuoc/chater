@@ -98,11 +98,15 @@ namespace UserServices {
         }
     }
 
-    export const deleteFriend = async (current_user_id: string, others_id: string) => {
+    export const deleteFriend = async (current_user_id: any, friend_id: any) => {
+        console.log("friend_id", friend_id)
+
         const checkFriend = async () => {
             const user = await User.findById(current_user_id)
+            console.log("user", user)
             if (user) {
-                const friend = user.friends.find((id: any) => id === others_id)
+                const friend = user.friends.some((id: any) => id == friend_id)
+                console.log("friend", friend)
                 return friend
             }
             return null
@@ -115,15 +119,15 @@ namespace UserServices {
                 return { message: "Cả hai chưa từng là bạn!" }
             }
 
-            const deleteInCurrentUser = await User.findByIdAndDelete(current_user_id, {
-                $pull: { friends: others_id },
+            const deleteInCurrentUser = await User.findByIdAndUpdate(current_user_id, {
+                $pull: { friends: friend_id },
             })
-            const deleteInOthers = await User.findByIdAndUpdate(others_id, {
+            const deleteInOthers = await User.findByIdAndUpdate(friend_id, {
                 $pull: { friends: current_user_id },
             })
 
             if (deleteInCurrentUser && deleteInOthers) {
-                return { message: "Đã hủy kết bạn!" }
+                return { message: "Đã xóa bạn bè!" }
             }
 
             return { message: "Error! Please again." }

@@ -1,132 +1,136 @@
+import HeaderChatBox from "../../Chat/ChatBox/components/HeaderChatBox"
 import { BellOutlined, MessageOutlined, UserOutlined } from "@ant-design/icons"
+import { selectCurrentUser, selectInvite, selectUser } from "~/redux/selectors"
 import { Avatar, Button, Flex, Image, Typography } from "antd"
 import { Fragment, useEffect } from "react"
 import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
 import { useParams } from "react-router"
 import { widthSider } from "~/components/layouts/DefaultLayout"
-import { selectCurrentUser, selectInvite, selectUser } from "~/redux/selectors"
-import { userActions } from "~/redux/slice/user.slice"
-import { userTypes } from "~/redux/type/user.type"
-import { inviteActions } from "~/redux/slice/invite.slice"
-import { inviteTypes } from "~/redux/type/invite.type"
-import { IInvite } from "~/redux/interface/invite.interface"
-import HeaderChatBox from "../../Chat/ChatBox/components/HeaderChatBox"
-
-const ListImages = () => (
-    <Flex gap={15}>
-        <Image
-            width={200}
-            src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-        />
-        <Image
-            width={200}
-            src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-        />
-        <Image
-            width={200}
-            src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-        />
-    </Flex>
-)
-
-const BoxSendInvite = () => {
-    const dispatch = useDispatch()
-    const { userId: receiver } = useParams() // id người nhận
-
-    return (
-        <Flex vertical justify="center" align="center">
-            <Typography.Text style={{ fontSize: 13, color: "#555" }}>Chater</Typography.Text>
-            <Typography.Text style={{ fontSize: 13, color: "#555" }}>
-                Các bạn không phải là bạn bè trên Chater
-            </Typography.Text>
-
-            <Button
-                type="primary"
-                style={{ margin: 10 }}
-                children={"Gửi lời mời kết bạn"}
-                onClick={() => dispatch(inviteActions[inviteTypes.SEND_INVITE](receiver))}
-            />
-        </Flex>
-    )
-}
-
-const BoxHandleInviteReceive = ({ invite_id }: { invite_id: IInvite["_id"] }) => {
-    const dispatch = useDispatch()
-
-    return (
-        <Fragment>
-            <Flex vertical justify="center" align="center">
-                <Typography.Text style={{ fontSize: 13, color: "#555" }}>Chater</Typography.Text>
-                <Typography.Text style={{ fontSize: 13, color: "#555" }}>
-                    Đối phương đã gửi cho bạn lời mời
-                </Typography.Text>
-            </Flex>
-
-            <Flex>
-                <Button
-                    type="primary"
-                    style={{ margin: 10 }}
-                    children={"Đồng ý kết bạn"}
-                    onClick={() => dispatch(inviteActions[inviteTypes.ACCEPT_INVITE](invite_id))}
-                />
-                <Button
-                    type="primary"
-                    danger
-                    style={{ margin: 10 }}
-                    children={"Từ chối"}
-                    // onClick={() => dispatch(userActions[userTypes.ADD_FRIEND](receiver))}
-                />
-            </Flex>
-        </Fragment>
-    )
-}
-
-const BoxWaitingInvite = () => {
-    const dispatch = useDispatch()
-    const { userId: receiver } = useParams() // id người nhận
-
-    return (
-        <Flex vertical justify="center" align="center">
-            <Typography.Text style={{ fontSize: 13, color: "#555" }}>Chater</Typography.Text>
-            <Typography.Text style={{ fontSize: 13, color: "#555" }}>
-                Đã gửi lời mời kết bạn! Vui lòng chờ phản hồi...
-            </Typography.Text>
-
-            <Button
-                type="default"
-                danger
-                style={{ margin: 10 }}
-                children={"Thu hồi lời mời kết bạn"}
-                // onClick={() => dispatch(userActions[userTypes.ADD_FRIEND](receiver))}
-            />
-        </Flex>
-    )
-}
+import { getUser } from "~/redux/actions/user.action"
+import { acceptInvite, redeemInvite, rejectInvite, sendInvite } from "~/redux/actions/invite.action"
 
 const InfoFriend = () => {
-    const { userId } = useParams()
+    const { userId = "" } = useParams()
     const dispatch = useDispatch()
-    const user = useSelector(selectUser)?.getUser.data
-    const picture = user?.picture
-    const givenName = user?.givenName
-    const current_user_id = useSelector(selectCurrentUser).data?._id
-
-    const isFriend = useSelector(selectCurrentUser).data?.friends.find((f) => f === userId)
-    const invite = useSelector(selectInvite).getInvites.data?.filter(
+    const currentUser = useSelector(selectCurrentUser).data
+    const user = useSelector(selectUser)?.getUser
+    const invites = useSelector(selectInvite).getInvites
+    const current_user_id = currentUser?._id
+    const isFriend = currentUser?.friends.find((f) => f === userId)
+    const picture = user.data?.picture
+    const givenName = user.data?.givenName
+    const invite = invites.data?.filter(
         (i) =>
-            (i.sender._id === current_user_id && i.receiver === user?._id) ||
-            (i.receiver === current_user_id && i.sender._id === user?._id),
+            (i.sender._id === current_user_id && i.receiver === user.data?._id) ||
+            (i.receiver === current_user_id && i.sender._id === user.data?._id),
     ) // Tìm lời mời
-
-    // Check được nhận lời mời
+    const invite_id = invite?.[0]?._id
     const isReceiveInvite = invite?.some((invite) => current_user_id === invite.receiver) // if true, là lời mời nhận được từ đối phương
 
     useEffect(() => {
-        if (userId) dispatch(userActions[userTypes.GET_USER]({ userId }))
-    }, [userId, dispatch])
+        if (userId) dispatch(getUser(userId))
+    }, [userId, invites,  dispatch])
 
-    console.log("isFriend", isFriend)
+    const ListImages = () => (
+        <Flex gap={15}>
+            <Image
+                width={200}
+                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+            />
+            <Image
+                width={200}
+                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+            />
+            <Image
+                width={200}
+                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+            />
+        </Flex>
+    )
+
+    const BoxSendInvite = () => {
+        return (
+            <Flex vertical justify="center" align="center">
+                <Typography.Text style={{ fontSize: 13, color: "#555" }}>Chater</Typography.Text>
+                <Typography.Text style={{ fontSize: 13, color: "#555" }}>
+                    Các bạn không phải là bạn bè trên Chater
+                </Typography.Text>
+
+                <Button
+                    type="primary"
+                    style={{ margin: 10 }}
+                    children={"Gửi lời mời kết bạn"}
+                    onClick={(e) => {
+                        e.preventDefault()
+                        dispatch(sendInvite(userId))
+                        dispatch(getUser(userId))
+                    }}
+                />
+            </Flex>
+        )
+    }
+
+    const BoxHandleInviteReceive = () => {
+        return (
+            <Fragment>
+                <Flex vertical justify="center" align="center">
+                    <Typography.Text style={{ fontSize: 13, color: "#555" }}>
+                        Chater
+                    </Typography.Text>
+                    <Typography.Text style={{ fontSize: 13, color: "#555" }}>
+                        Đối phương đã gửi cho bạn lời mời
+                    </Typography.Text>
+                </Flex>
+
+                <Flex>
+                    <Button
+                        type="primary"
+                        style={{ margin: 10 }}
+                        children={"Đồng ý kết bạn"}
+                        onClick={async (e) => {
+                            e.preventDefault()
+                            dispatch(acceptInvite(invite_id))
+                        }}
+                    />
+                    <Button
+                        type="primary"
+                        danger
+                        style={{ margin: 10 }}
+                        children={"Từ chối"}
+                        onClick={(e) => {
+                            e.preventDefault()
+                            dispatch(rejectInvite(invite_id))
+                            dispatch(getUser(userId))
+                        }}
+                    />
+                </Flex>
+            </Fragment>
+        )
+    }
+
+    const BoxWaitingInvite = () => {
+        return (
+            <Flex vertical justify="center" align="center">
+                <Typography.Text style={{ fontSize: 13, color: "#555" }}>Chater</Typography.Text>
+                <Typography.Text style={{ fontSize: 13, color: "#555" }}>
+                    Đã gửi lời mời kết bạn! Vui lòng chờ phản hồi...
+                </Typography.Text>
+
+                <Button
+                    type="default"
+                    danger
+                    style={{ margin: 10 }}
+                    children={"Thu hồi lời mời kết bạn"}
+                    onClick={(e) => {
+                        e.preventDefault()
+                        dispatch(redeemInvite(invite_id))
+                        dispatch(getUser(userId))
+                    }}
+                />
+            </Flex>
+        )
+    }
 
     return (
         <Flex vertical justify="space-between" style={{ marginLeft: widthSider, height: "100vh" }}>
@@ -182,7 +186,7 @@ const InfoFriend = () => {
                     </Flex>
                 ) : invite?.length ? (
                     isReceiveInvite ? (
-                        <BoxHandleInviteReceive invite_id={invite?.[0]?._id} />
+                        <BoxHandleInviteReceive />
                     ) : (
                         <BoxWaitingInvite />
                     )

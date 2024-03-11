@@ -4,6 +4,7 @@ import { routes } from "./routes"
 import { Fragment } from "react"
 import NotificationToast from "./components/NotificationToast"
 import SessionProvider from "./components/SessionProvider"
+import SocketProvider from "./socket"
 
 function App() {
     return (
@@ -23,7 +24,9 @@ function App() {
                                         <NotificationToast />
                                         {/* <Alert /> */}
                                         <SessionProvider>
-                                            <Page />
+                                            <SocketProvider>
+                                                <Page />
+                                            </SocketProvider>
                                         </SessionProvider>
                                     </>
                                 }
