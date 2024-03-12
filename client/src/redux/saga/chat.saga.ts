@@ -5,6 +5,8 @@ import { chatActions } from "../slice/chat.slice"
 import { chatTypes } from "../type/chat.type"
 import { selectCurrentUser, selectSocket } from "../selectors"
 import { toast } from "react-toastify"
+import { currentUserActions } from "../slice/currentUser.slice"
+import { currentUserTypes } from "../type/currentUser.type"
 
 function* getListChats(): Generator<any, any, any> {
     try {

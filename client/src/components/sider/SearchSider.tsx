@@ -7,13 +7,16 @@ import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
 import { selectSearch, selectSuggestFriend } from "~/redux/selectors"
 import AvatarOnline from "../AvatarOnline"
-import { useNavigate } from "react-router"
+import { useNavigate, useParams } from "react-router"
 import { useRef, useEffect } from "react"
 import { searchActions } from "~/redux/slice/search.slice"
 import searchTypes from "~/redux/type/search.type"
 import { IUser } from "~/redux/interface/user.interface"
 import { suggestFriendActions } from "~/redux/slice/suggestFriends.slice"
 import { suggestFriendTypes } from "~/redux/type/suggestFriends.type"
+import { getSuggestFriends } from "~/redux/actions/suggestFriend.action"
+import { getUser } from "~/redux/actions/user.action"
+import { getListInvites } from "~/redux/actions/invite.action"
 
 interface ISearchSider {
     placeholder: string
@@ -29,6 +32,7 @@ const SearchSider: React.FC<ISearchSider> = ({ placeholder }) => {
     const handleOutsideClick = (event: any) => {
         if (containerSearch.current && !containerSearch.current.contains(event.target)) {
             setShowResult(false)
+            dispatch(getSuggestFriends())
         }
     }
 
@@ -174,8 +178,15 @@ interface IItemSearch {
 const ItemSearch: React.FC<IItemSearch> = ({ _id, name, avatar, email }) => {
     const [isHovered, setIsHovered] = React.useState(false)
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const { userId } = useParams()
 
     const handleClick = () => {
+        if (userId === _id) {
+            console.log("first")
+            dispatch(getUser(_id))
+            dispatch(getListInvites())
+        }
         navigate(`/user/${_id}`)
     }
 

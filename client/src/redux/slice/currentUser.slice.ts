@@ -31,6 +31,13 @@ const currentUserSlice = createSlice({
             state.status = "failed"
             state.message = action.payload.message
         },
+
+        [currentUserTypes.DELETE_FRIEND_STORE]: (state, action) => {
+            const friend_id = action.payload
+            if (state.data) {
+                state.data.friends = state.data?.friends.filter((id) => id !== friend_id)
+            }
+        },
     },
 })
 

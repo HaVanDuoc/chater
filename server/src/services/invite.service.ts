@@ -134,7 +134,7 @@ namespace InviteService {
         }
     }
 
-    export const rejectInvite = async (invite_id: Schema.Types.ObjectId) => {
+    export const rejectInvite = async (invite_id: any) => {
         try {
             const reject = await Invite.findByIdAndDelete(invite_id)
             if (reject) {

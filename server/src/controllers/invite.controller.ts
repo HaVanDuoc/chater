@@ -41,8 +41,8 @@ namespace InviteController {
 
     export const rejectInvite = async (req: Request, res: Response) => {
         try {
-            const invite = req.body.invite
-            const response = await InviteService.rejectInvite(invite)
+            const { inviteId } = req.params
+            const response = await InviteService.rejectInvite(inviteId)
             return res.status(HttpStatusCodes.OK).json(response)
         } catch (error) {
             res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send("Server Error!")

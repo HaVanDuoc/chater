@@ -3,7 +3,7 @@ import { all, call, put, takeLatest } from "redux-saga/effects"
 import { suggestFriendActions } from "../slice/suggestFriends.slice"
 import { suggestFriendTypes } from "../type/suggestFriends.type"
 
-export function* getSuggestFriends(): Generator<any, any, any> {
+function* getSuggestFriends(): Generator<any, any, any> {
     try {
         const result = yield call(API.getSuggestFriends)
         yield put(suggestFriendActions[suggestFriendTypes.GET_SUGGEST_FRIENDS_SUCCESS](result))
@@ -13,10 +13,5 @@ export function* getSuggestFriends(): Generator<any, any, any> {
 }
 
 export default function* suggestFriendSaga() {
-    yield all([
-        takeLatest(
-            suggestFriendActions[suggestFriendTypes.GET_SUGGEST_FRIENDS].type,
-            getSuggestFriends,
-        ),
-    ])
+    yield all([takeLatest(suggestFriendTypes.GET_SUGGEST_FRIENDS, getSuggestFriends)])
 }

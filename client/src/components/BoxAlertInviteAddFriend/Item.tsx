@@ -3,10 +3,9 @@ import { Avatar, Button, Flex, Typography, theme } from "antd"
 import React, { useState } from "react"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router"
+import { acceptInvite, rejectInvite } from "~/redux/actions/invite.action"
 import { IInvite } from "~/redux/interface/invite.interface"
 import { IUser } from "~/redux/interface/user.interface"
-import { inviteActions } from "~/redux/slice/invite.slice"
-import { inviteTypes } from "~/redux/type/invite.type"
 
 interface IItem {
     invite_id: IInvite["_id"]
@@ -20,11 +19,6 @@ const Item: React.FC<IItem> = ({ invite_id, sender_id, sender_displayName, sende
     const { colorBgTextHover } = theme.useToken().token
     const navigate = useNavigate()
     const dispatch = useDispatch()
-
-    // const invite_id = invite?._id
-    // const sender_id = invite?.sender?._id
-    // const sender_name = invite?.sender?.displayName
-    // const sender_picture = invite?.sender?.picture
 
     return (
         <Flex
@@ -54,13 +48,18 @@ const Item: React.FC<IItem> = ({ invite_id, sender_id, sender_displayName, sende
                 <Button
                     type="primary"
                     onClick={() => {
-                        dispatch(inviteActions[inviteTypes.ACCEPT_INVITE](invite_id))
-                        dispatch(inviteActions[inviteTypes.GET_LIST_INVITES]({}))
+                        dispatch(acceptInvite(invite_id))
                     }}
                 >
                     Đồng ý
                 </Button>
-                <Button>Xóa</Button>
+                <Button
+                    onClick={() => {
+                        dispatch(rejectInvite(invite_id))
+                    }}
+                >
+                    Xóa
+                </Button>
             </Flex>
         </Flex>
     )

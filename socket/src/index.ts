@@ -128,13 +128,24 @@ io.on("connection", (socket: Socket) => {
         const receiverSocketId = findSocketIdByUserId(invite?.receiver)
         console.log("receiverSocketId", receiverSocketId)
 
-        const friend_id = invite?.receiver
+        const friend_id = invite?.sender
 
         if (receiverSocketId && !chat.group) {
             console.log("true", receiverSocketId)
             io.to(receiverSocketId).emit("acceptInvite", { chat, friend_id }) // Gửi cho đối phương
         }
         io.to(socket.id).emit("acceptInvite", { chat, friend_id }) // Và gửi cho chính mình
+    })
+
+    // On reject invite
+    socket.on("rejectInvite", (sender_id: any) => {
+        // Xác định người nhận
+        const receiverSocketId = findSocketIdByUserId(sender_id)
+
+        if (receiverSocketId) {
+            io.to(receiverSocketId).emit("rejectInvite") // Gửi cho đối phương
+        }
+        io.to(socket.id).emit("rejectInvite") // Và gửi cho chính mình
     })
 
     // On delete friend
@@ -146,9 +157,9 @@ io.on("connection", (socket: Socket) => {
             // Xác định người nhận
             const receiverSocketId = findSocketIdByUserId(friend_id)
             if (receiverSocketId) {
-                io.to(receiverSocketId).emit("deleteFriend", chat_id) // Gửi cho đối phương
+                io.to(receiverSocketId).emit("deleteFriend", friend_id) // Gửi cho đối phương
             }
-            io.to(socket.id).emit("deleteFriend", chat_id) // Và gửi cho chính mình
+            io.to(socket.id).emit("deleteFriend", friend_id) // Và gửi cho chính mình
         }
     })
 

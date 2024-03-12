@@ -43,6 +43,7 @@ function* acceptInvite(action: any): Generator<any, any, any> {
         if (accept) {
             yield put(inviteActions[inviteTypes.ACCEPT_INVITE_SUCCESS](invite))
             socket.socket.emit("acceptInvite", { invite, chat })
+            toast.success(accept.invite.message)
         }
     } catch (error) {
         yield put(inviteActions[inviteTypes.ACCEPT_INVITE_FAILED](error))
@@ -52,11 +53,14 @@ function* acceptInvite(action: any): Generator<any, any, any> {
 // REJECT
 function* rejectInvite(action: any): Generator<any, any, any> {
     try {
+        console.log("Reject Invite")
         const socket = yield select(selectSocket)
         const reject = yield call(API.rejectInvite, action.payload)
+   
         if (reject) {
             yield put(inviteActions[inviteTypes.REJECT_INVITE_SUCCESS](reject))
-            socket.socket.emit("sendInvite", reject.data)
+            const sender_id = reject.data.sender
+            socket.socket.emit("rejectInvite", sender_id)
             toast.success(reject.message)
         }
     } catch (error) {
