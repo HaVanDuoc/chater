@@ -73,8 +73,8 @@ CLIENT_URL = http://localhost:3000
 CLIENT_PORT = 3000
 SERVER_URL = http://localhost:5000
 SERVER_PORT = 5000
-GOOGLE_CLIENT_ID=857605937611-dsb5qleoi8g88jh51gul2io28f213hdg.apps.googleusercontent.com_need_delete # Delete `_delete` before run
-GOOGLE_CLIENT_SECRET=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_delete # Delete `_delete` before run
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
 SECRET_KEY=slkdfjsdlkfj_slkfjsl_kwjr
 ```
 
