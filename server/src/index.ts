@@ -14,6 +14,10 @@ dotenv.config()
 
 const CLIENT_URL = process.env.CLIENT_URL || "*"
 const SERVER_URL = process.env.SERVER_URL || "*"
+
+console.log('CLIENT_URL', CLIENT_URL)
+console.log('SERVER_URL', SERVER_URL)
+
 const corsOptions = {
     origin: [CLIENT_URL, SERVER_URL],
     credentials: true,
